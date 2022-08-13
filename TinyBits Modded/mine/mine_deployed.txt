@@ -1,0 +1,212 @@
+ID = "cosmoteer.mine_deployed"
+Range = 0
+IdealRange = 0
+Speed = 0
+RandomRotation = true
+
+Components
+{
+	Physics
+	{
+		Type = CirclePhysics
+		Radius = .3
+		Density = 2
+		LinearDamping = .5
+		AngularDamping = 1
+		CollidesWithBullets = true
+		FrameOfReferenceDuration = 0
+	}
+
+	Repulsion
+	{
+		Type = ProximityAcceleration
+		Range = 22.5
+		Acceleration = -10
+		AccelerateTowardsShips = false
+		AccelerateTowardsBullets = true
+		AccelerateTowardsBulletCategories = [mine]
+		AccelerateTowardsFriendlies = true
+		AccelerateTowardsEnemies = true
+	}
+
+	DeathByEnemyProximity
+	{
+		Type = DeathByEnemyProximity
+		Interval = .1
+		Range = 20
+		DetectsShips = true
+		DetectsBullets = false
+		StartDelay = .5
+
+		OnDeath
+		{
+			HitEffects
+			[
+				{
+					Type = SpawnBullets
+					Bullet = &<mine_shrapnel.txt>
+					Count = 20
+					Distance = .9
+					Spread = [-15d, 15d]
+					InheritVelocity = true
+				}
+			]
+
+			MediaEffects
+			[
+				&<../missile_he/particles/missile_he_hit.txt>
+				&<../missile_he/particles/missile_he_flash.txt>
+				&<particles/mine_range_ring.txt>
+
+				: /BASE_SOUNDS/AudioExterior
+				{
+					Sound = "../missile_he/missile_he_hit.wav"
+					Volume = .75
+					SpeedVariation = .4
+				}
+
+				: /BASE_SOUNDS/AudioExterior
+				{
+					Sound = "alarm.wav"
+					Volume = 1
+					SpeedVariation = 0
+				}
+
+				: /BASE_SHAKE
+				{
+					ShakeAmount = .1
+					Duration = .75
+				}
+			]
+		}
+	}
+
+	DeathByLifetime
+	{
+		Type = DeathByLifetime
+		Lifetime = 300
+
+		OnDeath
+		{
+			MediaEffects = &../../Hit/HitOperational/MediaEffects
+		}
+	}
+
+	LightsSprite
+	{
+		Type = Sprite
+		RenderBucket = Lower
+		LerpScaleFrom = [0, 0]
+		LerpTime = &~/Components/DeathByEnemyProximity/StartDelay
+		Spin = 225d
+		Sprite
+		{
+			Texture
+			{
+				File = "mine_lights.png"
+				MipLevels = max
+				SampleMode = Linear
+			}
+			Size = [15/4, 15]
+			VertexColor = [150, 0, 0]
+			TargetBlendMode = Add
+		}
+	}
+
+	ArmingSprite
+	{
+		Type = AnimatedSprite
+		RenderBucket = Middle
+		EndTime = &~/Components/DeathByEnemyProximity/StartDelay
+		Animation
+		{
+			AtlasSprite
+			{
+				Texture
+				{
+					File = "mine_arming.png"
+					MipLevels = max
+				}
+				Size = [3, 3]
+			}
+			FrameCount = 8
+			FrameSize = [192, 192]
+			FramesPerRow = 8
+			FramesPerSecond = 20
+			WrapMode = Clamp
+		}
+	}
+
+	ArmedSprite
+	{
+		Type = AnimatedSprite
+		RenderBucket = Middle
+		StartTime = &~/Components/DeathByEnemyProximity/StartDelay
+		Animation
+		{
+			AtlasSprite
+			{
+				Texture
+				{
+					File = "mine_armed.png"
+					MipLevels = max
+				}
+				Size = [2, 2]
+			}
+			FrameCount = 8
+			FrameSize = [128, 128]
+			FramesPerRow = 8
+			FramesPerSecond = 10
+		}
+	}
+
+	Targetable
+	{
+		Type = Targetable
+		Health = 800
+		TargetCategory = "mine"
+		OnDeath = &~/Components/Hit/HitOperational
+	}
+
+	Hit
+	{
+		Type = SimpleHit
+		ShieldCollisions
+		{
+			HitsEnemyShields = false
+		}
+
+		HitShield {}
+
+		HitOperational
+		{
+			HitEffects = &~/Components/DeathByEnemyProximity/OnDeath/HitEffects
+
+			MediaEffects
+			[
+				&<../missile_he/particles/missile_he_hit.txt>
+				&<../missile_he/particles/missile_he_flash.txt>
+
+				: /BASE_SOUNDS/AudioExterior
+				{
+					Sound = "../missile_he/missile_he_hit.wav"
+					Volume = .75
+					SpeedVariation = .4
+				}
+
+				: /BASE_SHAKE
+				{
+					ShakeAmount = .1
+					Duration = .75
+				}
+			]
+		}
+
+		HitStructural = &HitOperational
+
+		HitFriendly
+		{
+			MediaEffects = &../HitOperational/MediaEffects
+		}
+	}
+}

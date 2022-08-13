@@ -1,0 +1,310 @@
+Range = 400
+IdealRange = 280
+Width = .25
+HitInterval = .1
+HitEffectsScaleOverRange = [1, .7]
+MediaEffectsScaleOverRange = [1, .7]
+
+BeamMediaEffects
+[
+	{
+		Type = Beam
+		BeamSprite
+		{
+			Texture
+			{
+				File = "beam_base.png"
+				SampleMode = Linear
+				MipLevels = 1
+				UVMode = Clamp
+			}
+			_baseColor = [255, 255, 255, 255]
+			Shader = "beam.shader"
+			_sizePulseFactor = 1.5
+			_sizePulseInterval = .1
+			_sizePulseUOffsetFactor = .1
+			Size = [2.5, 0] // Only width matters.
+			VertexColor = [255, 255, 255, 217]
+		}
+		FadeInTime = .25
+		FadeOutTime = .25
+		Bucket = Upper1
+		ExtraEndLength = .5
+		ThicknessOverIntensity = [.2, .24]
+		ClampIntensity = [0, 50]
+		IntensityExponent = 0.75
+	}
+
+	&<particles/ion_beam_emit_sparks.txt>
+
+	: /BASE_SOUNDS/AudioExterior
+	{
+		Sound = "ion_beam.wav"
+		Volume = 1
+		MaxConcurrent = 1
+		MaxConcurrentVolume = 1
+		RampUpTime = .25
+		RampDownTime = .25
+
+		DynamicVolume : ^/0/DynamicVolume
+		{
+			UseCustomShapeForDistance = true
+		}
+		DynamicFilter : ^/0/DynamicFilter
+		{
+			UseCustomShapeForDistance = true
+		}
+	}
+]
+
+HitShield
+{
+	HitEffects
+	[
+		{
+			Type = TargetFilter
+			Filter
+			{
+				ExcludePartCategories = [ion_beam_prism]
+			}
+			AllowNoTarget = true
+			HitEffects
+			[
+				{
+					Type = ExplosiveDamage
+					TotalDamage = 2850
+					Radius = 1.2
+					FireChance = .5
+					Filter
+					{
+						Enemies = true
+						Junk = false
+						ExcludePartCategories = [ion_beam_prism]
+					}
+				}
+				{
+					Type = Impulse
+					Impulse = 3
+					Filter
+					{
+						Enemies = true
+						Junk = false
+						Friendlies = true
+						ExcludePartCategories = [ion_beam_prism]
+					}
+				}
+			]
+		}
+		{
+			Type = AreaDamage
+			Damage = 2850
+			Radius = 1.2
+			FireChance = .5
+			Filter
+			{
+				Friendlies = false
+				TargetedFriendlies = false
+			}
+		}
+		{
+			Type = Impulse
+			Impulse = 3
+			Filter
+			{
+				Friendlies = false
+				TargetedFriendlies = false
+			}
+		}
+		{
+			Type = ExplosiveAmmoDrain
+			AmmoType = battery
+			TotalDrain = -300
+			Radius = 2
+			Filter
+			{
+				Friendlies = false
+				Enemies = true
+				IgnoreInvulnerability = false
+			}
+		}
+	]
+}
+HitOperational
+{
+	HitEffects
+	[
+		{
+			Type = TargetFilter
+			Filter
+			{
+				ExcludePartCategories = [ion_beam_prism]
+			}
+			AllowNoTarget = true
+			HitEffects
+			[
+				{
+					Type = ExplosiveDamage
+					TotalDamage = 750
+					Radius = 2
+					FireChance = .5
+					Filter
+					{
+						Enemies = true
+						Junk = false
+						ExcludePartCategories = [ion_beam_prism]
+					}
+				}
+				{
+					Type = Impulse
+					Impulse = 2
+					Filter
+					{
+						Enemies = true
+						Junk = false
+						Friendlies = true
+						ExcludePartCategories = [ion_beam_prism]
+					}
+				}
+			]
+		}
+		{
+			Type = ExplosiveDamage
+			TotalDamage = 750
+			Radius = 2
+			Filter
+			{
+				Friendlies = false
+				TargetedFriendlies = false
+			}
+		}
+		{
+			Type = Impulse
+			Impulse = 2
+			Filter
+			{
+				Friendlies = false
+				TargetedFriendlies = false
+			}
+		}
+		{
+			Type = AmmoDrain
+			AmmoType = ion_energy
+			Amount = -2500
+			Filter
+			{
+				Friendlies = true
+				IgnoreInvulnerability = true
+				OnlyPartCategories = [ion_beam_prism]
+			}
+		}
+	]
+
+	MediaEffects
+	[
+		: <particles/ion_beam_hit.txt>
+		{
+			Filter
+			{
+				ExcludePartCategories = [ion_beam_prism]
+			}
+		}
+
+		: <particles/ion_beam_hit_flash.txt>
+		{
+			Filter
+			{
+				ExcludePartCategories = [ion_beam_prism]
+			}
+		}
+		
+		: <particles/ion_beam_hit_sparks.txt>
+		{
+			Filter
+			{
+				ExcludePartCategories = [ion_beam_prism]
+			}
+		}
+
+		: /BASE_SOUNDS/AudioExterior
+		{
+			Sound = "ion_beam_hit.wav"
+			Volume = .5
+			MaxConcurrent = 1
+			MaxConcurrentVolume = 1
+			RampUpTime = .25
+			RampDownTime = .25
+
+			Filter
+			{
+				ExcludePartCategories = [ion_beam_prism]
+			}
+		}
+
+		: /BASE_SHAKE
+		{
+			ShakeAmount = .05
+			Duration = .5
+			
+			Filter
+			{
+				ExcludePartCategories = [ion_beam_prism]
+			}
+		}
+	]
+}
+
+HitStructural
+{
+	HitEffects
+	[
+		{
+			Type = TargetFilter
+			Filter
+			{
+				ExcludePartCategories = [ion_beam_prism]
+			}
+			AllowNoTarget = true
+			HitEffects
+			[
+				{
+					Type = AreaDamage
+					Damage = 700
+					Radius = 2
+					Filter
+					{
+						Enemies = true
+						Junk = false
+					}
+				}
+				{
+					Type = Impulse
+					Impulse = 1
+					Filter
+					{
+						Enemies = true
+						Junk = false
+					}
+				}
+			]
+		}
+		{
+			Type = AreaDamage
+			Damage = 700
+			Radius = 2
+			Filter
+			{
+				Friendlies = false
+				TargetedFriendlies = false
+			}
+		}
+		{
+			Type = Impulse
+			Impulse = 1
+			Filter
+			{
+				Friendlies = false
+				TargetedFriendlies = false
+			}
+		}
+	]
+}

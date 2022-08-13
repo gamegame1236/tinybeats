@@ -1,0 +1,256 @@
+Type = Particles
+Def
+{
+	EmitPerSecond = 0
+	EmitPerOneShot = 0
+	Initializers
+	[
+		{
+			Type = LocationToWorldSpace
+			LocationIn = location
+			LocationOut = location
+			Name = "Convert location to world space."
+			Enabled = true
+			UpdateAfterInit = false
+		}
+		{
+			Type = VelocityToWorldSpace
+			VelocityIn = velocity
+			VelocityOut = velocity
+			Name = "Convert initial velocity to world space."
+			Enabled = true
+			UpdateAfterInit = false
+		}
+		{
+			Type = AddFrameOfReference
+			VelocityInOut = velocity
+			Name = "Add frame of reference"
+			Enabled = true
+			UpdateAfterInit = false
+		}
+		{
+			Type = SetRandom
+			DataOut = rotation
+			ValueType = Angle
+			FromValue = 0d
+			ToValue = 360d
+			Name = "Initial rotation."
+			Enabled = true
+			UpdateAfterInit = false
+		}
+		{
+			Type = SetRandom
+			DataOut = rot_vel
+			ValueType = Angle
+			FromValue = -399.99997d
+			ToValue = 399.99997d
+			Name = "Initial rot velocity."
+			Enabled = true
+			UpdateAfterInit = false
+		}
+	]
+	Updaters
+	[
+		{
+			Type = Lifetime
+			LifeInOut = life
+			Lifetime = 0.87
+			Name = Lifetime
+			Enabled = true
+			UpdateAfterInit = false
+		}
+		{
+			Type = Operator
+			DataType = Vector2
+			AIn = location
+			BIn = velocity
+			ResultOut = location
+			Operator = AddDt
+			Name = "Apply velocity."
+			Enabled = true
+			UpdateAfterInit = false
+		}
+		{
+			Type = Operator
+			DataType = Angle
+			AIn = rotation
+			BIn = rot_vel
+			ResultOut = rotation
+			Operator = AddDt
+			Name = "Apply rot velocity."
+			Enabled = true
+			UpdateAfterInit = false
+		}
+		{
+			Type = ColorRamp
+			LerpIn = life
+			ColorOut = color
+			Invert = false
+			Colors
+			[
+				{
+					Rf = 4.5882354
+					Gf = 1
+					Bf = 0.07450981
+					Af = 0.09803922
+				}
+				{
+					Rf = 3.9215686
+					Gf = 0.78431374
+					Bf = 0.78431374
+					Af = 2.0078433
+				}
+				{
+					Rf = 0.7372549
+					Gf = 0.972549
+					Bf = 0.83137256
+					Af = 1
+				}
+				{
+					Rf = 1
+					Gf = 0.09803922
+					Bf = 0.98039216
+					Af = 1
+				}
+				{
+					Rf = 0.62352943
+					Gf = 10
+					Bf = 8.823529
+					Af = 0
+				}
+			]
+			Name = "Color Ramp"
+			Enabled = true
+			UpdateAfterInit = true
+		}
+	]
+	Renderer
+	{
+		Type = StandardQuadRenderer
+		LocationIn = location
+		ScaleIn = scale
+		RotationIn = rotation
+		ColorIn = color
+		UvRectIn
+		BaseSize
+		{
+			X = 0.75
+			Y = 0.75
+		}
+		Name = ""
+	}
+	Material
+	{
+		Texture
+		{
+			File = flame.png
+			MipLevels = max
+			SampleMode = Linear
+		}
+		TargetBlendMode
+		{
+			SourceRgbFactor = SourceAlpha
+			DestRgbFactor = One
+			RgbOperator = Add
+			SourceAlphaFactor = InverseDestAlpha
+			DestAlphaFactor = One
+			AlphaOperator = Add
+		}
+		Color
+		{
+			Rf = 1
+			Gf = 1
+			Bf = 1
+			Af = 0.0627451
+		}
+	}
+	DeleteMode = Fast
+	EnableMultithreading = false
+	InitCapacity = 5000
+}
+EmitterDef
+{
+	EmitPerSecond = 29
+	EmitPerOneShot = 0
+	PreInitializers
+	[
+		{
+			Type = SetValue
+			DataOut = location
+			ValueType = Vector2
+			Value
+			{
+				X = 0
+				Y = 0
+			}
+			Name = "Initial location"
+			Enabled = true
+			UpdateAfterInit = false
+		}
+		{
+			Type = SetRandomVelocity
+			VelocityOut = velocity
+			Speed
+			{
+				Min = 4
+				Max = 7
+			}
+			Direction
+			{
+				Min = -3.5000002d
+				Max = 3.5000002d
+			}
+			Name = "Initial velocity"
+			Enabled = true
+			UpdateAfterInit = false
+		}
+		{
+			Type = ScaleFromIntensity
+			ScaleOut = scale
+			ScaleFactor = 4
+			IntensityExponent = 1
+			Name = "Scale from intensity"
+			Enabled = true
+			UpdateAfterInit = false
+		}
+	]
+	PostInitializers[]
+}
+Bucket = Lower1
+UseRealTime = false
+PenetratingBucket
+MinIntensity = 0.05
+IsFancy = true
+IsSimple = false
+Sharing = Global
+UnsharedRenderInWorldSpace = false
+DontEmitWhenOffScreen = true
+DontEmitWhenOffScreenSizeInflate = 10
+UseCustomShapeForOffScreenCheck = false
+MaxEmissionZoom = 3.4028235E+38
+ScaleEmissionWithIntensity = false
+ScaleEmissionWithBeamLength = false
+CaptureBackBuffer = false
+Filter
+{
+	Ships = true
+	OperationalHealth = true
+	StructuralHealth = true
+	OnlyPartCategories
+	ExcludePartCategories
+	Shields = true
+	Bullets = true
+	OnlyBulletCategories
+	ExcludeBulletCategories
+	IgnoreInvulnerability = true
+	Self
+	TargetedSelf
+	Friendlies = true
+	TargetedFriendlies
+	Enemies = true
+	TargetedEnemies
+	Junk = true
+	TargetedJunk
+}
+Delay = 0
+IgnoreIntensity = false

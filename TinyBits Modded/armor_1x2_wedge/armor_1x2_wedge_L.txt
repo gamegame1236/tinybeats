@@ -1,0 +1,288 @@
+Part : /BASE_PART
+{
+	NameKey = "Parts/UDArmor1x2WedgeL"
+	IconNameKey = "Parts/UDArmor1x2WedgeLIcon"
+	ID = Battleman103333.dense_armor_1x2_wedge_L // Part IDs must always be in the form of "author_name.part_name". If making your own mod, do *not* use "cosmoteer" as your author name, because it may conflict with future vanilla parts.
+	OtherIDs = [dense_armor2_wedge_L]
+	EditorGroup = "TitanDefensives"
+	DescriptionKey = "Parts/UDArmor1x2WedgeLDesc"
+	EditorReplacementPartID = ""
+	Cost = 300
+	Size = [1, 2]
+	AllowedContiguity = [Right, Bottom]
+	SelectionTypeID = "armor"
+	MaxHealth = 30000
+	ExplosiveDamageAbsorption = 100%
+	ExplosiveDamageResistance = 60%
+	TypeCategories = [armor, uses_power]
+	Flammable = false
+	CreatePartPerTileWhenDestroyed = ""
+	CreatePartWhenDestroyed = structure2_wedge_R
+	CreatePartPerTileWhenGrabbed = "corridor"
+	InitialPenetrationResistance = 35
+	ContinuingPenetrationResistance = &InitialPenetrationResistance
+	CrewSpeedFactor = 0
+	Density = 4.5
+	IsRotateable = true
+	IsWalled = true
+	ExternalWallsByCell
+	[
+		{
+			Key = [0, 0]
+			Value = [Right, TopRight]
+		}
+		{
+			Key = [0, 1]
+			Value = [Right, TopRight]
+		}
+	]
+	InternalWallsByCell
+	[
+	 	{
+	 		Key = [0, 0]
+	 		Value = [Left, TopLeft, Top]
+	 	}
+	 	{
+	 		Key = [0, 1]
+	 		Value = [Left, TopLeft]
+	 	}
+	]
+	VirtualInternalCells
+	[
+		{ExternalCell=[0, -1]; InternalCell=[1, 0]}
+		{ExternalCell=[-1, 1]; InternalCell=[0, 2]}
+	]
+	AllowedDoorLocations = []
+	GeneratorRequiresDoor = false
+	FlipHRotate = [0, 3, 2, 1]
+	FlipVRotate = [2, 1, 0, 3]
+	UsePartWhenFlipped = dense_armor2_wedge_R
+	CustomCollider
+	[
+		[1, 0]
+		[1, 2]
+		[0, 2]
+	]
+	EditorIcon
+	{
+		Texture
+		{
+			File = "icon.png"
+			SampleMode = Linear
+		}
+		Size = [32, 64]
+	}
+	Components : ^/0/Components
+	{
+		EmpAbsorber
+		{
+			Type = ExplosiveAmmoDrainSink
+			AmmoType = battery
+			AbsorbsAmmoDrain = 1500
+			RecoveryRate = (&AbsorbsAmmoDrain) * 0.1
+		}
+		IsOperational
+		{
+			Type = MultiToggle
+			Toggles = [PowerToggle]
+			Mode = All
+		}
+		FireModeToggle
+		{
+			Type = UIToggle
+			ToggleID = "fire_mode"
+			Default = 1
+			ToggledOnChoices = [0, 1, 2]
+		}
+		AutoTargetToggle
+		{
+			Type = ModeToggle
+			Mode = FireModeToggle
+			OnModes = [1, 2]
+		}
+		AutoFireToggle
+		{
+			Type = ModeToggle
+			Mode = FireModeToggle
+			OnMode = 2
+		}
+		PowerToggle
+		{
+			Type = UIToggle
+			ToggleID = "on_off"
+			Default = 1
+		}
+		BatteryProducer
+		{
+			Type = AmmoConverter
+			ToStorage = BatteryStorage
+			ToQuantity = 50
+			Interval = .1
+		}
+		BatteryStorage
+		{
+			Type = AmmoStorage
+			AmmoType = battery
+			MaxAmmo = 100
+			StartingAmmo = &MaxAmmo
+			SuppliesAmmo = false
+			AssumeAlwaysHasAmmo = true
+			WaitPerDistToNextClosest = .15
+		}
+		Graphics
+		{
+			Type = Graphics
+			Location = [0.5, 1]
+			Floor // This is needed so that armor shows up in ship ghosts.
+			{
+				Layer = "floors"
+				DamageLevels
+				[
+					{
+						File = "floor.png"
+						Size = [1, 2]
+					}
+					{
+						File = "floor_33.png"
+						Size = [1, 2]
+					}
+					{
+						File = "floor_66.png"
+						Size = [1, 2]
+					}
+				]
+			}
+			Walls
+			{
+				Layer = "walls"
+				DamageLevels
+				[
+					{
+						File = "armor.png"
+						Size = [1, 2]
+					}
+					{
+						File = "armor_33.png"
+						Size = [1, 2]
+					}
+					{
+						File = "armor_66.png"
+						Size = [1, 2]
+					}
+				]
+			}
+			Roof
+			{
+				Layer = "roofs"
+				DamageLevels
+				[
+					{
+						File = "roof.png"
+						Size = [1, 2]
+					}
+					{
+						File = "roof_33.png"
+						Size = [1, 2]
+					}
+					{
+						File = "roof_66.png"
+						Size = [1, 2]
+					}
+				]
+			}
+		}
+
+		AmmoStorage
+		{
+			Type = AmmoStorage
+			AmmoType = battery
+			MaxAmmo = 5
+			InitToMaxAmmoPVP = 0
+			ToggleOnAmmo = 5
+			ToggleOffAmmo = 1
+			DelayBeforeReadyToUse = 0.0001
+		}
+
+		Turret
+		{
+			Type = TurretWeapon
+			Location = [.5, 1] // Relative to upper-left corner of unrotated part.
+			Rotation = -135d // Relative to unrotated part.
+			OperationalToggle = IsOperational
+			AutoFireToggle = AutoFireToggle
+			FireInterval = .001
+			FiringArc = 180d
+			RotateSpeed = 180d
+			FireThresholdAngle = 50d
+			AIFirepowerRating = 2400
+			Emitter = BulletEmitter
+			FirePermissionToggle = FireModeToggle
+
+			AutoTargets
+			[
+				{
+					TargetType = ShipParts
+					Toggle = AutoTargetToggle
+				}
+			]
+
+			BlueprintArcSprite
+			{
+				Texture = &/INDICATORS/WeaponArc
+				Size = [0, 1.5]
+				Color = [255, 0, 0, 63]
+			}
+			BlueprintArcRadius = 10
+			BlueprintArcSpriteSegments = 64
+
+			CoverageSectorArc
+			{
+				Texture = &/INDICATORS/VerticalGradient
+				VertexColor = [255, 255, 255, 51]
+				QuadCount = 64
+			}
+		}
+
+		ReloadProgressBar
+		{
+			Type = ProgressBar
+			OperationalToggle = IsOperational
+			ShowProgressFor = Turret
+		}
+
+		BulletEmitter
+		{
+			Type = BulletEmitter
+			ChainedTo = Turret
+			FireTrigger = Turret
+			GetTargetFrom = Turret
+			Location = [0, 0]
+			OperationalToggle = IsOperational
+			Bullet = &<missile_nuke/missile_nuke.txt>
+			Spread = [-2.5d, 2.5d]
+			AmmoStorage = BatteryStorage
+			AmmoUsed = 1
+			Recoil = 5
+			Burst = 1
+		}
+
+		DestroyedEffects
+		{
+			Type = DeathEffects
+			MediaEffects = &/COMMON_EFFECTS/SmallPartDestroyedDry
+			Location = [.5, 1]
+		}
+
+		Blueprints
+		{
+			Type = BlueprintSprite
+			File = "blueprints.png"
+			Size = [1, 2]
+		}
+	}
+
+	Stats
+	{
+		EMPResist = (&~/Part/Components/EmpAbsorber/AbsorbsAmmoDrain) / 1500
+	}
+}

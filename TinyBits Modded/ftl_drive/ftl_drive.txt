@@ -1,0 +1,405 @@
+Part : /BASE_PART
+{
+	NameKey = "Parts/FtlDriveTiny"
+	IconNameKey = "Parts/FtlDriveTinyIcon"
+	ID = Gray.ftl_drive_tiny // Part IDs must always be in the form of "author_name.part_name". If making your own mod, do *not* use "cosmoteer" as your author name, because it may conflict with future vanilla parts.
+	OtherIDs = [ftl_drive_tiny]
+	EditorGroup = "Parts"
+	DescriptionKey = "Parts/FtlDriveTinyDesc"
+	Cost = 5000
+	Size = [1, 1]
+	SelectionPriority = 0
+	MaxHealth = 2000
+	AutoDoorMaxPathLength = 5
+	TypeCategories = [ftl, uses_power] // 'ftl' is a magic category that allows the FTL overlay to efficiently find FTL drives.
+	ReceivableBuffs : ^/0/ReceivableBuffs []
+	IgnoreRotationForMirroredSelection = true
+	EditorIcon
+	{
+		Texture
+		{
+			File = "icon.png"
+			SampleMode = Linear
+		}
+		Size = [34, 34]
+	}
+	Components : ^/0/Components
+	{
+		PowerToggle
+		{
+			Type = UIToggle
+			ToggleID = "on_off"
+			Default = 1
+		}
+
+		BatteryStorage
+		{
+			Type = AmmoStorage
+			AmmoType = battery
+			MaxAmmo = 8000
+			InitToMaxAmmo = 0
+		}
+		BatteryConsumer
+		{
+			Type = AmmoConsumer
+			AmmoType = battery
+			Storage = BatteryStorage
+			DefaultPriority = &/PRIORITIES/Ftl_Supply
+			OperationalToggle = FtlDrive
+			AllowNonOperationalMinPriorityDelivery = false
+			ReceiveAmmoMediaEffects = &/COMMON_EFFECTS/PowerDeliver
+		}
+
+		ReloadProgressBar
+		{
+			Type = ProgressBar
+			OperationalToggle = FtlDrive
+			ShowProgressFor = BatteryStorage
+		}
+
+		FtlDrive
+		{
+			Type = FtlDrive
+			OperationalToggle = PowerToggle
+			AmmoStorage = BatteryStorage
+			SpinDownDuration = 2.5
+			JumpEfficiencyDistanceRange = [7, 20]
+		}
+
+		Graphics
+		{
+			Type = Graphics
+			Location = [.5, .5]
+			OperationalToggle = PowerToggle
+			AnimationSpeedFactor = FtlDrive
+			Floor
+			{
+				Layer = "floors"
+				DamageLevels
+				[
+					{
+						File = "floor.png"
+						Size = [1, 1]
+					}
+					{
+						File = "floor_33.png"
+						Size = [1, 1]
+					}
+					{
+						File = "floor_66.png"
+						Size = [1, 1]
+					}
+				]
+			}
+			OperationalDoodad
+			{
+				Layer = "doodads_high"
+				DamageLevels
+				[
+					{
+						AnimationFiles
+						[
+							"doodads_on1.png"
+							"doodads_on2.png"
+							"doodads_on3.png"
+							"doodads_on4.png"
+							"doodads_on5.png"
+							"doodads_on6.png"
+							"doodads_on7.png"
+							"doodads_on8.png"
+						]
+						Size = [1, 1]
+						AnimationInterval = 0.015
+					}
+				]
+			}
+			NonOperationalDoodad
+			{
+				Layer = "doodads_high"
+				DamageLevels
+				[
+					{
+						File = "doodads_off.png"
+						Size = [1, 1]
+					}
+				]
+			}
+			OperationalLighting
+			{
+				Layer = "lights_add"
+				DamageLevels
+				[
+					{
+						AnimationFiles
+						[
+							"lights1.png"
+							"lights2.png"
+							"lights3.png"
+							"lights4.png"
+							"lights5.png"
+							"lights6.png"
+							"lights7.png"
+							"lights8.png"
+						]
+						Size = [1, 1]
+						AnimationInterval = 0.015
+					}
+				]
+			}
+			Walls
+			{
+				Layer = "walls"
+				DamageLevels
+				[
+					{
+						File = "walls.png"
+						Size = [1, 1]
+					}
+					{
+						File = "walls_33.png"
+						Size = [1, 1]
+					}
+					{
+						File = "walls_66.png"
+						Size = [1, 1]
+					}
+				]
+			}
+			Roof
+			{
+				Layer = "roofs"
+				DamageLevels
+				[
+					{
+						File = "roof.png"
+						Size = [1, 1]
+					}
+					{
+						File = "roof_33.png"
+						Size = [1, 1]
+					}
+					{
+						File = "roof_66.png"
+						Size = [1, 1]
+					}
+				]
+			}
+			OperationalRoofDoodad
+			{
+				Layer = "roof_doodads"
+				DamageLevels
+				[
+					{
+						AnimationFiles
+						[
+							"roof_doodads_on1.png"
+							"roof_doodads_on2.png"
+							"roof_doodads_on3.png"
+							"roof_doodads_on4.png"
+							"roof_doodads_on5.png"
+							"roof_doodads_on6.png"
+							"roof_doodads_on7.png"
+							"roof_doodads_on8.png"
+						]
+						Size = [1, 1]
+						AnimationInterval = 0.015
+					}
+				]
+			}
+			NonOperationalRoofDoodad
+			{
+				Layer = "roof_doodads"
+				DamageLevels
+				[
+					{
+						File = "roof_doodads_off.png"
+						Size = [1, 1]
+						AnimationInterval = 0.015
+					}
+				]
+			}
+			OperationalRoofWindows
+			{
+				Layer = "roof_windows"
+				DamageLevels
+				[
+					{
+						File = "roof_windows_on.png"
+						Size = [1, 1]
+					}
+					{
+						File = "roof_windows_on_33.png"
+						Size = [1, 1]
+					}
+					{
+						File = "roof_windows_on_66.png"
+						Size = [1, 1]
+					}
+				]
+			}
+			NonOperationalRoofWindows
+			{
+				Layer = "roof_windows"
+				DamageLevels
+				[
+					{
+						File = "roof_windows_off.png"
+						Size = [1, 1]
+					}
+					{
+						File = "roof_windows_off_33.png"
+						Size = [1, 1]
+					}
+					{
+						File = "roof_windows_off_66.png"
+						Size = [1, 1]
+					}
+				]
+			}
+		}
+
+		FtlSpin
+		{
+			Type = ContinuousEffects
+			Location = [1, 1]
+			FactorMediaEffectsIntensityWith = FtlDrive
+			OperationalToggle = PowerToggle
+			MediaEffects
+			[
+				: /BASE_SOUNDS/AudioExterior
+				{
+					Sound = "ftl_spin.wav"
+					Volume = .5
+					Speed = 2.5
+					MaxConcurrent = 0
+					VolumeOverIntensity = 1
+					SpeedOverIntensity = [0, 1]
+				}
+			]
+		}
+
+		BatterySprites
+		{
+			Type = AmmoSprites
+			Location = [.5, .5]
+			AmmoStorage = BatteryStorage
+			Layer = "doodads_low"
+			AmmoLevels
+			[
+				{
+					File = "power1.png"
+					Size = [1, 1]
+				}
+				{
+					File = "power2.png"
+					Size = [1, 1]
+				}
+				{
+					File = "power3.png"
+					Size = [1, 1]
+				}
+				{
+					File = "power4.png"
+					Size = [1, 1]
+				}
+				{
+					File = "power5.png"
+					Size = [1, 1]
+				}
+				{
+					File = "power6.png"
+					Size = [1, 1]
+				}
+				{
+					File = "power7.png"
+					Size = [1, 1]
+				}
+				{
+					File = "power8.png"
+					Size = [1, 1]
+				}
+				{
+					File = "power9.png"
+					Size = [1, 1]
+				}
+				{
+					File = "power10.png"
+					Size = [1, 1]
+				}
+				{
+					File = "power11.png"
+					Size = [1, 1]
+				}
+				{
+					File = "power12.png"
+					Size = [1, 1]
+				}
+				{
+					File = "power13.png"
+					Size = [1, 1]
+				}
+				{
+					File = "power14.png"
+					Size = [1, 1]
+				}
+				{
+					File = "power15.png"
+					Size = [1, 1]
+				}
+				{
+					File = "power16.png"
+					Size = [1, 1]
+				}
+			]
+		}
+
+		OperationEffects
+		{
+			Type = ToggleEffects
+			Location = [1, 1]
+			Toggle = PowerToggle
+			ToggledOnMediaEffects = &/COMMON_EFFECTS/PowerOn
+			ToggledOffMediaEffects = &/COMMON_EFFECTS/PowerOff
+		}
+
+		DestroyedEffects
+		{
+			Type = DeathEffects
+			MediaEffects = &/COMMON_EFFECTS/MedPartDestroyed
+			Location = [.5, .5]
+		}
+
+		Indicators
+		{
+			Type = IndicatorSprites
+			Location = [.5, .5]
+			Layer = "indicators"
+			Indicators
+			[
+				// Turned off.
+				{
+					Toggle = PowerToggle
+					AtlasSprite
+					{
+						File = &/INDICATORS/PowerOff
+						Size = [.5, .5]
+					}
+				}
+			]
+		}
+
+		Blueprints
+		{
+			Type = BlueprintSprite
+			File = "blueprints.png"
+			Size = [1, 1]
+		}
+	}
+
+	Stats
+	{
+		FtlMaxEfficiencyRange = &~/Part/Components/FtlDrive/JumpEfficiencyDistanceRange/0
+		FtlMinEfficiencyRange = &~/Part/Components/FtlDrive/JumpEfficiencyDistanceRange/1
+		PowerCapacity = (&~/Part/Components/BatteryStorage/MaxAmmo) / 1000
+	}
+}

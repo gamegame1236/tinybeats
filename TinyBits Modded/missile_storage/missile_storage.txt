@@ -1,0 +1,921 @@
+Part : /BASE_PART
+{
+	NameKey = "Parts/MissileStorageTiny"
+	IconNameKey = "Parts/MissileStorageTinyIcon"
+	ID = Gray.missile_storage_tiny // Part IDs must always be in the form of "author_name.part_name". If making your own mod, do *not* use "cosmoteer" as your author name, because it may conflict with future vanilla parts.
+	EditorGroup = "Parts"
+	DescriptionKey = "Parts/MissileStorageTinyDesc"
+	Cost = 750
+	AIValue = &Cost
+	Size = [2, 1]
+	MaxHealth = 1500
+	TypeCategories = [provides_missiles, storage]
+	FlipHRotate = [2, 1, 0, 3]
+	FlipVRotate = [0, 3, 2, 1]
+	IgnoreRotationForMirroredSelection = true
+	EditorIcon
+	{
+		Texture
+		{
+			File = "icon.png"
+			SampleMode = Linear
+		}
+		Size = [64, 42.66]
+	}
+	Components : ^/0/Components
+	{
+		IsOperational
+		{
+			Type = MultiToggle
+			Toggles = [PowerToggle, MissileStorageProxy]
+			Mode = All
+		}
+
+		PowerToggle
+		{
+			Type = UIToggle
+			ToggleID = "on_off"
+			Default = 1
+		}
+
+		MissileType
+		{
+			Type = UIToggle
+			ToggleID = "missile_type"
+			Default = 0
+		}
+
+		HEMissilesToggle
+		{
+			Type = ModeToggle
+			Mode = MissileType
+			OnMode = 0
+		}
+		HEMissilesComponents
+		{
+			Type = ToggledComponents
+			Toggle = HEMissilesToggle
+			IncludeInBlueprints = true
+			Components
+			{
+				FloorGraphics
+				{
+					Type = Graphics
+					Location = [1, .5]
+					OperationalToggle = IsOperational
+					Floor
+					{
+						Layer = "floors"
+						DamageLevels
+						[
+							{
+								File = "floor_he.png"
+								Size = [2, 1]
+							}
+							{
+								File = "floor_he_33.png"
+								Size = [2, 1]
+							}
+							{
+								File = "floor_he_66.png"
+								Size = [2, 1]
+							}
+						]
+					}
+				}
+
+				MissileStorage
+				{
+					Type = AmmoStorage
+					AmmoType = missile_part_he
+					MaxAmmo = 6
+					StartingAmmo = 0
+					InitToMaxAmmoPVP = 0
+					SuppliesAmmo = true
+					SuppliesAmmoToggle = PowerToggle
+				}
+				MissileConsumer
+				{
+					Type = AmmoConsumer
+					AmmoType = missile_part_he
+					Storage = MissileStorage
+					DefaultPriority = &/PRIORITIES/Storage_Supply
+					OperationalToggle = PowerToggle
+					ReceiveAmmoMediaEffects = &/COMMON_EFFECTS/MissileLoad
+				}
+
+				MissileSprites
+				{
+					Type = AmmoSprites
+					Location = [1, .5]
+					AmmoStorage = MissileStorage
+					Layer = "doodads_low"
+					AmmoLevels
+					[
+						{
+							File = "missiles_he1.png"
+							Size = [2, 1]
+						}
+						{
+							File = "missiles_he2.png"
+							Size = [2, 1]
+						}
+						{
+							File = "missiles_he3.png"
+							Size = [2, 1]
+						}
+						{
+							File = "missiles_he4.png"
+							Size = [2, 1]
+						}
+						{
+							File = "missiles_he5.png"
+							Size = [2, 1]
+						}
+						{
+							File = "missiles_he6.png"
+							Size = [2, 1]
+						}
+						{
+							File = "missiles_he7.png"
+							Size = [2, 1]
+						}
+						{
+							File = "missiles_he8.png"
+							Size = [2, 1]
+						}
+						{
+							File = "missiles_he9.png"
+							Size = [2, 1]
+						}
+						{
+							File = "missiles_he10.png"
+							Size = [2, 1]
+						}
+						{
+							File = "missiles_he11.png"
+							Size = [2, 1]
+						}
+						{
+							File = "missiles_he12.png"
+							Size = [2, 1]
+						}
+					]
+				}
+
+				DestroyedEffects
+				{
+					Type = DeathEffects
+					MediaEffects = &/COMMON_EFFECTS/BigPartDestroyed
+					Location = [1, .5]
+
+					FactorHitEffectsWith = MissileStorage
+					HitEffects
+					[
+						{
+							Type = ExplosiveDamage
+							TotalDamage = 12000
+							Radius = 2.5
+							Delay = .05
+							FireChancePerNDamage = 50%
+							NDamage = 1000
+							Filter
+							{
+								OperationalHealth = true
+								StructuralHealth = false
+								Friendlies = true
+							}
+						}
+						{
+							Type = ExplosiveDamage
+							TotalDamage = 4500
+							Radius = 2
+							Delay = .05
+							Filter
+							{
+								OperationalHealth = false
+								StructuralHealth = true
+								Friendlies = true
+							}
+						}
+					]
+				}
+
+				Indicators
+				{
+					Type = IndicatorSprites
+					Location = [1, .5]
+					Layer = "indicators"
+					Indicators
+					[
+						// Turned off.
+						{
+							Toggle = PowerToggle
+							AtlasSprite
+							{
+								File = &/INDICATORS/PowerOff
+								Size = [1, 1]
+							}
+						}
+						
+						// Out of missiles.
+						{
+							Toggle = MissileStorage
+							AtlasSprite
+							{
+								File = &/INDICATORS/NoMissiles
+								Size = [1, 1]
+							}
+						}
+					]
+				}
+			}
+		}
+
+		EMPMissilesToggle
+		{
+			Type = ModeToggle
+			Mode = MissileType
+			OnMode = 1
+		}
+		EMPMissilesComponents
+		{
+			Type = ToggledComponents
+			Toggle = EMPMissilesToggle
+			IncludeInBlueprints = true
+			Components
+			{
+				FloorGraphics
+				{
+					Type = Graphics
+					Location = [1, .5]
+					OperationalToggle = IsOperational
+					Floor
+					{
+						Layer = "floors"
+						DamageLevels
+						[
+							{
+								File = "floor_emp.png"
+								Size = [2, 1]
+							}
+							{
+								File = "floor_emp_33.png"
+								Size = [2, 1]
+							}
+							{
+								File = "floor_emp_66.png"
+								Size = [2, 1]
+							}
+						]
+					}
+				}
+
+				MissileStorage
+				{
+					Type = AmmoStorage
+					AmmoType = missile_part_emp
+					MaxAmmo = 9
+					StartingAmmo = 0
+					InitToMaxAmmoPVP = 0
+					SuppliesAmmo = true
+					SuppliesAmmoToggle = PowerToggle
+				}
+				MissileConsumer
+				{
+					Type = AmmoConsumer
+					AmmoType = missile_part_emp
+					Storage = MissileStorage
+					DefaultPriority = &/PRIORITIES/Storage_Supply
+					OperationalToggle = PowerToggle
+					ReceiveAmmoMediaEffects = &/COMMON_EFFECTS/MissileLoad
+				}
+
+				MissileSprites
+				{
+					Type = AmmoSprites
+					Location = [1, .5]
+					AmmoStorage = MissileStorage
+					Layer = "doodads_low"
+					AmmoLevels
+					[
+						{
+							File = "missile_emp1.png"
+							Size = [2, 1]
+						}
+						{
+							File = "missile_emp2.png"
+							Size = [2, 1]
+						}
+						{
+							File = "missile_emp3.png"
+							Size = [2, 1]
+						}
+						{
+							File = "missile_emp4.png"
+							Size = [2, 1]
+						}
+						{
+							File = "missile_emp5.png"
+							Size = [2, 1]
+						}
+						{
+							File = "missile_emp6.png"
+							Size = [2, 1]
+						}
+						{
+							File = "missile_emp7.png"
+							Size = [2, 1]
+						}
+						{
+							File = "missile_emp8.png"
+							Size = [2, 1]
+						}
+						{
+							File = "missile_emp9.png"
+							Size = [2, 1]
+						}
+					]
+				}
+
+				DestroyedEffects
+				{
+					Type = DeathEffects
+					Location = [1, .5]
+
+					FactorHitEffectsWith = MissileStorage
+					HitEffects
+					[
+						{
+							Type = ExplosiveAmmoDrain
+							AmmoType = battery
+							TotalDrain = 12000
+							Radius = 6
+							Slices = 1
+							Delay = .05
+							RadiusEffectScaleExponent = 0.5
+							Filter
+							{
+								Ships = true
+								Shields = true
+								Friendlies = true
+							}
+
+							MediaEffectsOnDrain
+							[
+								&<./Data/shots/electro_bolt/particles/electro_bolt_discharge.txt>
+								&<./Data/shots/missile_emp/particles/missile_emp_lightning.txt>
+
+								: /BASE_SOUNDS/AudioExterior
+								{
+									Sound = "./Data/shots/electro_bolt/discharge.wav"
+									Volume = 1
+									SpeedVariation = .2
+								}
+							]
+						}
+					]
+
+					FactorMediaEffectsWith = MissileStorage
+					MediaEffects
+					[
+						&<./Data/shots/missile_emp/particles/missile_emp_hit.txt>
+						&<./Data/shots/missile_emp/particles/missile_emp_shockwave.txt>
+					]
+				}
+
+				DestroyedEffects2 // A separate destroyed effects for the base destruction that doesn't get scale with ammo.
+				{
+					Type = DeathEffects
+					Location = [1, .5]
+					MediaEffects = &/COMMON_EFFECTS/BigPartDestroyed
+				}
+
+				Indicators
+				{
+					Type = IndicatorSprites
+					Location = [1, .5]
+					Layer = "indicators"
+					Indicators
+					[
+						// Turned off.
+						{
+							Toggle = PowerToggle
+							AtlasSprite
+							{
+								File = &/INDICATORS/PowerOff
+								Size = [1, 1]
+							}
+						}
+						
+						// Out of missiles.
+						{
+							Toggle = MissileStorage
+							AtlasSprite
+							{
+								File = &/INDICATORS/NoEmp
+								Size = [1, 1]
+							}
+						}
+					]
+				}
+			}
+		}
+
+		NukeMissilesToggle
+		{
+			Type = ModeToggle
+			Mode = MissileType
+			OnMode = 2
+		}
+		NukeMissilesComponents
+		{
+			Type = ToggledComponents
+			Toggle = NukeMissilesToggle
+			IncludeInBlueprints = true
+			Components
+			{
+				FloorGraphics
+				{
+					Type = Graphics
+					Location = [1, .5]
+					OperationalToggle = IsOperational
+					Floor
+					{
+						Layer = "floors"
+						DamageLevels
+						[
+							{
+								File = "floor_nuke.png"
+								Size = [2, 1]
+							}
+							{
+								File = "floor_nuke_33.png"
+								Size = [2, 1]
+							}
+							{
+								File = "floor_nuke_66.png"
+								Size = [2, 1]
+							}
+						]
+					}
+				}
+
+				MissileStorage
+				{
+					Type = AmmoStorage
+					AmmoType = missile_part_nuke
+					MaxAmmo = 6
+					StartingAmmo = 0
+					InitToMaxAmmoPVP = 0
+					SuppliesAmmo = true
+					SuppliesAmmoToggle = PowerToggle
+				}
+				MissileConsumer
+				{
+					Type = AmmoConsumer
+					AmmoType = missile_part_nuke
+					Storage = MissileStorage
+					DefaultPriority = &/PRIORITIES/Storage_Supply
+					OperationalToggle = PowerToggle
+					ReceiveAmmoMediaEffects = &/COMMON_EFFECTS/MissileLoad
+				}
+
+				MissileSprites
+				{
+					Type = AmmoSprites
+					Location = [1, .5]
+					AmmoStorage = MissileStorage
+					Layer = "doodads_low"
+					AmmoLevels
+					[
+						{
+							File = "missile_nuke1.png"
+							Size = [2, 1]
+						}
+						{
+							File = "missile_nuke2.png"
+							Size = [2, 1]
+						}
+						{
+							File = "missile_nuke3.png"
+							Size = [2, 1]
+						}
+						{
+							File = "missile_nuke4.png"
+							Size = [2, 1]
+						}
+						{
+							File = "missile_nuke5.png"
+							Size = [2, 1]
+						}
+						{
+							File = "missile_nuke6.png"
+							Size = [2, 1]
+						}
+						{
+							File = "missile_nuke7.png"
+							Size = [2, 1]
+						}
+						{
+							File = "missile_nuke8.png"
+							Size = [2, 1]
+						}
+						{
+							File = "missile_nuke9.png"
+							Size = [2, 1]
+						}
+						{
+							File = "missile_nuke10.png"
+							Size = [2, 1]
+						}
+						{
+							File = "missile_nuke11.png"
+							Size = [2, 1]
+						}
+						{
+							File = "missile_nuke12.png"
+							Size = [2, 1]
+						}
+					]
+				}
+
+				DestroyedEffects
+				{
+					Type = DeathEffects
+					MediaEffects = &/COMMON_EFFECTS/BigPartDestroyed
+					Location = [1, .5]
+
+					FactorHitEffectsWith = MissileStorage
+					HitEffects
+					[
+						{
+							Type = ExplosiveDamage
+							TotalDamage = 15000
+							Radius = 2.5
+							Delay = .05
+							FireChancePerNDamage = 50%
+							NDamage = 1000
+							Filter
+							{
+								OperationalHealth = true
+								StructuralHealth = false
+								Friendlies = true
+							}
+						}
+						{
+							Type = ExplosiveDamage
+							TotalDamage = 5000
+							Radius = 2
+							Delay = .05
+							Filter
+							{
+								OperationalHealth = false
+								StructuralHealth = true
+								Friendlies = true
+							}
+						}
+					]
+				}
+
+				DestroyedEffects2 // A separate destroyed effects for the base destruction that doesn't get scale with ammo.
+				{
+					Type = DeathEffects
+					Location = [1, .5]
+					MediaEffects = &/COMMON_EFFECTS/BigPartDestroyed
+				}
+
+				Indicators
+				{
+					Type = IndicatorSprites
+					Location = [1, .5]
+					Layer = "indicators"
+					Indicators
+					[
+						// Turned off.
+						{
+							Toggle = PowerToggle
+							AtlasSprite
+							{
+								File = &/INDICATORS/PowerOff
+								Size = [1, 1]
+							}
+						}
+						
+						// Out of missiles.
+						{
+							Toggle = MissileStorage
+							AtlasSprite
+							{
+								File = &/INDICATORS/NoNuke
+								Size = [1, 1]
+							}
+						}
+					]
+				}
+			}
+		}
+
+		MinesToggle
+		{
+			Type = ModeToggle
+			Mode = MissileType
+			OnMode = 3
+		}
+		MinesComponents
+		{
+			Type = ToggledComponents
+			Toggle = MinesToggle
+			IncludeInBlueprints = true
+			Components
+			{
+				FloorGraphics
+				{
+					Type = Graphics
+					Location = [1, .5]
+					OperationalToggle = IsOperational
+					Floor
+					{
+						Layer = "floors"
+						DamageLevels
+						[
+							{
+								File = "floor_mine.png"
+								Size = [2, 1]
+							}
+							{
+								File = "floor_mine_33.png"
+								Size = [2, 1]
+							}
+							{
+								File = "floor_mine_66.png"
+								Size = [2, 1]
+							}
+						]
+					}
+				}
+
+				MissileStorage // Needs to be called MissileStorage to work with MissileStorageProxy.
+				{
+					Type = AmmoStorage
+					AmmoType = mine
+					MaxAmmo = 3
+					StartingAmmo = 0
+					InitToMaxAmmoPVP = 0
+					SuppliesAmmo = true
+					SuppliesAmmoToggle = PowerToggle
+				}
+				MissileConsumer
+				{
+					Type = AmmoConsumer
+					AmmoType = mine
+					Storage = MissileStorage
+					DefaultPriority = &/PRIORITIES/Storage_Supply
+					OperationalToggle = PowerToggle
+					ReceiveAmmoMediaEffects = &/COMMON_EFFECTS/MissileLoad
+				}
+
+				MineSprites
+				{
+					Type = AmmoSprites
+					Location = [1, .5]
+					AmmoStorage = MissileStorage
+					Layer = "doodads_low"
+					AmmoLevels
+					[
+						{
+							File = "mines1.png"
+							Size = [2, 1]
+						}
+						{
+							File = "mines2.png"
+							Size = [2, 1]
+						}
+						{
+							File = "mines3.png"
+							Size = [2, 1]
+						}
+						{
+							File = "mines4.png"
+							Size = [2, 1]
+						}
+						{
+							File = "mines5.png"
+							Size = [2, 1]
+						}
+						{
+							File = "mines6.png"
+							Size = [2, 1]
+						}
+					]
+				}
+
+				DestroyedEffects
+				{
+					Type = DeathEffects
+					MediaEffects = &/COMMON_EFFECTS/BigPartDestroyed
+					Location = [1, .5]
+
+					FactorHitEffectsWith = MissileStorage
+					HitEffects
+					[
+						{
+							Type = ExplosiveDamage
+							TotalDamage = 7500
+							Radius = 2.5
+							Delay = .05
+							FireChancePerNDamage = 50%
+							NDamage = 1000
+							Filter
+							{
+								OperationalHealth = true
+								StructuralHealth = false
+								Friendlies = true
+							}
+						}
+						{
+							Type = ExplosiveDamage
+							TotalDamage = 2500
+							Radius = 2
+							Delay = .05
+							Filter
+							{
+								OperationalHealth = false
+								StructuralHealth = true
+								Friendlies = true
+							}
+						}
+					]
+				}
+
+				Indicators
+				{
+					Type = IndicatorSprites
+					Location = [1, .5]
+					Layer = "indicators"
+					Indicators
+					[
+						// Turned off.
+						{
+							Toggle = PowerToggle
+							AtlasSprite
+							{
+								File = &/INDICATORS/PowerOff
+								Size = [1, 1]
+							}
+						}
+						
+						// Out of missiles.
+						{
+							Toggle = MissileStorage
+							AtlasSprite
+							{
+								File = &/INDICATORS/NoMines
+								Size = [1.5, 1.5]
+							}
+						}
+					]
+				}
+			}
+		}
+
+		MissileStorageProxy
+		{
+			Type = ToggleProxy
+			ComponentID = MissileStorage
+		}
+
+		Graphics
+		{
+			Type = Graphics
+			Location = [1, .5]
+			OperationalToggle = IsOperational
+			OperationalLighting
+			{
+				Layer = "lights_add"
+				DamageLevels
+				[
+					{
+						File = "lights.png"
+						Size = [2, 1]
+					}
+				]
+			}
+			Walls
+			{
+				Layer = "walls"
+				DamageLevels
+				[
+					{
+						File = "walls.png"
+						Size = [2, 1]
+					}
+					{
+						File = "walls_33.png"
+						Size = [2, 1]
+					}
+					{
+						File = "walls_66.png"
+						Size = [2, 1]
+					}
+				]
+			}
+			Roof
+			{
+				Layer = "roofs"
+				DamageLevels
+				[
+					{
+						File = "roof.png"
+						Size = [2, 1]
+					}
+					{
+						File = "roof_33.png"
+						Size = [2, 1]
+					}
+					{
+						File = "roof_66.png"
+						Size = [2, 1]
+					}
+				]
+			}
+			OperationalRoofWindows
+			{
+				Layer = "roof_windows"
+				DamageLevels
+				[
+					{
+						File = "roof_windows.png"
+						Size = [2, 1]
+					}
+					{
+						File = "roof_windows_33.png"
+						Size = [2, 1]
+					}
+					{
+						File = "roof_windows_66.png"
+						Size = [2, 1]
+					}
+				]
+			}
+			NonOperationalRoofWindows = &OperationalRoofWindows
+		}
+
+		BlueprintsHE
+		{
+			Type = BlueprintSprite
+			File = "blueprints_he.png"
+			Size = [2, 1]
+
+			ShowOnlyInToggleMode
+			{
+				ToggleID = missile_type
+				Mode = 0
+			}
+		}
+		BlueprintsEmp
+		{
+			Type = BlueprintSprite
+			File = "blueprints_emp.png"
+			Size = [2, 1]
+
+			ShowOnlyInToggleMode
+			{
+				ToggleID = missile_type
+				Mode = 1
+			}
+		}
+		BlueprintsNuke
+		{
+			Type = BlueprintSprite
+			File = "blueprints_nuke.png"
+			Size = [2, 1]
+
+			ShowOnlyInToggleMode
+			{
+				ToggleID = missile_type
+				Mode = 2
+			}
+		}
+		BlueprintsMine
+		{
+			Type = BlueprintSprite
+			File = "blueprints_mine.png"
+			Size = [2, 1]
+
+			ShowOnlyInToggleMode
+			{
+				ToggleID = missile_type
+				Mode = 3
+			}
+		}
+	}
+
+	Stats
+	{
+		HEMissileCapacity = 3
+		EMPMissileCapacity = 1
+		NukeMissileCapacity = 1
+		MineCapacity = 6
+	}
+}

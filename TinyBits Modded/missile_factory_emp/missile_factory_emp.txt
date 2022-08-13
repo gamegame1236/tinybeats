@@ -1,0 +1,436 @@
+Part : /BASE_PART
+{
+	NameKey = "Parts/MissileFactoryEMP"
+	IconNameKey = "Parts/MissileFactoryEMPIcon"
+	ID = Gray.missile_factory_emp // Part IDs must always be in the form of "author_name.part_name". If making your own mod, do *not* use "cosmoteer" as your author name, because it may conflict with future vanilla parts.
+	EditorGroup = "WeaponsMissile"
+	DescriptionKey = "Parts/MissileFactoryEMPDesc"
+	Cost = 30000
+	Size = [3, 4]
+	SelectionPriority = 1
+	MaxHealth = 12000
+	TypeCategories = [provides_emps, provides_launcher_parts, uses_power]
+	ReceivableBuffs = [Factory]
+	AllowedDoorLocations
+	[
+		[-1, 2]
+		[-1, 3]
+		[0, 4]
+		[1, 4]
+		[2, 4]
+		[3, 2]
+		[3, 3]
+	]
+	EditorIcon
+	{
+		Texture
+		{
+			File = "icon.png"
+			SampleMode = Linear
+		}
+		Size = [48, 64]
+	}
+	Components : ^/0/Components
+	{
+		IsOperational
+		{
+			Type = MultiToggle
+			Toggles = [PowerToggle, BatteryStorage]
+			Mode = All
+		}
+
+		PowerToggle
+		{
+			Type = UIToggle
+			ToggleID = "on_off"
+			Default = 1
+		}
+
+		MissileStorage
+		{
+			Type = AmmoStorage
+			AmmoType = missile_part_emp
+			MaxAmmo = 9
+			SuppliesAmmo = true
+			ExpectedAmmoGenerationRate = { BaseValue=(&../../AmmoConverter/ToQuantity) / (&../../AmmoConverter/Interval/BaseValue); BuffType=Factory; BuffMode=Multiply; }
+			ExpectedAmmoGenerationToggle = IsOperational
+		}
+
+		BatteryStorage
+		{
+			Type = AmmoStorage
+			AmmoType = battery
+			MaxAmmo = 4000
+		}
+		BatteryConsumer
+		{
+			Type = AmmoConsumer
+			AmmoType = battery
+			Storage = BatteryStorage
+			DefaultPriority = &/PRIORITIES/Factory_Supply
+			ResupplyThreshold = 500
+			OperationalToggle = PowerToggle
+			ReceiveAmmoMediaEffects = &/COMMON_EFFECTS/PowerDeliver
+		}
+
+		AmmoConverter
+		{
+			Type = AmmoConverter
+			OperationalToggle = IsOperational
+			FromStorage = BatteryStorage
+			ToStorage = MissileStorage
+			FromQuantity = 250
+			MinFromQuantityForConversion = 1
+			ToQuantity = 1
+			Interval = { BaseValue=.5; BuffType=Factory; BuffMode=Divide; }
+		}
+
+		ConvertEffects
+		{
+			Type = TriggeredEffects
+			Trigger = AmmoConverter
+			Location = [1.5, 2]
+			MediaEffects
+			[
+				: /BASE_SOUNDS/AudioInterior
+				{
+					Sound = "../ammo_factory/bullet_create.wav"
+					Volume = .1
+					Speed = .5
+					SpeedVariation = .05
+				}
+			]
+		}
+
+		BuffProvider
+		{
+			Type = GridBuffProvider
+			BuffType = Factory
+			BuffAmount = 25%
+			GridDistance = 1
+			OperationalToggle = IsOperational
+		}
+
+		Graphics
+		{
+			Type = Graphics
+			Location = [1.5, 2]
+			OperationalToggle = IsOperational
+			AnimationToggle = AmmoConverter
+			Floor
+			{
+				Layer = "floors"
+				DamageLevels
+				[
+					{
+						File = "floor.png"
+						Size = [3, 4]
+					}
+					{
+						File = "floor_33.png"
+						Size = [3, 4]
+					}
+					{
+						File = "floor_66.png"
+						Size = [3, 4]
+					}
+				]
+			}
+			OperationalDoodad
+			{
+				Layer = "doodads_high"
+				Offset = [0, -.5]
+				DamageLevels
+				[
+					{
+						AnimationFiles
+						[
+							"doodads_on1.png"
+							"doodads_on2.png"
+							"doodads_on3.png"
+							"doodads_on4.png"
+							"doodads_on5.png"
+							"doodads_on6.png"
+							"doodads_on7.png"
+							"doodads_on8.png"
+						]
+						Size = [3, 3]
+						AnimationInterval = 0.1
+					}
+				]
+			}
+			NonOperationalDoodad
+			{
+				Layer = "doodads_high"
+				Offset = [0, -.5]
+				DamageLevels
+				[
+					{
+						File = "doodads_off.png"
+						Size = [3, 3]
+					}
+				]
+			}
+			Walls
+			{
+				Layer = "walls"
+				DamageLevels
+				[
+					{
+						File = "walls.png"
+						Size = [3, 4]
+					}
+					{
+						File = "walls_33.png"
+						Size = [3, 4]
+					}
+					{
+						File = "walls_66.png"
+						Size = [3, 4]
+					}
+				]
+			}
+			OperationalLighting
+			{
+				Layer = "lights_add"
+				DamageLevels
+				[
+					{
+						File = "lights.png"
+						Size = [3, 4]
+					}
+				]
+			}
+			Roof
+			{
+				Layer = "roofs"
+				DamageLevels
+				[
+					{
+						File = "roof.png"
+						Size = [3, 4]
+					}
+					{
+						File = "roof_33.png"
+						Size = [3, 4]
+					}
+					{
+						File = "roof_66.png"
+						Size = [3, 4]
+					}
+				]
+			}
+			OperationalRoofWindows
+			{
+				Layer = "roof_windows"
+				Offset = [0, 1]
+				DamageLevels
+				[
+					{
+						File = "roof_windows.png"
+						Size = [3, 2]
+					}
+					{
+						File = "roof_windows_33.png"
+						Size = [3, 2]
+					}
+					{
+						File = "roof_windows_66.png"
+						Size = [3, 2]
+					}
+				]
+			}
+			NonOperationalRoofWindows = &OperationalRoofWindows
+		}
+
+		BatterySprites
+		{
+			Type = AmmoSprites
+			Location = [1.5, 1]
+			AmmoStorage = BatteryStorage
+			Layer = "doodads_low"
+			AmmoLevels
+			[
+				{
+					File = "batteries1.png"
+					Size = [3, 2]
+				}
+				{
+					File = "batteries2.png"
+					Size = [3, 2]
+				}
+				{
+					File = "batteries3.png"
+					Size = [3, 2]
+				}
+				{
+					File = "batteries4.png"
+					Size = [3, 2]
+				}
+			]
+		}
+
+		AmmoSprites
+		{
+			Type = AmmoSprites
+			Location = [1.5, 3]
+			AmmoStorage = MissileStorage
+			Layer = "doodads_low"
+			AmmoLevels
+			[
+				{
+					File = "missile1.png"
+					Size = [3, 2]
+				}
+				{
+					File = "missile2.png"
+					Size = [3, 2]
+				}
+				{
+					File = "missile3.png"
+					Size = [3, 2]
+				}
+				{
+					File = "missile4.png"
+					Size = [3, 2]
+				}
+				{
+					File = "missile5.png"
+					Size = [3, 2]
+				}
+				{
+					File = "missile6.png"
+					Size = [3, 2]
+				}
+				{
+					File = "missile7.png"
+					Size = [3, 2]
+				}
+				{
+					File = "missile8.png"
+					Size = [3, 2]
+				}
+				{
+					File = "missile9.png"
+					Size = [3, 2]
+				}
+			]
+		}
+
+		OperationEffects
+		{
+			Type = ToggleEffects
+			Location = [1.5, 2]
+			Toggle = IsOperational
+			ToggledOnMediaEffects = &/COMMON_EFFECTS/MachinesOn
+			ToggledOffMediaEffects = &/COMMON_EFFECTS/MachinesOff
+		}
+
+		DestroyedEffects
+		{
+			Type = DeathEffects
+			Location = [1.5, 2]
+
+			HitEffects
+			[
+				{
+					Type = ExplosiveAmmoDrain
+					AmmoType = battery
+					TotalDrain = 500000
+					Radius = 12
+					Slices = 1
+					Delay = .05
+					RadiusEffectScaleExponent = 0.5
+					Filter
+					{
+						Ships = true
+						Shields = true
+						Friendlies = true
+					}
+
+					MediaEffectsOnDrain
+					[
+						&<./Data/shots/electro_bolt/particles/electro_bolt_discharge.txt>
+						&<./Data/shots/missile_emp/particles/missile_emp_lightning.txt>
+
+						: /BASE_SOUNDS/AudioExterior
+						{
+							Sound = "./Data/shots/electro_bolt/discharge.wav"
+							Volume = 1
+							SpeedVariation = .2
+						}
+					]
+				}
+			]
+
+			MediaEffects
+			[
+				&<./Data/shots/missile_emp/particles/missile_emp_hit.txt>
+				&<./Data/shots/missile_emp/particles/missile_emp_shockwave.txt>
+			]
+		}
+
+		DestroyedEffects2 // A separate destroyed effects for the base destruction that doesn't get scale with ammo.
+		{
+			Type = DeathEffects
+			Location = [1.5, 2]
+			MediaEffects = &/COMMON_EFFECTS/BigPartDestroyed
+		}
+
+		Indicators
+		{
+			Type = IndicatorSprites
+			Location = [1.5, 2]
+			Layer = "indicators"
+			Indicators
+			[
+				// Turned off.
+				{
+					Toggle = PowerToggle
+					AtlasSprite
+					{
+						File = &/INDICATORS/PowerOff
+						Size = [1, 1]
+					}
+				}
+
+				// Out of power.
+				{
+					Toggle = BatteryStorage
+					AtlasSprite
+					{
+						File = &/INDICATORS/NoPower
+						Size = [1.5, 1.5]
+					}
+				}
+			]
+		}
+
+		Blueprints
+		{
+			Type = BlueprintSprite
+			File = "blueprints.png"
+			Size = [3, 4]
+		}
+	}
+
+	Stats
+	{
+		PartsPerMissile = &<../missile_launcher/emp/missile_launcher_emp.txt>/Components/Emitter/AmmoUsed
+		MissileProduction = (&~/Part/Components/AmmoConverter/ToQuantity) / (&~/Part/Components/AmmoConverter/Interval/BaseValue) / (&PartsPerMissile)
+		MissileCapacity = (&~/Part/Components/MissileStorage/MaxAmmo) / (&PartsPerMissile)
+		PowerPerMissile = (&~/Part/Components/AmmoConverter/FromQuantity) / (&~/Part/Components/AmmoConverter/ToQuantity) * (&PartsPerMissile) / 1000
+		PowerPerSecond = (&~/Part/Components/AmmoConverter/FromQuantity) / (&~/Part/Components/AmmoConverter/Interval/BaseValue) / 1000
+		MissilePowerUsage = [&../PowerPerMissile, &../PowerPerSecond]
+		PowerCapacity = (&~/Part/Components/BatteryStorage/MaxAmmo) / 1000
+		FactoryBuff = (&~/Part/Components/BuffProvider/BuffAmount) * 100
+
+		RecPower = &PowerPerSecond
+		RecCrew = (&RecPower) * 4
+	}
+
+	StatsByCategory
+	[
+		&<../missile_launcher/emp/missile_launcher_emp.txt>/MissileStats
+	]
+}

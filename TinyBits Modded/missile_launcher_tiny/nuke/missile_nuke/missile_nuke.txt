@@ -1,0 +1,191 @@
+ID = "Battleman103333.missile_nuke_tiny"
+Range = { BaseValue=250; BuffType=AmmoRange; BuffMode=Multiply; }
+IdealRange = { BaseValue=240; BuffType=AmmoRange; BuffMode=Multiply; Min=240; Max=480}
+Speed = { BaseValue=45; BuffType=AmmoSpeed; BuffMode=Multiply; }
+ReceiveableBuffs = [AmmoDamage, AmmoRange, AmmoSpeed]
+
+Components
+{
+	Physics
+	{
+		Type = CirclePhysics
+		Radius = .6
+		Density = 0.1
+	}
+
+	Homing
+	{
+		Type = TargetHoming
+		TurnVelocity = 45d
+		Delay = .1
+		AvoidanceRaycastDistance = 100
+		VelocityCompensation = 70%
+	}
+
+	Acceleration
+	{
+		Type = Acceleration
+		Acceleration = { BaseValue=30; BuffType=AmmoSpeed; BuffMode=Multiply; Min=30; Max=120; }
+	}
+
+	NegativeAcceleration
+	{
+		Type = Acceleration
+		Acceleration = [-135, 0]
+		AccelerationOverTime = [0, .75]
+		Direction = FrameOfReferenceVelocity
+	}
+
+	DeathByLifetime
+	{
+		Type = DeathByLifetime
+		Lifetime = 14
+		HasTarget = true
+	}
+
+	DeathByDistanceTraveled
+	{
+		Type = DeathByDistanceTraveled
+		// Distance auto-computed from range.
+		HasTarget = false
+	}
+
+	Sprite
+	{
+		Type = AnimatedSprite
+		Animation
+		{
+			AtlasSprite
+			{
+				Texture
+				{
+					File = "missile_nuke.png"
+					MipLevels = max
+				}
+				Size = [1, 1.5]
+			}
+			FrameCount = 8
+			FrameSize = [192, 98]
+			FramesPerRow = 8
+			FramesPerSecond = 24
+		}
+	}
+
+	RadiationSprite
+	{
+		Type = Sprite
+		RenderBucket = Upper
+		Spin = 360d
+		Sprite
+		{
+			Texture
+			{
+				File = "radiation.png"
+				MipLevels = max
+				SampleMode = Linear
+			}
+			Size = [2.5, 2.5]
+			VertexColor = [150, 0, 0]
+			TargetBlendMode = Add
+		}
+	}
+
+	MediaEffects
+	{
+		Type = MediaEffects
+		MediaEffects
+		[
+			&<particles/missile_nuke_thruster_glow.txt>
+			&<particles/missile_nuke_thruster_trail.txt>
+		]
+	}
+
+	Targetable
+	{
+		Type = Targetable
+		Health = 3200
+		TargetCategory = "missile"
+
+		// No AOE damage when shot down.
+		OnDeath = &../Hit/HitFriendly
+	}
+
+	Hit
+	{
+		Type = SimpleHit
+		SourceShipCollisionDelay = 1.5/30
+
+		HitShield = &HitOperational
+		HitOperational
+		{
+			HitEffects
+			[
+				{
+					Type = ExplosiveDamage
+					TotalDamage = { BaseValue=100000; BuffType=AmmoDamage; BuffMode=Multiply; }
+					Radius = 5
+					ExpandDuration = .8
+					ExpandStartRadius = 1
+					ExpandLoss = 100%
+					ImpulsePerNDamage = 5
+					NDamage = 1000
+					Filter
+					{
+						OperationalHealth = true
+						StructuralHealth = false
+						Friendlies = true
+					}
+				}
+				{
+					Type = ExplosiveDamage
+					TotalDamage = { BaseValue=30000; BuffType=AmmoDamage; BuffMode=Multiply; }
+					Radius = 4
+					ExpandDuration = .8
+					ExpandStartRadius = 1
+					ExpandLoss = 100%
+					ImpulsePerNDamage = 2.5
+					NDamage = 1000
+					Filter
+					{
+						OperationalHealth = false
+						StructuralHealth = true
+						Friendlies = true
+					}
+				}
+			]
+
+			MediaEffects
+			[
+				&<particles/missile_nuke_flash.txt>
+				&<particles/missile_nuke_shockwave.txt>
+
+				: /BASE_SOUNDS/AudioExterior
+				{
+					Sound = "missile_nuke_hit.wav"
+					Volume = 1
+				}
+
+				: /BASE_SHAKE
+				{
+					ShakeAmount = .15
+					Duration = .75
+				}
+			]
+		}
+		HitStructural = &HitOperational
+
+		HitFriendly
+		{
+			MediaEffects
+			[
+				&<particles/missile_nuke_flash.txt>
+
+				: /BASE_SOUNDS/AudioExterior
+				{
+					Sound = "missile_nuke_hit.wav"
+					Volume = 1
+				}
+			]
+		}
+	}
+}

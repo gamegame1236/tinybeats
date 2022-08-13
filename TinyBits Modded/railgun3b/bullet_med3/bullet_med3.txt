@@ -1,0 +1,202 @@
+ID = "Gray.bullet_rail_3"
+Range = { BaseValue=400; BuffType=AmmoRange; BuffMode=Multiply; }
+IdealRange = [80, 400]
+IdealRadius = [5, 50]
+Speed = { BaseValue=125; BuffType=AmmoSpeed; BuffMode=Multiply; }
+ReceivableBuffs = [AmmoSpeed, AmmoRange, AmmoPen, AmmoDamage]
+
+Components
+{
+	Physics
+	{
+		Type = CirclePhysics
+		Radius = 0.05
+		Density = 0.0001
+	}
+
+	Death
+	{
+		Type = DeathByLifetime
+		// Lifetime will be auto-calculated based on range and speed.
+	}
+	Homing
+	{
+		Type = TargetHoming
+		TurnVelocity = 15d
+		Delay = .01
+		AvoidanceRaycastDistance = 150
+		VelocityCompensation = 80%
+	}
+
+	Retarget
+	{
+		Type = SameShipRetarget
+	}
+
+	Acceleration
+	{
+		Type = Acceleration
+		Acceleration = 10
+	}
+
+	NegativeAcceleration
+	{
+		Type = Acceleration
+		Acceleration = [-90, 0]
+		AccelerationOverTime = [0, .75]
+		Direction = FrameOfReferenceVelocity
+	}
+	Targetable
+	{
+		Type = Targetable
+		Health = 1300
+		TargetCategory = "bullet"
+
+		OnDeath
+		{
+			MediaEffects = &~/Components/Hit/HitOperational/MediaEffects
+		}
+	}
+
+	Hit
+	{
+		Type = PenetratingHit
+		Penetration = { BaseValue=20; BuffType=AmmoPen; BuffMode=Multiply; }
+		PenetrationSpeed = 100
+		SourceShipCollisionDelay = 10
+
+		HitShield = &HitOperational
+		HitOperational
+		{
+			ReduceEffectsByPenetration = true
+
+			HitEffects
+			[
+				{
+					Type = AreaDamage
+					Damage = { BaseValue=9050; BuffType=AmmoDamage; BuffMode=Multiply; }
+					Radius = 2
+				}
+				{
+					Type = Impulse
+					Impulse = 150
+				}
+			]
+
+			MediaEffects
+			[
+				&<particles/bullet_hit_med.txt>
+				&<particles/bullet_smoke_med.txt>
+				&<particles/bullet_flash_med.txt>
+
+				: /BASE_SOUNDS/AudioExterior
+				{
+					Sound = "bullet_med_hit.wav"
+					Volume = .4
+					SpeedVariation = .4
+				}
+
+				: /BASE_SHAKE
+				{
+					ShakeAmount = .05
+					Duration = .5
+				}
+			]
+		}
+		HitStructural
+		{
+			ReduceEffectsByPenetration = true
+
+			HitEffects
+			[
+				{
+					Type = Damage
+					Damage = { BaseValue=650; BuffType=AmmoDamage; BuffMode=Multiply; }
+				}
+				{
+					Type = Impulse
+					Impulse = 10
+				}
+			]
+
+			MediaEffects
+			[
+				&<particles/bullet_hit_struct_med.txt>
+
+				: /BASE_SOUNDS/AudioExterior
+				{
+					Sound = "bullet_med_hit_structure.wav"
+					Volume = .3
+					SpeedVariation = .4
+				}
+			]
+		}
+		PenetratingOperational
+		{
+			ReduceEffectsByPenetration = true
+
+			HitEffects
+			[
+				{
+					Type = Damage
+					Damage = { BaseValue=3550; BuffType=AmmoPen; BuffMode=Multiply; }
+				}
+				{
+					Type = Fire
+					FireChance = .4
+				}
+				{
+					Type = Impulse
+					Impulse = 20
+				}
+			]
+
+			MediaEffects
+			[
+				&<particles/bullet_hit_med.txt>
+				&<particles/bullet_flash_med.txt>
+			]
+		}
+		PenetratingStructural
+		{
+			// No effect.
+		}
+		FinishedPenetratingOperational = &PenetratingOperational
+		FinishedPenetratingStructural = &PenetratingStructural
+	}
+
+	Sprite
+	{
+		Type = AnimatedSprite
+		ReduceScaleWith = Hit
+		ReduceScaleExponent = 0.5
+		Animation
+		{
+			AtlasSprite
+			{
+				Texture
+				{
+					File = "pew.png"
+					SampleMode = Linear
+					MipLevels = max
+				}
+				Size = [1, 1]
+			}
+			FrameCount = 1
+			FrameSize = [128, 128]
+			FramesPerRow = 1
+			FramesPerSecond = 60
+			Bucket = Upper1
+		}
+	}
+
+	MediaEffects
+	{
+		Type = MediaEffects
+		MediaEffects
+		[
+			&<particles/bullet_trail_med.txt>
+			&<particles/h.txt>
+		]
+	}
+}

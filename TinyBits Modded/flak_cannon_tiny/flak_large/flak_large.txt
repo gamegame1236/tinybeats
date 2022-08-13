@@ -1,0 +1,60 @@
+Range = { BaseValue=150; BuffType=AmmoRange; BuffMode=Multiply; MaxValue=300; }
+IdealRange = { BaseValue=240; BuffType=AmmoRange; BuffMode=Multiply; Min=140; Max=280; }
+ReceivableBuffs = [AmmoDamage, AmmoRange]
+ClipRangeToTarget = true
+RandomOffsetRadius = [1, 5] // Increases as range increases.
+
+HitNothing
+{
+	HitEffects
+	[
+		{
+			Type = ExplosiveDamage
+			TotalDamage = { BaseValue=1800; BuffType=AmmoDamage; BuffMode=Multiply; }
+			Radius = 4
+            Slices = 1
+			Filter
+			{
+				Ships = false
+				Shields = false
+				Bullets = true
+				OnlyBulletCategories = [missile, laser, bullet, mine]
+			}
+		}
+		{
+			Type = ExplosiveDamage
+			TotalDamage = { BaseValue=1800; BuffType=AmmoDamage; BuffMode=Multiply; }
+			Radius = 4
+			Filter
+			{
+				Ships = true
+				Shields = true
+				Bullets = false
+			}
+		}
+	]
+
+	MediaEffects
+	[
+		&<particles/flak_large_shrapnel.txt>
+		&<particles/flak_large_flash.txt>
+		&<particles/flak_large_smoke.txt>
+
+		: /BASE_SOUNDS/AudioExterior
+		{
+			Sound = "flak_large_hit.wav"
+			Volume = .5
+			SpeedVariation = .2
+		}
+
+		: /BASE_SHAKE
+		{
+			ShakeAmount = .05
+			Duration = .25
+		}
+	]
+}
+
+HitShield = &HitNothing
+HitOperational = &HitNothing
+HitStructural = &HitNothing

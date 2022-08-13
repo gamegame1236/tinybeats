@@ -1,0 +1,81 @@
+ID = "cosmoteer.pd_shot_hugo"
+Range = 350
+IdealRange = 150
+Speed = 1200
+
+Components
+{
+	Physics
+	{
+		Type = CirclePhysics
+		Radius = 0.5
+		Density = 0.001
+	}
+
+	Death
+	{
+		Type = DeathByLifetime
+		// Lifetime will be auto-calculated based on range and speed.
+	}
+
+	Sprite
+	{
+		Type = Sprite
+		RenderBucket = Lower
+		Sprite
+		{
+			Texture
+			{
+				File = "pd_shot.png"
+				SampleMode = Linear
+				MipLevels = max
+			}
+			Size = [24, 4]
+		}
+		Offset = [-3.5, 0]
+		LerpScaleFrom = [.25, 1]
+		LerpTime = .1
+	}
+
+	AntiBullet
+	{
+		Type = AntiBullet
+		HitsBulletCategories = [missile, mine, bullet, laser]
+
+		HitBullet
+		{
+			HitEffects
+			[
+				{
+					Type = Damage
+					Damage = 5000
+				}
+			]
+
+			MediaEffects
+			[
+				&<particles/pd_shot_clink.txt>
+			]
+		}
+	}
+
+	Hit
+	{
+		Type = SimpleHit
+			
+		HitShield = &HitOperational
+		HitOperational
+		{
+			HitEffects
+			[
+				{
+					Type = ExplosiveDamage
+					TotalDamage = 8575
+					Radius = 5
+				}
+			]
+			MediaEffects = &~/Components/AntiBullet/HitBullet/MediaEffects
+		}
+		HitStructural = &HitOperational
+	}
+}

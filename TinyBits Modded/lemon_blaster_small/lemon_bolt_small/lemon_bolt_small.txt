@@ -1,0 +1,210 @@
+ID = "Battleman103333.lemon_bolt_small"
+OtherIDs = ["small_lemon_shot", "lemon_bolt", "lemon_bolt_small"]
+Range = 350
+IdealRange = [100, 350]
+IdealRadius = [5, 50]
+Speed = 50
+
+Components
+{
+	Physics
+	{
+		Type = CirclePhysics
+		Radius = 0.01
+		Density = 0.0001
+	}
+
+	DeathByEnemyProximity
+	{
+		Type = DeathByEnemyProximity
+		Interval = .1
+		Range = 35
+		DetectsShips = true
+		DetectsBullets = false
+		StartDelay = .1
+
+		OnDeath
+		{
+			HitEffects
+			[
+				{
+					Type = SpawnBullets
+					Bullet = &<lemon_bolt_small1.txt>
+					Count = 7
+					Spread = [-360d, 360d]
+					InheritVelocity = true
+				}
+			]
+		}
+	}
+	Death
+	{
+		Type = DeathByLifetime
+		Lifetime = 6
+
+		OnDeath
+		{
+			HitEffects
+			[
+				{
+					Type = SpawnBullets
+					Bullet = &<lemon_bolt_small1.txt>
+					Count = 7
+					Distance = 0.1
+					Spread = [-360d, 360d]
+					InheritVelocity = false
+				}
+			]
+		}
+	}
+	Targetable
+	{
+		Type = Targetable
+		Health = 1250
+		TargetCategory = "laser"
+	}
+
+	Repulsion
+	{
+		Type = ProximityAcceleration
+		Range = 50
+		Acceleration = 25
+		AccelerateTowardsShips = false
+		AccelerateTowardsBullets = true
+		AccelerateTowardsBulletCategories = [laser]
+		AccelerateTowardsFriendlies = true
+		AccelerateTowardsEnemies = false
+	}
+
+	Hit
+	{
+		Type = PenetratingHit
+		FactorEffectsWith = Targetable
+
+		HitShield = &HitOperational
+		HitOperational
+		{
+			HitEffects
+			[
+				{
+					Type = Damage
+					Damage = 750
+				}
+				{
+					Type = ExplosiveAmmoDrain
+					AmmoType = battery
+					TotalDrain = 600
+					Radius = 6.5
+					Slices = 1
+					Filter
+					{
+						Ships = true
+						Shields = true
+						Friendlies = false
+					}
+				}
+				{
+					Type = Impulse;
+					Impulse = 10;
+				}
+			]
+
+			MediaEffects
+			[
+				&<particles/laser_bolt_small_hit.txt>
+				&<particles/laser_bolt_small_flash.txt>
+				&<particles/laser_bolt_small_sparks.txt>
+
+				: /BASE_SOUNDS/AudioExterior
+				{
+					Sound = "laser_bolt_small_hit.wav"
+					Volume = .4
+					SpeedVariation = .4
+				}
+
+				: /BASE_SHAKE
+				{
+					ShakeAmount = .1
+					Duration = .3
+				}
+			]
+		}
+		HitStructural
+		{
+			HitEffects
+			[
+				{
+					Type = Damage
+					Damage = 700
+				}
+				{
+					Type = Impulse;
+					Impulse = 3;
+				}
+			]
+
+			MediaEffects
+			[
+				&<particles/laser_bolt_small_hit_struct.txt>
+
+				: /BASE_SOUNDS/AudioExterior
+				{
+					Sound = "laser_bolt_small_hit.wav"
+					Volume = .3
+					SpeedVariation = .4
+				}
+			]
+		}
+		PenetratingOperational
+		{
+			// No effect.
+		}
+		PenetratingStructural
+		{
+			// No effect.
+		}
+		FinishedPenetratingOperational
+		{
+			// No effect.
+		}
+		FinishedPenetratingStructural
+		{
+			// No effect.
+		}
+	}
+
+	Sprite
+	{
+		Type = AnimatedSprite
+		ReduceScaleWith = Hit
+		ReduceScaleExponent = 0.5
+		Animation
+		{
+			AtlasSprite
+			{
+				Texture
+				{
+					File = "lemon_bolt_small.png"
+					SampleMode = Linear
+					MipLevels = max
+				}
+				Size = [2, 2]
+			}
+			FrameCount = 8
+			FrameSize = [128, 128]
+			FramesPerRow = 2
+			FramesPerSecond = 60
+		}
+	}
+
+	MediaEffects
+	{
+		Type = MediaEffects
+		FactorEffectsWith = Hit
+		FactorEffectsExponent = 0.5
+		MediaEffects
+		[
+			&<particles/laser_bolt_small_glow.txt>
+		]
+	}
+}

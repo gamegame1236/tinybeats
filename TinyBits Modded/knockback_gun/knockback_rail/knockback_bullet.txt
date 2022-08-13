@@ -1,0 +1,278 @@
+ID = "Battleman103333.knockback_bullet"
+OtherIDs = ["bullet_knockback"]
+Range = 200
+IdealRange
+[
+	150
+]
+IdealRadius = [5, 50]
+Speed = 450
+Components
+{
+	Physics
+	{
+		Type = CirclePhysics
+		Radius = 0.3
+		Density = 0.01
+	}
+
+	Death
+	{
+		Type = DeathByLifetime
+	}
+
+	Targetable
+	{
+		Type = Targetable
+		Health = 2250
+		TargetCategory = "bullet"
+
+		OnDeath
+		{
+			MediaEffects = &~/Components/Hit/HitOperational/MediaEffects
+		}
+	}
+
+	DamagePool
+	{
+		Type = DamagePool
+		Damage = 10
+	}
+
+	AntiBullet
+	{
+		Type = AntiBullet
+		HitsBulletCategories = [missile, mine, bullet]
+
+		HitBullet
+		{
+			HitEffects
+			[
+				{
+					Type = Impulse
+					Impulse = 300
+					Filter
+					[
+						Operational = false
+						Friendlies = false
+						Structural = false
+					]
+				}
+			]
+
+		}
+	}
+
+	Hit
+	{
+		Type = PenetratingHit
+		Penetration = 25
+		PenetrationSpeed = &~/Speed
+		SourceShipCollisionDelay = 4
+
+		HitShield
+		{
+			ReduceEffectsByPenetration = true
+
+			HitEffects
+			[
+				{
+					Type = ExplosiveDamage
+					TotalDamage = -500
+					Slices = 1
+					Radius = 5
+					Filter
+					[
+						Friendlies = true
+						Enemies = false
+					]
+				}
+				{
+					Type = ExplosiveDamage
+					TotalDamage = 500
+					Slices = 1
+					Radius = 5
+					Filter
+					[
+						Friendlies = false
+						Enemies = true
+					]
+				}
+			]
+
+			MediaEffects = &../HitOperational/MediaEffects
+		}
+		HitOperational
+		{
+			ReduceEffectsByPenetration = true
+
+			HitEffects
+			[
+				{
+					Type = ExplosiveDamage
+					TotalDamage = -500
+					Radius = 5
+					Slices = 1
+					Filter
+					[
+						Friendlies = true
+						Enemies = false
+					]
+				}
+				{
+					Type = ExplosiveDamage
+					TotalDamage = 500
+					Radius = 5
+					Slices = 1
+					Filter
+					[
+						Friendlies = false
+						Enemies = true
+					]
+				}
+			]
+
+			MediaEffectsScale = 2
+			MediaEffects
+			[
+				&<particles/bullet_hit_railgun.txt>
+				&<particles/bullet_railgun_sparks.txt>
+				&<particles/bullet_smoke_large.txt>
+				&<particles/bullet_flash_railgun.txt>
+
+				: /BASE_SOUNDS/AudioExterior
+				{
+					Sound = "bullet_railgun_hit.wav"
+					Volume = 4
+					SpeedVariation = .4
+				}
+
+				: /BASE_SHAKE
+				{
+					ShakeAmount = 1
+					Duration = .75
+				}
+			]
+		}
+		HitStructural
+		{
+			ReduceEffectsByPenetration = true
+
+			HitEffects
+			[
+				{
+					Type = ExplosiveDamage
+					TotalDamage = -500
+					Radius = 5
+					Slices = 1
+					Filter
+					[
+						Friendlies = true
+						Enemies = false
+					]
+				}
+				{
+					Type = ExplosiveDamage
+					TotalDamage = 500
+					Radius = 5
+					Slices = 1
+					Filter
+					[
+						Friendlies = false
+						Enemies = true
+					]
+				}
+			]
+
+			MediaEffectsScale = 1.5
+			MediaEffects
+			[
+				&<particles/bullet_hit_struct_railgun.txt>
+
+				: /BASE_SOUNDS/AudioExterior
+				{
+					Sound = "bullet_railgun_hit_structure.wav"
+					Volume = 4
+					SpeedVariation = .4
+				}
+			]
+		}
+		PenetratingOperational
+		{
+			ReduceEffectsByPenetration = true
+
+			HitEffects
+			[
+				{
+					Type = ExplosiveDamage
+					TotalDamage = -2000
+					Radius = 5
+					Slices = 1
+					Filter
+					[
+						Friendlies = true
+						Enemies = false
+					]
+				}
+				{
+					Type = ExplosiveDamage
+					TotalDamage = 2000
+					Radius = 5
+					Slices = 1
+					Filter
+					[
+						Friendlies = false
+						Enemies = true
+					]
+				}
+			]
+
+			MediaEffectsScale = 2
+			MediaEffects
+			[
+				&<particles/bullet_penetrate_railgun.txt>
+				&<particles/bullet_flash_railgun.txt>
+			]
+		}
+		PenetratingStructural
+		{
+			// No effect.
+		}
+		FinishedPenetratingOperational = &PenetratingOperational
+		FinishedPenetratingStructural = &PenetratingStructural
+	}
+
+	Sprite
+	{
+		Type = AnimatedSprite
+		ReduceScaleWith = Hit
+		ReduceScaleExponent = 0.5
+		Animation
+		{
+			AtlasSprite
+			{
+				Texture
+				{
+					File = "bullet_railgun.png"
+					SampleMode = Linear
+					MipLevels = max
+				}
+				Size = [3, 3]
+			}
+			FrameCount = 16
+			FrameSize = [128, 128]
+			FramesPerRow = 4
+			FramesPerSecond = 60
+		}
+	}
+
+	MediaEffects
+	{
+		Type = MediaEffects
+		MediaEffectsScale = .1
+		MediaEffects
+		[
+			&<particles/bullet_trail_railgun.txt>
+		]
+	}
+}

@@ -1,0 +1,111 @@
+ID = "Battleman103333.mine1"
+Range = 170
+IdealRange = 50
+Speed = 50
+RandomRotation = true
+
+Components
+{
+	Physics
+	{
+		Type = CirclePhysics
+		Radius = .3
+		Density = 2
+		LinearDamping = .5
+		AngularDamping = 1
+		CollidesWithBullets = true
+		FrameOfReferenceDuration = 1
+	}
+
+	Repulsion
+	{
+		Type = ProximityAcceleration
+		Range = 15
+		Acceleration = -10
+		AccelerateTowardsShips = false
+		AccelerateTowardsBullets = true
+		AccelerateTowardsBulletCategories = [mine]
+		AccelerateTowardsFriendlies = true
+		AccelerateTowardsEnemies = true
+	}
+
+	UnarmedSprite
+	{
+		Type = Sprite
+		RenderBucket = Lower
+		Sprite
+		{
+			Texture
+			{
+				File = "mine_unarmed.png"
+				MipLevels = max
+			}
+			Size = [3, 3]
+		}
+	}
+
+	Targetable
+	{
+		Type = Targetable
+		Health = 800
+		TargetCategory = "mine"
+		OnDeath = &~/Components/Hit/HitOperational
+	}
+
+	DeployDeath
+	{
+		Type = DeathBySpeed
+		MinSpeed = 30
+		FactorEffectsWith = Targetable
+
+		OnDeath
+		{
+			HitEffects
+			[
+				{
+					Type = SpawnBullets
+					Bullet = &<mine_deployed.txt>
+					Count = 2
+					InheritVelocity = true
+					ScaleHealth = true
+				}
+			]
+		}
+	}
+
+	Hit
+	{
+		Type = SimpleHit
+		SourceShipCollisionDelay = 1.5/30
+		ShieldCollisions
+		{
+			HitsEnemyShields = false
+		}
+
+		HitShield {}
+
+		HitOperational
+		{
+			MediaEffects
+			[
+				&<../missile_he/particles/missile_he_hit.txt>
+				&<../missile_he/particles/missile_he_flash.txt>
+
+				: /BASE_SOUNDS/AudioExterior
+				{
+					Sound = "../missile_he/missile_he_hit.wav"
+					Volume = .75
+					SpeedVariation = .4
+				}
+
+				: /BASE_SHAKE
+				{
+					ShakeAmount = .1
+					Duration = .75
+				}
+			]
+		}
+
+		HitStructural = &HitOperational
+	}
+}

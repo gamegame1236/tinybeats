@@ -1,0 +1,109 @@
+ID = "Battleman103333.bullet_spreadl"
+OtherIDs = ["spread_bulletl", "bullet_spreadl"]
+Range = 200
+IdealRange = [160, 210]
+IdealRadius = [5, 50]
+Speed = 120
+
+Components
+{
+	Physics
+	{
+		Type = CirclePhysics
+		Radius = 1
+		Density = 0.01
+	}
+
+	Death
+	{
+		Type = DeathByLifetime
+		// Lifetime will be auto-calculated based on range and speed.
+	}
+
+	Targetable
+	{
+		Type = Targetable
+		Health = 1000
+		TargetCategory = "bullet"
+	}
+
+	HitEffects
+	[
+		{
+			Type = ExplosiveDamage
+			TotalDamage = 5500
+			Radius = 4
+           		Slices = 1
+			Filter
+			{
+				Ships = false
+				Shields = false
+				Bullets = true
+				OnlyBulletCategories = [missile, laser, bullet, mine]
+			}
+		}
+		{
+			Type = ExplosiveDamage
+			TotalDamage = 5500
+			Radius = 4
+			Filter
+			{
+				Ships = true
+				Shields = true
+				Bullets = false
+			}
+		}
+		MediaEffects
+		[
+			&<particles/flak_large_shrapnel.txt>
+			&<particles/flak_large_flash.txt>
+			&<particles/flak_large_smoke.txt>
+
+			: /BASE_SOUNDS/AudioExterior
+			{
+				Sound = "flak_large_hit.wav"
+				Volume = .5
+				SpeedVariation = .2
+			}
+
+			: /BASE_SHAKE
+			{
+				ShakeAmount = .05
+				Duration = .25
+			}
+		]
+	]
+
+	Sprite
+	{
+		Type = AnimatedSprite
+		ReduceScaleWith = Hit
+		ReduceScaleExponent = 0.5
+		Animation
+		{
+			AtlasSprite
+			{
+				Texture
+				{
+					File = "bullet_med.png" // Just re-use the medium cannon's bullet.
+					SampleMode = Linear
+					MipLevels = max
+				}
+				Size = [2, 1]
+			}
+			FrameCount = 16
+			FrameSize = [128, 128]
+			FramesPerRow = 4
+			FramesPerSecond = 60
+		}
+	}
+
+	MediaEffects
+	{
+		Type = MediaEffects
+		MediaEffects
+		[
+			&<particles/bullet_trail_large.txt>
+		]
+	}
+}

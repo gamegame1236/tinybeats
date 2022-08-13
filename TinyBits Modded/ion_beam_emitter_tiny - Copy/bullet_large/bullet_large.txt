@@ -1,0 +1,147 @@
+ID = "Battleman103333.bullet_explosive_e"
+OtherIDs = ["big_boom_e", "boom_big_e"]
+Range = 200
+IdealRange = [75, 190]
+IdealRadius = [5, 50]
+Speed = 100
+
+Components
+{
+	Physics
+	{
+		Type = CirclePhysics
+		Radius = 0.3
+		Density = 0.0001
+	}
+
+	Death
+	{
+		Type = DeathByLifetime
+		// Lifetime will be auto-calculated based on range and speed.
+	}
+
+	Targetable
+	{
+		Type = Targetable
+		Health = 1200
+		TargetCategory = "bullet"
+	}
+
+	Hit
+	{
+		Type = SimpleHit
+		SourceShipCollisionDelay = 1.5/30
+
+		HitShield = &HitOperational
+		HitOperational
+		{
+			HitEffects
+			[
+				{
+					Type = ExplosiveAmmoDrain
+					AmmoType = battery
+					TotalDrain = 88000
+					Radius = 45
+					Slices = 5
+					Filter
+					{
+						Ships = true
+						Shields = true
+						Friendlies = true
+					}
+
+					MediaEffectsOnDrainFactor = .00025
+					MediaEffectsOnDrain
+					[
+						&<particles/electro_bolt_discharge.txt>
+						&<particles/missile_emp_lightning.txt>
+
+						: /BASE_SOUNDS/AudioExterior
+						{
+							Sound = "discharge.wav"
+							Volume = 1
+							SpeedVariation = .2
+						}
+					]
+				}
+				{
+					Type = Damage
+					Damage = 25000
+					Filter
+					{
+						Friendlies = true
+					}
+				}
+				{
+					Type = ExplosiveDamage
+					TotalDamage = 350000
+					Radius = 50
+					Filter
+					{
+						OperationalHealth = false
+						StructuralHealth = true
+						Friendlies = true
+					}
+				}
+				{
+					Type = Impulse;
+					Impulse = 100;
+				}
+			]
+
+			MediaEffects
+			[
+				&<particles/missile_emp_hit.txt>
+				&<particles/missile_emp_shrapnel.txt>
+				&<particles/missile_emp_shockwave.txt>
+
+				: /BASE_SOUNDS/AudioExterior
+				{
+					Sound = "particles/missile_emp_hit.wav"
+					Volume = 1
+					SpeedVariation = .2
+				}
+
+				: /BASE_SHAKE
+				{
+					ShakeAmount = .05
+					Duration = .75
+				}
+			]
+		}
+		HitStructural = &HitOperational
+	}
+
+	Sprite
+	{
+		Type = AnimatedSprite
+		ReduceScaleWith = Hit
+		ReduceScaleExponent = 0.5
+		Animation
+		{
+			AtlasSprite
+			{
+				Texture
+				{
+					File = "particles/bullet_railgun.png" // Just re-use the medium cannon's bullet.
+					SampleMode = Linear
+					MipLevels = max
+				}
+				Size = [6, 6]
+			}
+			FrameCount = 16
+			FrameSize = [128, 128]
+			FramesPerRow = 4
+			FramesPerSecond = 60
+		}
+	}
+
+	MediaEffects
+	{
+		Type = MediaEffects
+		MediaEffects
+		[
+			&<particles/bullet_trail_large.txt>
+		]
+	}
+}

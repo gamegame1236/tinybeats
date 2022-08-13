@@ -1,0 +1,82 @@
+ID = "cosmoteer.pd_shot_largo"
+OtherIDs = ["point_defense_largo_shot", "pd_shot_largo"]
+Range = 250
+IdealRange = 150
+Speed = 700
+
+Components
+{
+	Physics
+	{
+		Type = CirclePhysics
+		Radius = 0.1
+		Density = 0.0001
+	}
+
+	Death
+	{
+		Type = DeathByLifetime
+		// Lifetime will be auto-calculated based on range and speed.
+	}
+
+	Sprite
+	{
+		Type = Sprite
+		RenderBucket = Lower
+		Sprite
+		{
+			Texture
+			{
+				File = "pd_shot.png"
+				SampleMode = Linear
+				MipLevels = max
+			}
+			Size = [12, 2]
+		}
+		Offset = [-3.5, 0]
+		LerpScaleFrom = [.25, 1]
+		LerpTime = .05
+	}
+
+	AntiBullet
+	{
+		Type = AntiBullet
+		HitsBulletCategories = [missile, mine, bullet]
+
+		HitBullet
+		{
+			HitEffects
+			[
+				{
+					Type = Damage
+					Damage = 2375
+				}
+			]
+
+			MediaEffects
+			[
+				&<particles/pd_shot_clink.txt>
+			]
+		}
+	}
+
+	Hit
+	{
+		Type = SimpleHit
+			
+		HitShield = &HitOperational
+		HitOperational
+		{
+			HitEffects
+			[
+				{
+					Type = ExplosiveDamage
+					TotalDamage = 2375
+					Radius = 3
+				}
+			]
+			MediaEffects = &~/Components/AntiBullet/HitBullet/MediaEffects
+		}
+		HitStructural = &HitOperational
+	}
+}

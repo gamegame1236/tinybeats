@@ -1,0 +1,294 @@
+Components
+{
+	MissileStorage
+	{
+		Type = AmmoStorage
+		AmmoType = missile_part_emp
+		MaxAmmo = 7
+		InitToMaxAmmoPVP = 0
+		ToggleOnAmmo = 7
+		ToggleOffAmmo = 6
+		DelayBeforeReadyToUse = .5
+	}
+	MissileConsumer
+	{
+		Type = AmmoConsumer
+		AmmoType = missile_part_emp
+		Storage = MissileStorage
+		DefaultPriority = &/PRIORITIES/Weapon_Supply
+		OperationalToggle = PowerToggle
+		ReceiveAmmoMediaEffects = &/COMMON_EFFECTS/MissileLoad
+	}
+
+	MissilesPrereq
+	{
+		Type = MultiToggle
+		Toggles = [MissileStorage]
+		Mode = Any
+	}
+
+	Weapon
+	{
+		Type = TurretWeapon // This has an arc of 0, but we don't want to use FixedWeapon because that will only shoot at things directly in the LOS.
+		Location = [.5, .5]
+		Rotation = -90d
+		Emitter = Emitter
+		OperationalToggle = IsOperational
+		AutoFireToggle = AutoFireToggle
+		FireInterval = 0 // Uses common reload timer.
+		FiringArc = 0d;
+		ValidArc = 360d;
+		FireThresholdAngle = 180d;
+		RotateSpeed = 0d
+		AllowFireWithBlockedLOS = true
+		AIFirepowerRating = 2800
+		FirePermissionToggle = FirePermissionToggle
+
+		AutoTargets
+		[
+			{
+				TargetType = ShipParts
+				Toggle = AutoTargetToggle
+				EnableInDirectControlMode = true
+			}
+		]
+
+		CoverageSectorArc
+		{
+			Texture = &/INDICATORS/VerticalGradient
+			VertexColor = [255, 255, 255, 51]
+			QuadCount = 64
+		}
+	}
+	FirePermissionToggle
+	{
+		Type = MultiToggle
+		Toggles = [CommonReloadTimerMed, FireModeToggle]
+		Mode = All
+	}
+
+	ReloadProgressBar
+	{
+		Type = ProgressBar
+		OperationalToggle = IsOperational
+		ShowProgressFor = CommonReloadTimerMed
+		Invert = true
+	}
+
+	Emitter
+	{
+		Type = BulletEmitter
+		ChainedTo = Weapon
+		OperationalToggle = IsOperational
+		FireTrigger = Weapon
+		GetTargetFrom = Weapon
+		AmmoStorage = MissileStorage
+		AmmoUsed = 7
+		Bullet = &<missile_emp/missile_emp.txt>
+		TargetLeadPrediction = true
+		Recoil = 75
+	}
+
+	CommonReloadResetTrigger
+	{
+		Type = MultiTrigger
+		Triggers = [Weapon]
+	}
+
+	LaunchEffect
+	{
+		Type = TriggeredEffects
+		ChainedTo = Weapon
+		Trigger = Weapon
+
+		MediaEffects
+		[
+			&<../particles/missile_launcher_shoot_large.txt>
+
+			: /BASE_SOUNDS/AudioExterior
+			{
+				Sound = "../shoot.wav"
+				Speed = 0.25
+				SpeedVariation = .1
+			}
+		]
+	}
+
+	MissileSprites
+	{
+		Type = AmmoSprites
+		Location = [.5, .5]
+		AmmoStorage = MissileStorage
+		Layer = "doodads_low"
+		HasZeroAmmoSprite = true
+		AmmoLevels
+		[
+			{
+				File = "emp0.png"
+				Size = [1, 2]
+			}
+			{
+				File = "emp1.png"
+				Size = [1, 2]
+			}
+			{
+				File = "emp2.png"
+				Size = [1, 2]
+			}
+			{
+				File = "emp3.png"
+				Size = [1, 2]
+			}
+			{
+				File = "emp4.png"
+				Size = [1, 2]
+			}
+			{
+				File = "emp5.png"
+				Size = [1, 2]
+			}
+			{
+				File = "emp6.png"
+				Size = [1, 2]
+			}
+			{
+				File = "emp7.png"
+				Size = [1, 2]
+			}
+			{
+				File = "emp8.png"
+				Size = [1, 2]
+			}
+			{
+				AnimationFiles
+				[
+					"emp9_1.png"
+					"emp9_2.png"
+					"emp9_3.png"
+					"emp9_4.png"
+					"emp9_5.png"
+					"emp9_6.png"
+					"emp9_7.png"
+					"emp9_8.png"
+				]
+				Size = [1, 2]
+				AnimationInterval = 0.033
+			}
+		]
+	}
+
+	DestroyedEffects
+	{
+		Type = DeathEffects
+		Location = [.5, 1]
+
+		FactorHitEffectsWith = MissileStorage
+		HitEffects
+		[
+			{
+				Type = ExplosiveAmmoDrain
+				AmmoType = battery
+				TotalDrain = 24000
+				Radius = 12
+				Slices = 1
+				Delay = .05
+				RadiusEffectScaleExponent = 0.5
+				Filter
+				{
+					Ships = true
+					Shields = true
+					Friendlies = true
+				}
+
+				MediaEffectsOnDrain
+				[
+					&<./Data/shots/electro_bolt/particles/electro_bolt_discharge.txt>
+					&<./Data/shots/missile_emp/particles/missile_emp_lightning.txt>
+
+					: /BASE_SOUNDS/AudioExterior
+					{
+						Sound = "./Data/shots/electro_bolt/discharge.wav"
+						Volume = 1
+						SpeedVariation = .2
+					}
+				]
+			}
+		]
+
+		FactorMediaEffectsWith = MissileStorage
+		MediaEffects
+		[
+			&<./Data/shots/missile_emp/particles/missile_emp_hit.txt>
+			&<./Data/shots/missile_emp/particles/missile_emp_shockwave.txt>
+		]
+	}
+
+	DestroyedEffects2 // A separate destroyed effects for the base destruction that doesn't get scale with ammo.
+	{
+		Type = DeathEffects
+		Location = [.5, 1]
+		MediaEffects = &/COMMON_EFFECTS/BigPartDestroyed
+	}
+
+	Indicators
+	{
+		Type = IndicatorSprites
+		Location = [.5, 1]
+		Layer = "indicators"
+		Indicators
+		[
+			// Turned off.
+			{
+				Toggle = PowerToggle
+				AtlasSprite
+				{
+					File = &/INDICATORS/PowerOff
+					Size = [1, 1]
+				}
+			}
+
+			// Out of missiles.
+			{
+				Toggle = MissileStorage
+				AtlasSprite
+				{
+					File = &/INDICATORS/NoEmp
+					Size = [1, 1]
+				}
+			}
+
+			// No crew.
+			{
+				Toggle = PartCrew
+				AtlasSprite
+				{
+					File = &/INDICATORS/NoCrew
+					Size = [1, 1]
+				}
+			}
+		]
+	}
+}
+
+MissileStats
+{
+	NameKey = "StatCategories/MissileEMP"
+	Stats
+	{
+		DamagePerShot = &~/Components/Emitter/Bullet/Components/Hit/HitOperational/HitEffects/1/Damage/BaseValue
+		DamagePerSecond = (&DamagePerShot) * (&ROF)
+		Damage = [&../DamagePerShot, &../DamagePerSecond]
+		PowerDrainPerShot = (&~/Components/Emitter/Bullet/Components/Hit/HitShield/HitEffects/0/TotalDrain/BaseValue) / 1000
+		PowerDrainPerSecond = (&PowerDrainPerShot) * (&ROF)
+		PowerDrain = [&../PowerDrainPerShot, &../PowerDrainPerSecond]
+		PowerDrainArea = &~/Components/Emitter/Bullet/Components/Hit/HitOperational/HitEffects/0/Radius
+		ROF = 1 / (&<../missile_launcher.txt>/Part/Components/CommonReloadTimerMed/Duration)
+		Range = &~/Components/Emitter/Bullet/Range/BaseValue
+		Arc = deg(&~/Components/Weapon/ValidArc)
+		ShotLaunchSpeed = &~/Components/Emitter/Bullet/Speed/BaseValue
+		Acceleration = &~/Components/Emitter/Bullet/Components/Acceleration/Acceleration
+		ShotGuidance = deg(&~/Components/Emitter/Bullet/Components/Homing/TurnVelocity)
+		ShotHP = &~/Components/Emitter/Bullet/Components/Targetable/Health
+		MissileParts = &~/Components/Emitter/AmmoUsed
+	}
+}

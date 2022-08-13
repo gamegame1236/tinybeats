@@ -1,0 +1,313 @@
+// Every mod must have an ID that is used to uniquely identify the mod and differentiate it from other mods.
+// In order to avoid ID conflicts with other mods, you *must* follow the "author_name.mod_name" format.
+// Do *not* use "cosmoteer" as your author name -- that is reserved for official mods only!
+ID = Battleman103333.tinybits_mod
+
+// You must give a human-readable name for your mod. This is what will be shown in the user interface.
+Name = "TinyBits Mod"
+
+// The version of the mod that will be shown in the user interface. This is optional.
+Version = 1.5.1(WIP)
+
+// This is a list of Cosmoteer versions that this mod is known to be compatible with.
+// If this mod is turned on and it isn't known to be compatible with the version of Cosmoteer
+// that the player is running, a warning will be displayed. When upgrading the game, mods
+// that aren't known to be compatible with the new version will also be automatically disabled.
+CompatibleGameVersions = ["0.15.14", "0.15.16"]
+ 
+// This should be set to true for any mod that makes gameplay changes that could affect multiplayer games.
+// Setting this to false *MAY* make it possible to play with someone else who doesn't have this mod,
+// so long as this mod doesn't actually make any gameplay changes. (Setting this to false will *NOT*
+// magically allow you to play with someone who doesn't have this mod; it will just make the error
+// less informative.) If omitted, the default is true.
+ModifiesMultiplayer = true
+
+// The name of the mod creator(s) that will be shown in the user interface. This is optional.
+Author = "Gray"
+
+// A logo to display for your mod in the user interface. This is optional.
+
+// A longer description of what your mod does to the game. This is optional.
+Description = "This mod adds quite a few things, for ships of all sizes. Things include: A weapon capable of shredding through ships; A Point Defense capable of oversizing your enemies; a Star Cannon"
+
+// Mods can define their own per-language string files.
+// The values in a string file (such as en.txt) will add to
+// and override any values in the base string file (such as Data\strings\en.txt).
+// Each language supported should have its own string file named
+// after the two-letter 639-1 language code for that language.
+StringsFolder = "strings"
+
+// The primary way mods modify the game is through "actions".
+//
+// Actions are little commands that modify the game's .txt files *after* they have been
+// loaded into memory. (The actual .txt files in the 'Data' folder are never modified
+// and so disabling a mod will cause the game to revert back to its vanilla state.)
+//
+// First, the game loads the vanilla .txt files normally.
+// Then, for every mod that is enabled, that mod's "actions" are run on
+// top of the loaded .txt files, modifying them.
+//
+// Using this technique, mods can make almost any change to the game
+// that *could* be made by modifying the .txt files directly, but
+// without actually having to make any permanent changes to the game files.
+//
+// The examples below show all the different kinds of "actions" that can be
+// performed on the vanilla .txt data.
+//
+// Note that it's very easy to make a modification that will cause the game
+// to crash when loading. The log.txt file may have details on why it crashed.
+//
+// There are a small number of .txt files that can't be modified using actions.
+// The most prominent example is the language string files (such as en.txt)
+// which are modified using the StringsFolder setting above.
+
+Actions
+[
+	{
+		Action = Add
+		AddTo = "<Ammo/ammo.txt>/Ammo"
+		ToAdd
+		{
+			ID = LemonJuice
+			NameKey = "Ammo/LemonJuice"
+			PluralNameKey = "Ammo/LemonJuicePlural"
+			MaxCarried = 1250
+			CarriedSprite
+			{
+				AnimationFiles
+				[
+					"Ammo/battery_small1.png"
+					"Ammo/battery_small2.png"
+					"Ammo/battery_small3.png"
+				]
+				AnimationInterval = 0.1
+				Size = [1, 1]
+				Offset = [0, .25]
+			}
+		}
+	}
+	{
+		Action = Add
+		AddTo = "<Ammo/ammo.txt>/Ammo"
+		ToAdd
+		{
+			ID = Diesel
+			NameKey = "Ammo/Diesel"
+			PluralNameKey = "Ammo/DieselPlural"
+			MaxCarried = 50
+			CarriedSprite
+			{
+				AnimationFiles
+				[
+					"Ammo/diesel.png"
+				]
+				AnimationInterval = 0.1
+				Size = [1, 1]
+				Offset = [0, .25]
+			}
+		}
+	}
+	{
+		Action = Replace
+		Replace = "<Gui/menus.txt>/LogoShip"
+		With = "Cosmotiny.ship.png"
+	}
+	{
+		Action = Overrides
+		OverrideIn = "<./Data/buffs/buffs.txt>"
+		Overrides = &<buffs.txt>
+	}
+	{
+		Action = Overrides
+		OverrideIn = "<gui/game/designer/editor_groups.txt>"
+		Overrides = &<editor_groups.txt>
+	}
+	{
+		// The "AddMany" action is similar to the "Add" action, but it can
+		// add multiple data fields to a single [] list, and it can't
+		// add named data fields. (You should use Overrides to add multiple named data fields.)
+		Action = AddMany
+
+		// This is the [] list to which we want to add data fields.
+		AddTo = "<ships/terran/terran.txt>/Terran/Parts"
+
+		// If this is set to true, the 'AddTo' will be created if it doesn't exist.
+		// This is optional and will default to false.
+		CreateIfNotExisting = false
+
+		// If this is set to true, this action will do nothing if the 'AddTo' doesn't exist instead of giving an error.
+		// This is optional and will default to false.
+		IgnoreIfNotExisting = false
+
+		// These are the data fields we want to add to the [] list.
+		ManyToAdd
+		[
+			//Ammo
+			&<cannon_tiny/cannon_tiny.txt>/Part
+			&<shotgun_med2/shotgun_med.txt>/Part
+			&<cannon_spread/cannon_large.txt>/Part
+			&<Uber/cannon_tiny.txt>/Part
+			&<cannon_guargantuan/cannon_large.txt>/Part
+			&<flak_cannon_tiny/flak_cannon_tiny.txt>/Part
+			&<boom_flak_tiny/boom_flak_tiny.txt>/Part
+			&<flak_minigun_tiny/flak_cannon_tiny.txt>/Part
+			&<missile_launcher_tiny/missile_launcher_tiny.txt>/Part
+			&<missile_launcher_tiny - Copy/missile_launcher_tiny.txt>/Part
+			&<missile_launcher_swarm/missile_launcher_swarm.txt>/Part
+			&<missile_cluster/missile_launcher_tiny.txt>/Part
+			&<Rocket Turret/missile_launcher_tiny.txt>/Part
+			&<mega_miner/mega_miner.txt>/Part
+			&<railgun_loader/railgun_loader.txt>/Part
+			&<railgun_accelerator/railgun_accelerator.txt>/Part
+			&<railgun_launcher/railgun_launcher.txt>/Part
+			&<railgun_trident_attachment/railgun_launcher.txt>/Part
+			&<railgun_auto_attachment/railgun_launcher.txt>/Part
+			&<railgun_splitter_attachment/railgun_launcher.txt>/Part
+			&<railgun_targetor_attachment/railgun_launcher.txt>/Part
+			//Battery
+			&<laser_blaster_small/laser_blaster_small.txt>/Part
+			&<laser_sniper_small/laser_sniper_small.txt>/Part
+			&<lemon_blaster_small/lemon_blaster_small.txt>/Part
+			&<laser_blaster_large/laser_blaster_large.txt>/Part
+			&<minigun_blaster_large/minigun_blaster_large.txt>/Part
+			&<supernova/minigun_blaster_large_s.txt>/Part
+			&<mk1_laser/mk1_laser.txt>/Part
+			&<ion_beam_emitter_tiny/ion_beam_emitter.txt>/Part
+			&<ion_beam_emitter/ion_beam_emitter.txt>/Part
+			//&<ion_beam_emitter_tiny - Copy/ion_beam_emitter.txt>/Part
+			&<overcharged_ion_beam_prism/overcharged_ion_beam_prism.txt>/Part
+			&<overcharged_ion_beam_prism_roof/overcharged_ion_beam_prism.txt>/Part
+			&<knockback_gun/knockback_gun.txt>/Part
+			&<point_defense_larg/point_defense_largo.txt>/Part
+			&<point_defense_hugo/point_defense_largo.txt>/Part
+			//Parts
+			&<control_room_tiny/control_room_tiny.txt>/Part
+			&<reactor_control_room_tiny/reactor_control_room_tiny.txt>/Part
+			&<thruster_smol/thruster_small.txt>/Part
+			&<thruster_smol_3/thruster_small_3way.txt>/Part
+			&<thruster_med_n/thruster_med.txt>/Part
+			&<thrust_med/thruster_large.txt>/Part
+			&<huge/thruster_huge.txt>/Part
+			&<thruster_med/thruster_med.txt>/Part
+			&<thruster_boost/thruster_boost.txt>/Part
+			&<BIGSUBLIGHT/thruster_boost.txt>/Part
+			&<omed/omed.txt>/Part
+			&<engine_room/engine_room.txt>/Part
+			&<ftl_drive/ftl_drive.txt>/Part
+			&<reactor_large/reactor_large.txt>/Part
+			&<reactor_small/reactor_small.txt>/Part
+			&<reactor_tiny/reactor_tiny.txt>/Part
+			&<Warp Gen/reactor_tiny.txt>/Part
+			&<lemon_reactor_small/lemon_reactor_small.txt>/Part
+			&<power_storage/power_storage.txt>/Part
+			&<ammo_factory_tiny/ammo_factory_tiny.txt>/Part
+			&<ammo_factory/ammo_factory_fleet.txt>/Part
+			&<missile_factory_he_tiny/missile_factory_he_tiny.txt>/Part
+			&<missile_factory_nuke_tiny/missile_factory_nuke_tiny.txt>/Part
+			&<mine_factory/mine_factory.txt>/Part
+			&<missile_storage/missile_storage.txt>/Part
+			&<diesel_factory/diesel_factory.txt>/Part
+			&<fire_extinguisher/fire_extinguisher.txt>/Part
+			&<op_drone/op_drone.txt>/Part
+			&<cannon drone/op_drone.txt>/Part
+			&<missile drone/op_drone.txt>/Part
+			&<tiny_op_drone/tiny_op_drone.txt>/Part
+			&<Window Block/armor_wedge.txt>/Part
+			&<Window Wedge/armor_wedge.txt>/Part
+			&<disconnect_charge/disconnect_charge.txt>/Part
+			&<nuclear_charge/disconnect_charge.txt>/Part
+			&<ammo_damage_buffer/engine_room.txt>/Part
+			&<ammo_penetration_buffer/engine_room.txt>/Part
+			&<ammo_speed_buffer/engine_room.txt>/Part
+			&<ammo_range_buffer/engine_room.txt>/Part
+			&<sensor_array/sensor_array.txt>/Part
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+			//&<fleet_power_supplier_tiny/reactor_tiny.txt>/Part
+
+
+
+			&<hellstone_armor/hellstone_armor.txt>/Part
+			&<hellstone_1x2_wedge/hellstone_1x2_wedge_L.txt>/Part
+			&<hellstone_1x2_wedge/hellstone_1x2_wedge_R.txt>/Part
+			&<hellstone_wedge/armor_wedge.txt>/Part
+			&<hellstone_triceratops/armor_tri.txt>/Part
+			&<hellstone_armor_1x3/hellstone_1x3_wedge_L.txt>/Part
+			&<hellstone_armor_1x3/hellstone_1x3_wedge_R.txt>/Part
+//			&<armor/armor.txt>/Part
+//			&<armor_1x2_wedge/armor_1x2_wedge_L.txt>/Part
+//			&<armor_1x2_wedge/armor_1x2_wedge_R.txt>/Part
+			&<obsidian_1x2_w/armor_1x2_wedge_L.txt>/Part
+			&<obsidian_1x2_w/armor_1x2_wedge_R.txt>/Part
+			&<shotgun_med3/shotgun_med.txt>/Part
+			&<CANNON_TURRET/missile_launcher_tiny.txt>/Part
+			&<CANNON_TURRET2/missile_launcher_tiny.txt>/Part
+			&<CANNON_TURRET3/missile_launcher_tiny.txt>/Part
+			&<CANNON_TURRET4/missile_launcher_tiny.txt>/Part
+			&<railgun/missile_launcher_tiny.txt>/Part
+			&<railgun2b/missile_launcher_tiny.txt>/Part
+			&<railgun3b/missile_launcher_tiny.txt>/Part
+			&<lemon_cannon/cannon_tiny.txt>/Part
+			&<t/missile_launcher_tiny.txt>/Part
+			&<cannon_minigun_/missile_launcher_tiny.txt>/Part
+			&<CLUSTERFUCKER/missile_launcher_tiny.txt>/Part
+			&<wiggler/missile_launcher_tiny.txt>/Part
+			&<plasma/missile_launcher_tiny.txt>/Part
+			&<plasma_grape/missile_launcher_tiny.txt>/Part
+			&<plasmakinetic/missile_launcher_tiny.txt>/Part
+			&<plasmakgrape/missile_launcher_tiny.txt>/Part
+			&<side cannon/center.txt>/Part
+			&<side cannon/left.txt>/Part
+			&<side cannon/right.txt>/Part
+			&<roof ion/missile_launcher_tiny.txt>/Part
+			&<laserside/FighterGun00_1x1.txt>/Part
+			&<laserside/FighterGun00_1x1_Left.txt>/Part
+			&<laserside/FighterGun00_1x1_Right.txt>/Part
+
+			&<nuke/missile_launcher_tiny.txt>/Part
+
+
+
+			&<shield_gen_tiny/shield_gen_tiny.txt>/Part
+			&<internal_shield/shield_gen_tiny.txt>/Part
+			&<fleet_shield2x2/shield_gen_tiny.txt>/Part
+			&<fleet_shield3602x2/shield_gen_tiny.txt>/Part
+			&<fleet_shield3x3/shield_gen_tiny.txt>/Part
+			&<fleet_shield3x360/shield_gen_tiny.txt>/Part 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		]
+	} 
+
+]

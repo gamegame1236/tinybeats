@@ -1,0 +1,86 @@
+Type = Particles
+Def = &<./Data/common_effects/particles/bullet_trail_def.txt>
+EmitterDef
+{
+	EmitPerSecond = 500
+	EmitPerOneShot = 0
+	PreInitializers
+	[
+		{
+			Type = SetRandomVelocity
+			VelocityOut = velocity
+			Speed
+			{
+				Min = 2.5
+				Max = 2.5
+			}
+			Direction
+			{
+				Min = 0d
+				Max = 360d
+			}
+			Name = "Velocity"
+			Enabled = false
+			UpdateAfterInit = false
+			DataOut = location
+			ValueType = Vector2D
+			Value
+			{
+				X = -0.5
+				Y = 0
+			}
+		}
+		{
+			Type = ScaleFromIntensity
+			DataOut = base_scale
+			ValueType = Float
+			Value = 0.3
+			Name = "Base scale"
+			Enabled = true
+			UpdateAfterInit = false
+			ScaleOut = base_scale
+			ScaleFactor = 0.3
+			IntensityExponent = 0.5
+		}
+	]
+	PostInitializers[]
+	UpdatedEmittedParticles = false
+}
+Bucket = Upper1
+Delay = 0
+IgnoreIntensity = false
+Sharing = Global
+MinIntensity = 0
+IsFancy = true
+DontEmitWhenOffScreen = true
+DontEmitWhenOffScreenSizeInflate = 1
+PenetratingBucket
+UnsharedRenderInWorldSpace = false
+UseCustomShapeForOffScreenCheck = false
+MaxEmissionZoom = 3.4028235E+38
+ScaleEmissionWithIntensity = false
+ScaleEmissionWithBeamLength = false
+UseRealTime = false
+IsSimple = false
+CaptureBackBuffer = false
+Filter
+{
+	Ships = true
+	OperationalHealth = true
+	StructuralHealth = true
+	OnlyPartCategories
+	ExcludePartCategories
+	Shields = true
+	Bullets = true
+	OnlyBulletCategories
+	ExcludeBulletCategories
+	IgnoreInvulnerability = true
+	Self
+	TargetedSelf
+	Friendlies = true
+	TargetedFriendlies
+	Enemies = true
+	TargetedEnemies
+	Junk = true
+	TargetedJunk
+}

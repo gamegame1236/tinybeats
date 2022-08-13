@@ -1,0 +1,186 @@
+ID = "Battleman103333.missile_nuke_swarm"
+Range = 250
+IdealRange = 240
+Speed = 65
+
+Components
+{
+	Physics
+	{
+		Type = CirclePhysics
+		Radius = .6
+		Density = 0.1
+	}
+
+	Homing
+	{
+		Type = TargetHoming
+		TurnVelocity = 120d
+		Delay = .18
+		AvoidanceRaycastDistance = 100
+		VelocityCompensation = 70%
+	}
+
+	Acceleration
+	{
+		Type = Acceleration
+		Acceleration = 30
+	}
+
+	NegativeAcceleration
+	{
+		Type = Acceleration
+		Acceleration = [-135, 0]
+		AccelerationOverTime = [0, .75]
+		Direction = FrameOfReferenceVelocity
+	}
+
+	DeathByLifetime
+	{
+		Type = DeathByLifetime
+		Lifetime = 14
+		HasTarget = true
+	}
+
+	DeathByDistanceTraveled
+	{
+		Type = DeathByDistanceTraveled
+		// Distance auto-computed from range.
+		HasTarget = false
+	}
+
+	Sprite
+	{
+		Type = AnimatedSprite
+		Animation
+		{
+			AtlasSprite
+			{
+				Texture
+				{
+					File = "missile_nuke.png"
+					MipLevels = max
+				}
+				Size = [.5, .2521]
+			}
+			FrameCount = 8
+			FrameSize = [192, 98]
+			FramesPerRow = 8
+			FramesPerSecond = 24
+		}
+	}
+
+	RadiationSprite
+	{
+		Type = Sprite
+		RenderBucket = Upper
+		Spin = 360d
+		Sprite
+		{
+			Texture
+			{
+				File = "radiation.png"
+				MipLevels = max
+				SampleMode = Linear
+			}
+			Size = [.5, .5]
+			VertexColor = [150, 0, 0]
+			TargetBlendMode = Add
+		}
+	}
+
+	MediaEffects
+	{
+		Type = MediaEffects
+		MediaEffects
+		[
+			&<particles/missile_nuke_thruster_glow.txt>
+			&<particles/missile_nuke_thruster_trail.txt>
+		]
+	}
+
+	Targetable
+	{
+		Type = Targetable
+		Health = 500
+		TargetCategory = "missile"
+
+		// No AOE damage when shot down.
+		OnDeath = &../Hit/HitFriendly
+	}
+
+	Hit
+	{
+		Type = SimpleHit
+		SourceShipCollisionDelay = 1.5/30
+
+		HitShield = &HitOperational
+		HitOperational
+		{
+			HitEffects
+			[
+				{
+					Type = ExplosiveDamage
+					TotalDamage = 100000
+					Radius = 2.5
+					ExpandDuration = .8
+					ExpandStartRadius = .5
+					ExpandLoss = 100%
+					Filter
+					{
+						OperationalHealth = true
+						StructuralHealth = false
+						Friendlies = true
+					}
+				}
+				{
+					Type = ExplosiveDamage
+					TotalDamage = 75000
+					Radius = 2
+					ExpandDuration = .8
+					ExpandStartRadius = .5
+					ExpandLoss = 100%
+					Filter
+					{
+						OperationalHealth = false
+						StructuralHealth = true
+						Friendlies = true
+					}
+				}
+			]
+
+			MediaEffects
+			[
+				&<particles/missile_nuke_flash.txt>
+				&<particles/missile_nuke_shockwave.txt>
+
+				: /BASE_SOUNDS/AudioExterior
+				{
+					Sound = "missile_nuke_hit.wav"
+					Volume = 1
+				}
+
+				: /BASE_SHAKE
+				{
+					ShakeAmount = .15
+					Duration = .75
+				}
+			]
+		}
+		HitStructural = &HitOperational
+
+		HitFriendly
+		{
+			MediaEffects
+			[
+				&<particles/missile_nuke_flash.txt>
+
+				: /BASE_SOUNDS/AudioExterior
+				{
+					Sound = "missile_nuke_hit.wav"
+					Volume = 1
+				}
+			]
+		}
+	}
+}

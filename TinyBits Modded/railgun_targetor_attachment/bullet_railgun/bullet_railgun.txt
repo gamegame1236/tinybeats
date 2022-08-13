@@ -1,0 +1,231 @@
+ID = "gray.bullet_railgun_ht"
+Range = { BaseValue=200; BuffType=RailgunShot; BuffMode=Multiply; MaxValue=500; }
+IdealRange
+[
+	{ BaseValue=50; BuffType=RailgunShot; BuffMode=Multiply; MaxValue=200; }
+	{ BaseValue=200; BuffType=RailgunShot; BuffMode=Multiply; MaxValue=500; }
+]
+IdealRadius = [5, 50]
+Speed = { BaseValue=120; BuffType=RailgunShot; BuffMode=Multiply; MaxValue=900; }
+ReceivableBuffs = [RailgunShot]
+
+Components
+{
+	Physics
+	{
+		Type = CirclePhysics
+		Radius = 0.3
+		Density = 0.0001
+	}
+
+	Death
+	{
+		Type = DeathByLifetime
+	}
+
+	Targetable
+	{
+		Type = Targetable
+		Health = 950
+		TargetCategory = "bullet"
+
+		OnDeath
+		{
+			MediaEffects = &~/Components/Hit/HitOperational/MediaEffects
+		}
+	}
+
+	Homing
+	{
+		Type = TargetHoming
+		TurnVelocity = 90d
+		Delay = .01
+		AvoidanceRaycastDistance = 150
+		VelocityCompensation = 80%
+	}
+
+	Retarget
+	{
+		Type = SameShipRetarget
+	}
+
+	Acceleration
+	{
+		Type = Acceleration
+		Acceleration = 100
+	}
+
+	NegativeAcceleration
+	{
+		Type = Acceleration
+		Acceleration = [-90, 0]
+		AccelerationOverTime = [0, .75]
+		Direction = FrameOfReferenceVelocity
+	}
+
+	DamagePool
+	{
+		Type = DamagePool
+		Damage = { BaseValue=3750; BuffType=RailgunShot; BuffMode=Multiply; }
+	}
+
+	Hit
+	{
+		Type = PenetratingHit
+		Penetration = { BaseValue=7.5; BuffType=RailgunShot; BuffMode=Multiply; }
+		PenetrationSpeed = &~/Speed
+
+		HitShield
+		{
+			ReduceEffectsByPenetration = true
+
+			HitEffects
+			[
+				{
+					Type = Damage
+					Damage = { BaseValue=3250; BuffType=RailgunShot; BuffMode=Multiply; }
+				}
+				{
+					Type = Impulse
+					Impulse = { BaseValue=25; BuffType=RailgunShot; BuffMode=Multiply; }
+				}
+			]
+
+			MediaEffects = &../HitOperational/MediaEffects
+		}
+		HitOperational
+		{
+			ReduceEffectsByPenetration = true
+
+			HitEffects
+			[
+				{
+					Type = Damage
+					Damage = { BaseValue=3250; BuffType=RailgunShot; BuffMode=Multiply; }
+					DamagePool = DamagePool
+				}
+				{
+					Type = Impulse
+					Impulse = { BaseValue=15; BuffType=RailgunShot; BuffMode=Multiply; }
+				}
+			]
+
+			MediaEffectsScale = { BaseValue=.5; BuffType=RailgunShot; BuffMode=Multiply; }
+			MediaEffects
+			[
+				&<particles/bullet_hit_railgun.txt>
+				&<particles/bullet_railgun_sparks.txt>
+				&<particles/bullet_smoke_large.txt>
+				&<particles/bullet_flash_railgun.txt>
+
+				: /BASE_SOUNDS/AudioExterior
+				{
+					Sound = "bullet_railgun_hit.wav"
+					Volume = { BaseValue= 1; BuffType=RailgunShot; BuffMode=Multiply; }
+					SpeedVariation = .4
+				}
+
+				: /BASE_SHAKE
+				{
+					ShakeAmount = { BaseValue=.35; BuffType=RailgunShot; BuffMode=Multiply; }
+					Duration = .5
+				}
+			]
+		}
+		HitStructural
+		{
+			ReduceEffectsByPenetration = true
+
+			HitEffects
+			[
+				{
+					Type = Damage
+					Damage = { BaseValue=2250; BuffType=RailgunShot; BuffMode=Multiply; }
+				}
+				{
+					Type = Impulse
+					Impulse = { BaseValue=15; BuffType=RailgunShot; BuffMode=Multiply; }
+				}
+			]
+
+			MediaEffectsScale = { BaseValue=.55; BuffType=RailgunShot; BuffMode=Multiply; }
+			MediaEffects
+			[
+				&<particles/bullet_hit_struct_railgun.txt>
+
+				: /BASE_SOUNDS/AudioExterior
+				{
+					Sound = "bullet_railgun_hit_structure.wav"
+					Volume = { BaseValue=.5; BuffType=RailgunShot; BuffMode=Multiply; }
+					SpeedVariation = .4
+				}
+			]
+		}
+		PenetratingOperational
+		{
+			ReduceEffectsByPenetration = true
+
+			HitEffects
+			[
+				{
+					
+					Type = Damage
+					Damage = { BaseValue=2255; BuffType=RailgunShot; BuffMode=Multiply; }
+					DamagePool = DamagePool
+					DoPooledDamageFirst = true
+				}
+				{
+					Type = Impulse
+					Impulse = { BaseValue=25; BuffType=RailgunShot; BuffMode=Multiply; }
+				}
+			]
+
+			MediaEffectsScale = { BaseValue=.35; BuffType=RailgunShot; BuffMode=Multiply; }
+			MediaEffects
+			[
+				&<particles/bullet_penetrate_railgun.txt>
+				&<particles/bullet_flash_railgun.txt>
+			]
+		}
+		PenetratingStructural
+		{
+			// No effect.
+		}
+		FinishedPenetratingOperational = &PenetratingOperational
+		FinishedPenetratingStructural = &PenetratingStructural
+	}
+
+	Sprite
+	{
+		Type = AnimatedSprite
+		ReduceScaleWith = Hit
+		ReduceScaleExponent = 0.5
+		Animation
+		{
+			AtlasSprite
+			{
+				Texture
+				{
+					File = "bullet_railgun.png"
+					SampleMode = Linear
+					MipLevels = max
+				}
+				Size = [1.125, 1.125]
+			}
+			FrameCount = 16
+			FrameSize = [128, 128]
+			FramesPerRow = 4
+			FramesPerSecond = 60
+		}
+	}
+
+	MediaEffects
+	{
+		Type = MediaEffects
+		MediaEffectsScale = { BaseValue=.5; BuffType=RailgunShot; BuffMode=Multiply; }
+		MediaEffects
+		[
+			&<particles/bullet_trail_railgun.txt>
+		]
+	}
+}

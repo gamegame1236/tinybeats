@@ -1,0 +1,35 @@
+BatteryWeapons
+{
+	NameKey = "EditorGroups/BatteryWeapons"
+	Icon
+	{
+		Texture = "group_strange_weapons.png"
+	}
+}
+
+AmmoWeapons
+{
+	NameKey = "EditorGroups/AmmoWeapons"
+	Icon
+	{
+		Texture = "group_tiny_weapons.png"
+	}
+}
+
+Parts
+{
+	NameKey = "EditorGroups/Parts"
+	Icon
+	{
+		Texture = "group_tiny_parts.png"
+	}
+}
+
+TitanDefensives
+{
+	NameKey = "EditorGroups/TitanDefensives"
+	Icon
+	{
+		Texture = "group_strange_parts.png"
+	}
+}

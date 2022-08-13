@@ -1,0 +1,127 @@
+ID = "cosmoteer.bullet_explosive"
+OtherIDs = ["big_boom", "boom_big"]
+Range = 200
+IdealRange = [75, 190]
+IdealRadius = [5, 50]
+Speed = 150
+
+Components
+{
+	Physics
+	{
+		Type = CirclePhysics
+		Radius = 0.3
+		Density = 0.0001
+	}
+
+	Death
+	{
+		Type = DeathByLifetime
+		// Lifetime will be auto-calculated based on range and speed.
+	}
+
+	Targetable
+	{
+		Type = Targetable
+		Health = 1200
+		TargetCategory = "bullet"
+
+		OnDeath
+		{
+			MediaEffects = &~/Components/Hit/HitOperational/MediaEffects
+		}
+	}
+
+	HitEffects
+	[
+		{
+			Type = ExplosiveAmmoDrain
+			AmmoType = battery
+			TotalDrain = 55000
+			Radius = 35
+			Slices = 1
+			UseFractionalSlices = false
+			AllowFriendlyDrain = true
+
+			MediaEffectsOnDrainFactor = .00025
+			MediaEffectsOnDrain
+			[
+				&<./Data/shots/electro_bolt/particles/electro_bolt_discharge.txt>
+				: /BASE_SOUNDS/AudioExterior
+				{
+					Sound = "./Data/shots/electro_bolt/discharge.wav"
+					Volume = 1
+					SpeedVariation = .2
+				}
+			]
+		}
+		{
+			Type = AreaFires
+			FireChancePerTile = .90
+			FireRadius = 36
+			FireFalloff = 0
+			Delay = .05
+			AllowFriendlyFires = true
+		}
+		{
+			Type = ShieldDamage
+			Damage = 250000
+		}
+	]
+
+	MediaEffects
+	[
+		&<particles/reactor_explode_med.txt>
+		&<particles/reactor_explode_flash_med.txt>
+		&<particles/reactor_shockwave_med.txt>
+		&<./Data/common_effects/particles/explosions/big_part_explode_debris.txt>
+		&<./Data/common_effects/particles/explosions/huge_part_explode_smoke.txt>
+
+		: /BASE_SOUNDS/AudioExterior
+		{
+			Sound = "../reactor_small/destroyed.wav"
+			Volume = 1.5
+			Speed = .75
+			SpeedVariation = .25 * (&Speed)
+		}
+
+		: /BASE_SHAKE
+		{
+				ShakeAmount = .5
+				Duration = 3
+		}
+	]
+
+	Sprite
+	{
+		Type = AnimatedSprite
+		ReduceScaleWith = Hit
+		ReduceScaleExponent = 0.5
+		Animation
+		{
+			AtlasSprite
+			{
+				Texture
+				{
+					File = "particles/bullet_railgun.png" // Just re-use the medium cannon's bullet.
+					SampleMode = Linear
+					MipLevels = max
+				}
+				Size = [3, 3]
+			}
+			FrameCount = 16
+			FrameSize = [128, 128]
+			FramesPerRow = 4
+			FramesPerSecond = 60
+		}
+	}
+
+	MediaEffects
+	{
+		Type = MediaEffects
+		MediaEffects
+		[
+			&<particles/bullet_trail_large.txt>
+		]
+	}
+}

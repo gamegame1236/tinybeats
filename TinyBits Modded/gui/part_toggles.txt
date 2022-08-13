@@ -1,0 +1,36 @@
+PartToggles
+[
+	{
+		ToggleID = "sublight"
+		Style = CycledButton
+		Choices
+		[
+			{
+				ChoiceID = "sublight_on"
+				ButtonToolTipKey = "PartToggles/Activate_Sublight"
+				ButtonSprite
+				{
+					Texture
+					{
+						File = "toggle_activate_sublight.png"
+						MipLevels = 2
+						SampleMode = Linear
+					}
+				}
+			}
+			{
+				ChoiceID = "sublight_off"
+				ButtonToolTipKey = "PartToggles/Deactivate_Sublight"
+				ButtonSprite
+				{
+					Texture
+					{
+						File = "toggle_deactivate_sublight.png"
+						MipLevels = 2
+						SampleMode = Linear
+					}
+				}
+			}
+		]
+	}
+]

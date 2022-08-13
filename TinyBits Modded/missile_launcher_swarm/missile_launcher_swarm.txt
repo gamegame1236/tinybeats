@@ -1,0 +1,401 @@
+Part : /BASE_PART
+{
+	NameKey = "Parts/MissileLauncherSwarm"
+	IconNameKey = "Parts/MissileLauncherSwarmIcon"
+	ID = Gray.missile_launcher_swarm // Part IDs must always be in the form of "author_name.part_name". If making your own mod, do *not* use "cosmoteer" as your author name, because it may conflict with future vanilla parts.
+	EditorGroup = "AmmoWeapons"
+	DescriptionKey = "Parts/MissileLauncherSwarmDesc"
+	Cost = 12500
+	Size = [1, 2]
+	SelectionPriority = 1
+	SelectionTypeByRotation = true
+	MaxHealth = 5000
+	TypeCategories = [weapon, uses_missiles, uses_launcher_parts, is_crewed]
+	ProhibitAbove = 2
+	AllowedDoorLocations
+	[
+		[-1, 1]
+		[1, 1]
+	]
+	ExternalWallsByCell
+	[
+		{
+			Key = [0, 0]
+			Value = [Bottom]
+		}
+	]
+	InternalWallsByCell
+	[
+		{
+			Key = [0, 0]
+			Value = [Right, Left, Top]
+		}
+	]
+	EditorIcon
+	{
+		Texture
+		{
+			File = "icon.png"
+			SampleMode = Linear
+		}
+		Size = [46, 92]
+	}
+	Components : ^/0/Components
+	{
+		CrewSource
+		{
+			Type = CrewSource
+			Crew = 1
+		}
+
+		IsOperational
+		{
+			Type = MultiToggle
+			Toggles = [PowerToggle, PartCrew]
+			Mode = All
+		}
+		
+		PowerToggle
+		{
+			Type = UIToggle
+			ToggleID = "on_off"
+			Default = 1
+		}
+
+		FireModeToggle
+		{
+			Type = UIToggle
+			ToggleID = "fire_mode"
+			Default = 1
+			ToggledOnChoices = [0, 1, 2]
+		}
+		AutoTargetToggle
+		{
+			Type = ModeToggle
+			Mode = FireModeToggle
+			OnModes = [1, 2]
+		}
+		AutoFireToggle
+		{
+			Type = ModeToggle
+			Mode = FireModeToggle
+			OnMode = 2
+		}
+
+		MissileType
+		{
+			Type = UIToggle
+			ToggleID = "missile_type"
+			Default = 0
+			AlwaysAllowInBuildMode = true
+		}
+
+		HEMissilesToggle
+		{
+			Type = ModeToggle
+			Mode = MissileType
+			OnMode = 0
+		}
+		HEMissilesComponents
+		{
+			Type = ToggledComponents
+			Toggle = HEMissilesToggle
+			IncludeInBlueprints = true
+			Components = &<he/missile_launcher_he.txt>/Components
+		}
+		
+		EMPMissilesToggle
+		{
+			Type = ModeToggle
+			Mode = MissileType
+			OnMode = 1
+		}
+		EMPMissilesComponents
+		{
+			Type = ToggledComponents
+			Toggle = EMPMissilesToggle
+			IncludeInBlueprints = true
+			Components = &<emp/missile_launcher_emp.txt>/Components
+		}
+
+		NukeMissilesToggle
+		{
+			Type = ModeToggle
+			Mode = MissileType
+			OnMode = 2
+		}
+		NukeMissilesComponents
+		{
+			Type = ToggledComponents
+			Toggle = NukeMissilesToggle
+			IncludeInBlueprints = true
+			Components = &<nuke/missile_launcher_nuke.txt>/Components
+		}
+
+		CommonReloadTimerShort
+		{
+			Type = Timer
+			Duration = .01
+			AutoStart = true
+			StartTrigger = CommonReloadResetTriggerProxy
+		}
+		CommonReloadTimerMed
+		{
+			Type = Timer
+			Duration = .02
+			AutoStart = true
+			StartTrigger = CommonReloadResetTriggerProxy
+		}
+		CommonReloadTimerLong
+		{
+			Type = Timer
+			Duration = .03
+			AutoStart = true
+			StartTrigger = CommonReloadResetTriggerProxy
+		}
+		CommonReloadResetTriggerProxy
+		{
+			Type = TriggerProxy
+			ComponentID = CommonReloadResetTrigger
+		}
+
+		MissilesPrereqProxy
+		{
+			Type = ToggleProxy
+			ComponentID = MissilesPrereq
+		}
+
+		CrewLocation1
+		{
+			Type = CrewLocation
+			Location = [.5, 1.5]
+			Rotation = 0d
+		}
+
+		PartCrew
+		{
+			Type = PartCrew
+			Crew = 1
+			DefaultPriority = &/PRIORITIES/Weapon_Crew
+			PrerequisitesBeforeCrewing = [PowerToggle]
+			HighPriorityPrerequisites = [MissilesPrereqProxy]
+			CrewDestinations
+			[
+				[.5, 1.5]
+			]
+			CrewLocations
+			[
+				CrewLocation1
+			]
+		}
+
+		Graphics
+		{
+			Type = Graphics
+			Location = [.5, 1]
+			OperationalToggle = IsOperational
+			Floor
+			{
+				Layer = "floors"
+				DamageLevels
+				[
+					{
+						File = "floor.png"
+						Size = [1, 2]
+					}
+					{
+						File = "floor_33.png"
+						Size = [1, 2]
+					}
+					{
+						File = "floor_66.png"
+						Size = [1, 2]
+					}
+				]
+			}
+			OperationalDoodad
+			{
+				Layer = "doodads_low"
+				Offset = [0, .8]
+				DamageLevels
+				[
+					{
+						AnimationFiles
+						[
+							"doodads_on1.png"
+							"doodads_on2.png"
+							"doodads_on3.png"
+							"doodads_on4.png"
+							"doodads_on5.png"
+							"doodads_on6.png"
+							"doodads_on7.png"
+							"doodads_on8.png"
+						]
+						Size = [1, .5]
+						AnimationInterval = 0.075
+						AnimationStartTime = Zero
+					}
+				]
+			}
+			NonOperationalDoodad
+			{
+				Layer = "doodads_low"
+				Offset = [0, .8]
+				DamageLevels
+				[
+					{
+						File = "doodads_off.png"
+						Size = [1, .5]
+					}
+				]
+			}
+			OperationalLighting
+			{
+				Layer = "lights_add"
+				Offset = [0, .15]
+				DamageLevels
+				[
+					{
+						File = "lights.png"
+						Size = [1, 1.5]
+					}
+				]
+			}
+			Walls
+			{
+				Layer = "walls"
+				DamageLevels
+				[
+					{
+						File = "walls.png"
+						Size = [1, 2]
+					}
+					{
+						File = "walls_33.png"
+						Size = [1, 2]
+					}
+					{
+						File = "walls_66.png"
+						Size = [1, 2]
+					}
+				]
+			}
+			Roof
+			{
+				Layer = "roofs"
+				DamageLevels
+				[
+					{
+						File = "roof.png"
+						Size = [1, 2]
+					}
+					{
+						File = "roof_33.png"
+						Size = [1, 2]
+					}
+					{
+						File = "roof_66.png"
+						Size = [1, 2]
+					}
+				]
+			}
+			OperationalRoofWindows
+			{
+				Layer = "roof_windows"
+				Offset = [0, .18]
+				DamageLevels
+				[
+					{
+						File = "roof_windows_on.png"
+						Size = [1, .5]
+					}
+					{
+						File = "roof_windows_on_33.png"
+						Size = [1, .5]
+					}
+					{
+						File = "roof_windows_on_66.png"
+						Size = [1, .5]
+					}
+				]
+			}
+			NonOperationalRoofWindows
+			{
+				Layer = "roof_windows"
+				Offset = [0, .18]
+				DamageLevels
+				[
+					{
+						File = "roof_windows_off.png"
+						Size = [1, .5]
+					}
+					{
+						File = "roof_windows_off_33.png"
+						Size = [1, .5]
+					}
+					{
+						File = "roof_windows_off_66.png"
+						Size = [1, .5]
+					}
+				]
+			}
+		}
+
+		OperationEffects
+		{
+			Type = ToggleEffects
+			Location = [.5, 1]
+			Toggle = IsOperational
+			ToggledOnMediaEffects = &/COMMON_EFFECTS/MachinesOn
+			ToggledOffMediaEffects = &/COMMON_EFFECTS/MachinesOff
+		}
+
+		BlueprintsHE
+		{
+			Type = BlueprintSprite
+			File = "blueprints_he.png"
+			Size = [1, 2.25]
+			Offset = [0, -.25]
+
+			ShowOnlyInToggleMode
+			{
+				ToggleID = missile_type
+				Mode = 0
+			}
+		}
+		BlueprintsEmp
+		{
+			Type = BlueprintSprite
+			File = "blueprints_emp.png"
+			Size = [1, 2.25]
+			Offset = [0, -.25]
+
+			ShowOnlyInToggleMode
+			{
+				ToggleID = missile_type
+				Mode = 1
+			}
+		}
+		BlueprintsNuke
+		{
+			Type = BlueprintSprite
+			File = "blueprints_nuke.png"
+			Size = [1, 2.25]
+			Offset = [0, -.25]
+
+			ShowOnlyInToggleMode
+			{
+				ToggleID = missile_type
+				Mode = 2
+			}
+		}
+	}
+
+	Stats
+	{
+		CrewRequired = &~/Part/Components/PartCrew/Crew
+		HEMissileCapacity = 12
+	}
+	
+	StatsNotesKey = "Stats/MissileLauncherNotes"
+}

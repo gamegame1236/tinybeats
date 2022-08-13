@@ -1,0 +1,541 @@
+Part : /BASE_PART
+{
+	NameKey = "Parts/OIPtiny"
+	IconNameKey = "Parts/OIPtinyIcon"
+	ID = Graay.tiny_oip // Part IDs must always be in the form of "author_name.part_name". If making your own mod, do *not* use "cosmoteer" as your author name, because it may conflict with future vanilla parts.
+	EditorGroup = "Parts"
+	DescriptionKey = "Parts/OIPtinyDesc"
+	Cost = 2500
+	TypeCategories = [ftl, command, thruster, uses_power, is_crewed, uses_ammo, weapon]
+	Size = [1, 1]
+	SelectionPriority = 1
+	SelectionTypeByRotation = true
+	SelectionTypeRotations = [0, 3]
+	SelectionTypeID = "thrusters"
+	MaxHealth = 3500
+	Density = 3
+	ExternalWalls = [None]
+	InternalWalls = [All]
+	IsWalled = false
+	ThrusterForce = 75
+	ThrustIncreaseTime = 0
+	ThrustRecoveryTime = 0
+	FuelUsage = 1
+	CrewCapacity = 1
+	CustomCollider
+	[
+		[1, 0]
+		[1, 1]
+		[1, 2]
+		[0, 1]
+	]
+	EditorIcon
+	{
+		Texture
+		{
+			File = "icon.png"
+			SampleMode = Linear
+		}
+		Size = [21.33, 21.33]
+	}
+	Components : ^/0/Components
+	{
+		CrewSource
+		{
+			Type = CrewSource
+			Crew = 1
+		}
+
+		CommandProvider
+		{
+			Type = CommandProvider
+		}
+
+		IsOperational
+		{
+			Type = MultiToggle
+			Toggles = [BatteryStorage]
+			Mode = All
+		}
+
+		PowerToggle
+		{
+			Type = UIToggle
+			ToggleID = "on_off"
+			Default = 1
+			RequiresCommand = false
+		}
+
+		BatteryStorage
+		{
+			Type = AmmoStorage
+			AmmoType = battery
+			MaxAmmo = 8000
+			StartingAmmo = &MaxAmmo
+			AssumeAlwaysHasAmmo = true
+		}
+		BatteryProducer
+		{
+			Type = AmmoConverter
+			ToStorage = BatteryStorage
+			ToQuantity = 8000
+			Interval = 0.1
+		}
+		PowerDrain
+		{
+			Type = AmmoConverter
+			OperationalToggle = IsOperational
+			FromStorage = BatteryStorage
+			FromQuantity = 100
+			Interval = 1
+		}
+
+		Sensor
+		{
+			Type = Sensor
+			OperationalToggle = IsOperational
+			SightRadius = 220
+		}
+
+		FtlDrive
+		{
+			Type = FtlDrive
+			SpinDownDuration = 1
+			JumpEfficiencyDistanceRange = [1, 5]
+		}
+
+		ArcShield
+		{
+			Type = ArcShield
+			OperationalToggle = IsOperational
+
+			Radius = 1.5
+			Arc = 360d
+			DrainAmmoFrom = BatteryStorage
+			PenetrationResistance = [5, 0]
+			AmmoDrainPerDamage = 1
+			Rotation = -90d
+			Location = [0.5, 0.5]
+
+			BlueprintArcSprite
+			{
+				Texture = "./Data/ships/terran/shield_gen_small/shield_energy.png"
+				Size = [0, 1.5]
+				Color = [0, 0, 255, 127]
+			}
+			BlueprintArcSpriteSegments = 64
+
+			CoverageArcSprite
+			{
+				Texture = "./Data/ships/terran/shield_gen_small/shield_energy.png"
+				Size = [0, 1.5]
+				Color = [255, 255, 255, 127]
+			}
+			CoverageArcSpriteSegments = 64
+			HitMediaEffects
+			[
+				{
+					Type = ArcShield
+					FadeInTime = .1
+					FadeOutTime = .5
+					Radius = &~/Part/Components/ArcShield/Radius
+					Arc = 20d
+					ArcSprite
+					{
+						Texture = "./Data/ships/terran/shield_gen_small/shield_energy.png"
+						Shader = "./Data/ships/terran/shield_gen_small/shield.shader"
+						_waveTex
+						{
+							File = "./Data/ships/terran/shield_gen_small/shield_energy_wave.png"
+							UVMode = Wrap
+						}
+						_waveSpeed = -2
+						_waveAlpha = .75
+						_waveCurveInterval = 1
+						_waveCurveMagnitude = .25
+						_waveCurveUOffsetPerSecond = 0
+						//TargetBlendMode = Add
+						_fullPowerColor = [0, 0, 255, 191]
+						_lowPowerColor = [255, 0, 0, .191]
+						_lowPowerThicknessExponent = .6
+						TargetBlendMode = Add
+						Size = [0, 3]
+					}
+					ArcSpriteSegments = 12
+					Bucket = Upper3
+				}
+
+				: /BASE_SOUNDS/AudioExterior
+				{
+					Sound = "./Data/ships/terran/shield_gen_small/shield_hit.wav"
+					Volume = 1
+					Speed = 1
+					IgnoreIntensity = true
+					SpeedVariation = .25
+					MaxConcurrent = 10
+				}
+			]
+		}
+		ArcShieldEffect
+		{
+			Type = ContinuousEffects
+			ChainedTo = ArcShield
+			FactorMediaEffectsIntensityWith = BatteryStorage
+			Location = [&~/Part/Components/ArcShield/Radius, 0]
+			OperationalToggle = IsOperational
+			MediaEffects
+			[
+				{
+					Type = ArcShield
+					Radius = &~/Part/Components/ArcShield/Radius
+					Arc = &~/Part/Components/ArcShield/Arc
+					FadeInTime = .25
+					FadeOutTime = .25
+					FadeFromScale = .8
+					ArcSprite
+					{
+						Texture = "./Data/ships/terran/shield_gen_small/shield_energy.png"
+						Shader = "./Data/ships/terran/shield_gen_small/shield.shader"
+						_waveTex
+						{
+							File = "./Data/ships/terran/shield_gen_small/shield_energy_wave.png"
+							UVMode = Wrap
+						}
+						_waveSpeed = 1
+						_waveAlpha = 1
+						_waveCurveInterval = .5
+						_waveCurveMagnitude = .35
+						_waveCurveUOffsetPerSecond = .2
+						_fullPowerColor = [0, 0, 255, 127]
+						_lowPowerColor = [255, 0, 0, 127]
+						_lowPowerThicknessExponent = .6
+						TargetBlendMode = Add
+						Size = [0, 1.5]
+					}
+					ArcSpriteSegments = 64
+					Bucket = Lower1
+				}
+
+				: /BASE_SOUNDS/AudioExteriorDetail
+				{
+					Sound = "./Data/ships/terran/shield_gen_small/shield_loop.wav"
+					Volume = .15
+					Speed = .5
+					MaxConcurrent = 1
+					MaxConcurrentVolume = .3
+					DynamicVolume : ^/0/DynamicVolume
+					{
+						MinDistance = .75
+						MaxDistance = 1.5
+					}
+					IgnoreIntensity = true
+				}
+			]
+		}
+		ShieldOperationEffects
+		{
+			Type = ToggleEffects
+			Toggle = IsOperational,
+			ChainedTo = ArcShieldEffect
+			ToggledOnMediaEffects
+			[
+				: /BASE_SOUNDS/AudioExterior
+				{
+					Sound = "./Data/ships/terran/shield_gen_small/activate.wav"
+					Volume = .5
+					Speed = 1
+					IgnoreIntensity = true
+				}
+			]
+			ToggledOffMediaEffects
+			[
+				: /BASE_SOUNDS/AudioExterior
+				{
+					Sound = "./Data/ships/terran/shield_gen_small/deactivate.wav"
+					Volume = .5
+					Speed = 1
+					IgnoreIntensity = true
+				}
+			]
+		}
+
+		FireModeToggle
+		{
+			Type = UIToggle
+			ToggleID = "fire_mode"
+			Default = 1
+			ToggledOnChoices = [0, 1, 2]
+		}
+		AutoTargetToggle
+		{
+			Type = ModeToggle
+			Mode = FireModeToggle
+			OnModes = [1, 2]
+		}
+		AutoFireToggle
+		{
+			Type = ModeToggle
+			Mode = FireModeToggle
+			OnMode = 2
+		}
+
+		EngineBuffToggle
+		{
+			Type = BuffToggle
+			BuffType = Engine
+		}
+
+		
+		Graphics
+		{
+			Type = Graphics
+			Location = [.5, .5]
+			OperationalToggle = IsOperational
+			Floor
+			{
+				Layer = "floors"
+				Offset = [0, 0]
+				DamageLevels
+				[
+					{
+						File = "OIP.png"
+						Size = [1, 1]
+					}
+					{
+						File = "OIP.png"
+						Size = [1, 1]
+					}
+					{
+						File = "OIP.png"
+						Size = [1, 1]
+					}
+				]
+			}
+		
+			Roof
+			{
+				Layer = "roofs"
+				DamageLevels
+				[
+					{
+						File = "OIP.png"
+						Size = [1, 1]
+					}
+					{
+						File = "OIP.png"
+						Size = [1, 1]
+					}
+					{
+						File = "OIP.png"
+						Size = [1, 1]
+					}
+				]
+			}
+		}
+
+		MainThruster
+		{
+			Type = Thruster
+			Location = [.5, .75]
+			Rotation = 90d
+			OperationalToggle = IsOperational
+			Force = &../../ThrusterForce
+			MinActivation = -1
+			MaxActivation = 1
+			MinUncommandedActivation = &MinActivation
+			MaxUncommandedActivation = &MaxActivation
+			FuelStorage = BatteryStorage
+			FuelUsagePerSecond = &../../FuelUsage
+		}
+
+		LateralThrustOfForwardThruster
+		{
+			Type = Thruster
+			ChainedTo = MainThruster
+			Rotation = 90d// Relative to main thruster.
+			OperationalToggle = IsOperational
+			Force = &../../ThrusterForce
+			MinActivation = -1
+			MaxActivation = 1
+			MinUncommandedActivation = &MinActivation
+			MaxUncommandedActivation = &MaxActivation
+			FuelStorage = BatteryStorage
+			FuelUsagePerSecond = &../../FuelUsage
+		}
+
+		BackwardThruster
+		{
+			Type = Thruster
+			Location = [.5, 0]// Relative to upper-left corner of unrotated part.
+			Rotation = -90d// Relative to unrotated part.
+			OperationalToggle = IsOperational
+			Force = &../../ThrusterForce
+			MinActivation = -1
+			MaxActivation = 1
+			MinUncommandedActivation = &MinActivation
+			MaxUncommandedActivation = &MaxActivation
+			FuelStorage = BatteryStorage
+			FuelUsagePerSecond = &../../FuelUsage
+		}
+
+		LateralThrustOfBackwardThruster
+		{
+			Type = Thruster
+			ChainedTo = BackwardThruster
+			Rotation = 90d// Relative to main thruster.
+			OperationalToggle = IsOperational
+			Force = &../../ThrusterForce
+			MinActivation = -1
+			MaxActivation = 1
+			MinUncommandedActivation = &MinActivation
+			MaxUncommandedActivation = &MaxActivation
+			FuelStorage = BatteryStorage
+			FuelUsagePerSecond = &../../FuelUsage
+		}
+
+		BurstTrigger
+		{
+			Type = ThresholdTrigger
+			AmountFrom = MainThruster
+			MinAmount = .5
+		}
+
+		BurstEffects
+		{
+			Type = TriggeredEffects
+			ChainedTo = MainThruster
+			Trigger = BurstTrigger
+			FactorMediaEffectsIntensityWith = MainThruster
+			AnchorMediaEffects = true
+			MediaEffects
+			[
+				: /COMMON_SOUNDS/ThrusterBurst
+				{
+					Volume = .125
+					Speed = 2
+					MaxConcurrentVolume = .25
+				}
+			]
+		}
+
+		Turret
+		{
+			Type = TurretWeapon
+			Location = [.5, .5]// Relative to upper-left corner of unrotated part.
+			Rotation = -90d// Relative to unrotated part.
+			OperationalToggle = IsOperational
+			AutoFireToggle = AutoFireToggle
+			FireInterval = .55
+			FiringArc = 360d
+			RotateSpeed = 360d
+			FireThresholdAngle = 1d
+			AIFirepowerRating = 220
+			Emitter = BulletEmitter
+			FirePermissionToggle = FireModeToggle
+
+			AutoTargets
+			[
+				{
+					TargetType = ShipParts
+					Toggle = AutoTargetToggle
+				}
+			]
+
+			BlueprintArcSprite
+			{
+				Texture = &/INDICATORS/WeaponArc
+				Size = [0, 1.5]
+				Color = [255, 154, 43, 63]
+			}
+			BlueprintArcRadius = 10
+			BlueprintArcSpriteSegments = 64
+
+			CoverageSectorArc
+			{
+				Texture = &/INDICATORS/VerticalGradient
+				VertexColor = [255, 255, 255, 51]
+				QuadCount = 64
+			}
+		}
+
+		ReloadProgressBar
+		{
+			Type = ProgressBar
+			OperationalToggle = IsOperational
+			ShowProgressFor = Turret
+		}
+
+		BulletEmitter
+		{
+			Type = BulletEmitter
+			ChainedTo = Turret
+			FireTrigger = Turret
+			GetTargetFrom = Turret
+			Location = [0, 0]
+			OperationalToggle = IsOperational
+			Bullet = &<laser_bolt_small/laser_bolt_small.txt>
+			AmmoStorage = BatteryStorage
+			AmmoUsed = 15
+			Burst = 2
+			BurstDelay = .025
+		}
+
+		CrewLocation
+		{
+			Type = CrewLocation
+			Location = [.5, 0.5]
+			Rotation = 180d
+		}
+		PartCrew
+		{
+			Type = PartCrew
+			Crew = 1
+			DefaultPriority = &/PRIORITIES/ControlRoom_Crew
+			Priorities = &/PRIORITIES/ControlRoom_Crew
+			PrerequisitesBeforeCrewing = []
+			HighPriorityPrerequisites = [BatteryStorage]
+			CrewDestinations
+			[
+				[.5, 0.5]
+			]
+			CrewLocations
+			[
+				CrewLocation
+			]
+		}
+
+		Indicators
+		{
+			Type = IndicatorSprites
+			Location = [1, 1]
+			Layer = "indicators"
+			Indicators
+			[
+				// Out of power.
+				{
+					Toggle = BatteryStorage
+					AtlasSprite
+					{
+						File = &/INDICATORS/NoPower
+						Size = [1, 1]
+					}
+				}
+			]
+		}
+
+		Blueprints
+		{
+			Type = BlueprintSprite
+			File = "OIP.png"
+			Size = [1, 1]
+		}
+	}
+
+	Stats
+	{
+		ThrusterForce = &~/Part/ThrusterForce
+		ThrusterRampUp = &~/Part/ThrustIncreaseTime
+		ThrusterPowerUsage = (&~/Part/FuelUsage) / 1000
+		PowerCapacity = (&~/Part/Components/BatteryStorage/MaxAmmo) / 1000
+	}
+}

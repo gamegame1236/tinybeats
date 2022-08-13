@@ -1,0 +1,13 @@
+missileparthetiny
+		// HE Missile parts.
+	{
+		ID = missile_part_he_tiny
+		MaxCarried = 1
+		CarriedSprite
+		{
+			File = "missile_part_he.png"
+			Size = [1, 1]
+			Offset = [0, .25]
+		}
+	}
+

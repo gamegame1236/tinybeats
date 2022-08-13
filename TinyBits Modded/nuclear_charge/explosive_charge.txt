@@ -1,0 +1,204 @@
+Part : /BASE_PART
+{
+	NameKey = "Parts/DC"
+	IconNameKey = "Parts/DCIcon"
+	ID = Battleman103333.d_c // Part IDs must always be in the form of "author_name.part_name". If making your own mod, do *not* use "cosmoteer" as your author name, because it may conflict with future vanilla parts.
+	OtherIDs = [d_c]
+	EditorGroup = "StrangeParts"
+	DescriptionKey = "Parts/DCDesc"
+	Cost = 500
+	TypeCategories = [explosives]
+	Size = [1, 1]
+	SelectionPriority = 1
+	MaxHealth = 100
+	CreatePartPerTileWhenDestroyed = ""
+	CrewSpeedFactor = 0
+	AllowedDoorLocations = []
+	EditorIcon
+	{
+		Texture
+		{
+			File = "icon.png"
+			SampleMode = Linear
+		}
+		Size = [32, 32]
+	}
+	Components : ^/0/Components
+	{
+		DetonateTrigger
+		{
+			Type = UITrigger
+			TriggerID = "detonate"
+		}
+
+		DetonateEffects
+		{
+			// This just destroys the part, which in turn will trigger the DeathEffects, causing the actual collateral damage.
+
+			Type = TriggeredEffects
+			Trigger = DetonateTrigger
+			HitEffects
+			[
+				{
+					Type = Damage
+					Damage = 999999
+					Filter
+					{
+						Friendlies = true
+						IgnoreInvulnerability = true
+					}
+				}
+				{
+					Type = AreaImpulse
+					Impulse = 100
+					Radius = 4
+					SourceShipCollision = false
+					
+				}
+			]
+		}
+
+		DestroyedEffects
+		{
+			Type = DeathEffects
+			Location = [.5, .5]
+
+			MediaEffects
+			[
+				&<./Data/common_effects/particles/explosions/med_part_explode.txt>
+				&<./Data/common_effects/particles/explosions/big_part_explode_flash.txt>
+				&<particles/explosive_charge_shockwave.txt>
+				&<./Data/common_effects/particles/explosions/med_part_explode_smoke.txt>
+
+				: /BASE_SOUNDS/AudioExterior
+				{
+					Sound = "./Data/common_effects/sounds/big_part_destroyed.wav"
+					Volume = 1
+					SpeedVariation = .25
+				}
+
+				: /BASE_SHAKE
+				{
+					ShakeAmount = .15
+					Duration = 1
+				}
+			]
+		}
+
+		Graphics
+		{
+			Type = Graphics
+			Location = [.5, .5]
+			Floor
+			{
+				Layer = "floors"
+				DamageLevels
+				[
+					{
+						File = "floor.png"
+						Size = [1, 1]
+					}
+					{
+						File = "floor_33.png"
+						Size = [1, 1]
+					}
+					{
+						File = "floor_66.png"
+						Size = [1, 1]
+					}
+				]
+			}
+			OperationalDoodad
+			{
+				Layer = "doodads_low"
+				DamageLevels
+				[
+					{
+						AnimationFiles
+						[
+							"bomb1.png"
+							"bomb2.png"
+							"bomb3.png"
+							"bomb4.png"
+							"bomb5.png"
+							"bomb4.png"
+							"bomb3.png"
+							"bomb2.png"
+						]
+						Size = [1, 1]
+						AnimationInterval = .000001
+						AnimationStartTime = Zero
+					}
+				]
+			}
+			Walls
+			{
+				Layer = "walls"
+				DamageLevels
+				[
+					{
+						File = "walls.png"
+						Size = [1, 1]
+					}
+					{
+						File = "walls_33.png"
+						Size = [1, 1]
+					}
+					{
+						File = "walls_66.png"
+						Size = [1, 1]
+					}
+				]
+			}
+			Roof
+			{
+				Layer = "roofs"
+				DamageLevels
+				[
+					{
+						File = "roof.png"
+						Size = [1, 1]
+					}
+					{
+						File = "roof_33.png"
+						Size = [1, 1]
+					}
+					{
+						File = "roof_66.png"
+						Size = [1, 1]
+					}
+				]
+			}
+			OperationalRoofDoodad
+			{
+				Layer = "roof_doodads"
+				DamageLevels
+				[
+					{
+						AnimationFiles
+						[
+							"roof_light1.png"
+							"roof_light2.png"
+							"roof_light3.png"
+							"roof_light4.png"
+							"roof_light5.png"
+							"roof_light4.png"
+							"roof_light3.png"
+							"roof_light2.png"
+						]
+						Size = [1, 1]
+						AnimationInterval = .000001
+						AnimationStartTime = Zero
+					}
+				]
+			}
+		}
+
+		Blueprints
+		{
+			Type = BlueprintSprite
+			File = "blueprints.png"
+			Size = [1, 1]
+		}
+	}
+}

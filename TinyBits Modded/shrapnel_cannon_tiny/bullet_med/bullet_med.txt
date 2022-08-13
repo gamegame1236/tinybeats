@@ -1,0 +1,268 @@
+ID = "Battleman103333.scrap_bullet"
+OtherIDs = ["scrap_bullet", "scrap_tiny"]
+Range = 190
+IdealRange = [50, 190]
+IdealRadius = [5, 50]
+Speed = 30
+
+Components
+{
+	Physics
+	{
+		Type = CirclePhysics
+		Radius = 0.15
+		Density = 0.0001
+	}
+
+	Death
+	{
+		Type = DeathByLifetime
+		Lifetime = 6
+
+		OnDeath
+		{
+			HitEffects
+			[
+				{
+					Type = SpawnBullets
+					Bullet = &<mine_shrapnel.txt>
+					Count = [3, 9]
+					Distance = .05
+					Spread = [-25d, 25d]
+					InheritVelocity = false
+					ScaleCount = true
+				}
+			]
+
+			MediaEffects
+			[
+				&<particles/missile_he_hit.txt>
+				&<particles/missile_he_flash.txt>
+
+				: /BASE_SOUNDS/AudioExterior
+				{
+					Sound = "missile_he_hit.wav"
+					Volume = .75
+					SpeedVariation = .4
+				}
+
+				: /BASE_SHAKE
+				{
+					ShakeAmount = .1
+					Duration = .75
+				}
+			]
+		}
+	}
+
+	Targetable
+	{
+		Type = Targetable
+		Health = 28000
+		TargetCategory = "bullet"
+
+		OnDeath
+		{
+			HitEffects
+			[
+				{
+					Type = SpawnBullets
+					Bullet = &<mine_shrapnel.txt>
+					Count = [0, 1]
+					Spread = [-134, 142]
+					Distance = .05
+					InheritVelocity = false
+				}
+			]
+
+			MediaEffects
+			[
+				&<particles/missile_he_hit.txt>
+				&<particles/missile_he_flash.txt>
+
+				: /BASE_SOUNDS/AudioExterior
+				{
+					Sound = "missile_he_hit.wav"
+					Volume = .75
+					SpeedVariation = .4
+				}
+
+				: /BASE_SHAKE
+				{
+					ShakeAmount = .1
+					Duration = .75
+				}
+			]
+		}
+	}
+	Hit
+	{
+		Type = PenetratingHit
+		Penetration = 5000.0
+		PenetrationSpeed = 60
+
+		HitShield = &HitOperational
+		HitOperational
+		{
+			ReduceEffectsByPenetration = true
+
+			HitEffects
+			[
+				{
+					Type = ExplosiveDamage
+					TotalDamage = 25000
+					Radius = 5.5
+					Filter
+					{
+						Friendlies = true
+					}
+				}
+				{
+					Type = Impulse
+					Impulse = 1
+				}
+				{
+					Type = SpawnBullets
+					Bullet = &<mine_shrapnel.txt>
+					Count = [0, 1]
+					Spread = [-360, 360]
+					Distance = .05
+					InheritVelocity = false
+				}
+			]
+
+			MediaEffects
+			[
+				&<particles/bullet_hit_med.txt>
+				&<particles/bullet_smoke_med.txt>
+				&<particles/bullet_flash_med.txt>
+
+				: /BASE_SOUNDS/AudioExterior
+				{
+					Sound = "bullet_med_hit.wav"
+					Volume = .4
+					SpeedVariation = .4
+				}
+
+				: /BASE_SHAKE
+				{
+					ShakeAmount = .05
+					Duration = .5
+				}
+			]
+		}
+		HitStructural
+		{
+			ReduceEffectsByPenetration = true
+
+			HitEffects
+			[
+				{
+					Type = ExplosiveDamage
+					TotalDamage = 18000
+					Radius = 5.5
+					Filter
+					{
+						OperationalHealth = true
+						StructuralHealth = false
+						Friendlies = true
+					}
+				}
+				{
+					Type = Impulse
+					Impulse = 1
+				}
+			]
+
+			MediaEffects
+			[
+				&<particles/bullet_hit_struct_med.txt>
+
+				: /BASE_SOUNDS/AudioExterior
+				{
+					Sound = "bullet_med_hit_structure.wav"
+					Volume = .3
+					SpeedVariation = .4
+				}
+			]
+		}
+		PenetratingOperational
+		{
+			ReduceEffectsByPenetration = true
+
+			HitEffects
+			[
+				{
+					Type = ExplosiveDamage
+					TotalDamage = 50000
+					Radius = 3.5
+
+					MediaEffects
+					[
+						&<particles/electro_bolt_discharge.txt>
+						&<particles/missile_emp_lightning.txt>
+
+						: /BASE_SOUNDS/AudioExterior
+						{
+							Sound = "discharge.wav"
+							Volume = 1
+							SpeedVariation = .2
+						}
+					]
+				}
+				{
+					Type = SpawnBullets
+					Bullet = &<bullet_med2.txt>
+					Count = [0, 1]
+					Spread = [-360, 360]
+					Distance = .05
+					InheritVelocity = false
+				}
+				{
+					Type = Fire
+					FireChance = .6
+				}
+				{
+					Type = Impulse
+					Impulse = 2
+				}
+			]
+		}
+		PenetratingStructural = &PenetratingOperational
+		FinishedPenetratingOperational = &PenetratingOperational
+		FinishedPenetratingStructural = &PenetratingStructural
+	}
+
+	Sprite
+	{
+		Type = AnimatedSprite
+		ReduceScaleWith = Hit
+		ReduceScaleExponent = 0.5
+		Animation
+		{
+			AtlasSprite
+			{
+				Texture
+				{
+					File = "bullet_med.png"
+					SampleMode = Linear
+					MipLevels = max
+				}
+				Size = [4, 4]
+			}
+			FrameCount = 16
+			FrameSize = [128, 128]
+			FramesPerRow = 4
+			FramesPerSecond = 120
+		}
+	}
+
+	MediaEffects
+	{
+		Type = MediaEffects
+		MediaEffects
+		[
+			&<particles/bullet_trail_med.txt>
+		]
+	}
+}

@@ -1,0 +1,202 @@
+ID = "Battleman103333.mega_mine_shrapnel"
+Range = 5 // Note: Actual lifetime is set below. Need to change that when modifying range.
+Speed = 25
+
+Components
+{
+	Physics
+	{
+		Type = CirclePhysics
+		Radius = 0.25
+		Density = 1
+		RandomExtraSpeed = [5, 10]
+	}
+
+	Retarget
+	{
+		Type = SameShipRetarget
+	}
+
+	Acceleration
+	{
+		Type = Acceleration
+		Acceleration = 1
+	}
+
+	Death
+	{
+		Type = DeathByLifetime
+		Lifetime = [.5, 1]
+	}
+
+	Hit
+	{
+		Type = PenetratingHit
+		Penetration = 9
+		PenetrationSpeed = 5
+		PenetratesFriendlies = true
+
+		HitShield = &HitOperational
+		HitOperational
+		{
+			ReduceEffectsByPenetration = true
+
+			HitEffects
+			[
+				{
+					Type = Damage
+					Damage = 1000
+					Filter
+					{
+						Friendlies = true
+					}
+				}
+				{
+					Type = Impulse
+					Impulse = 2
+				}
+			]
+
+			MediaEffects
+			[
+				&<particles/bullet_hit_large.txt>
+				&<particles/bullet_smoke_large.txt>
+				&<particles/bullet_flash_large.txt>
+
+				: /BASE_SOUNDS/AudioExterior
+				{
+					Sound = "bullet_large_hit.wav"
+					Volume = .75
+					SpeedVariation = .4
+				}
+
+				: /BASE_SHAKE
+				{
+					ShakeAmount = .1
+					Duration = .75
+				}
+			]
+		}
+		HitStructural
+		{
+			ReduceEffectsByPenetration = true
+
+			HitEffects
+			[
+				{
+					Type = Damage
+					Damage = 750
+					Filter
+					{
+						Friendlies = true
+					}
+				}
+				{
+					Type = Impulse;
+					Impulse = 3
+				}
+			]
+
+			MediaEffects
+			[
+				&<particles/bullet_hit_struct_large.txt>
+
+				: /BASE_SOUNDS/AudioExterior
+				{
+					Sound = "bullet_large_hit_structure.wav"
+					Volume = .5
+					SpeedVariation = .4
+				}
+			]
+		}
+		PenetratingOperational
+		{
+			ReduceEffectsByPenetration = true
+
+			HitEffects
+			[
+				{
+					Type = Damage
+					Damage = 850
+					Filter
+					{
+						Friendlies = true
+					}
+				}
+				{
+					Type = Fire
+					FireChance = .1
+					Filter
+					{
+						Friendlies = true
+					}
+				}
+				{
+					Type = Impulse
+					Impulse = 5
+				}
+			]
+
+			MediaEffects
+			[
+				&<particles/bullet_hit_large.txt>
+				&<particles/bullet_flash_large.txt>
+			]
+		}
+		PenetratingStructural
+		{
+			// No effect.
+		}
+		FinishedPenetratingOperational = &PenetratingOperational
+		FinishedPenetratingStructural = &PenetratingStructural
+	}
+
+	AntiBullet
+	{
+		Type = AntiBullet
+		HitsBulletCategories = [laser, missile]
+
+		HitBullet
+		{
+			HitEffects
+			[
+				{
+					Type = Damage
+					Damage = 250
+					Filter
+					{
+						Friendlies = false
+					}
+				}
+			]
+			
+			MediaEffects = &~/Components/Hit/HitOperational/MediaEffects
+		}
+	}
+
+	Sprite
+	{
+		Type = Sprite
+		ReduceScaleWith = Hit
+		ReduceScaleExponent = 0.5
+		Sprite
+		{
+			Texture
+			{
+				File = "mine_shrapnel.png"
+				SampleMode = Linear
+				MipLevels = max
+			}
+			Size = [1.5, 1.5]
+		}
+	}
+
+	MediaEffects
+	{
+		Type = MediaEffects
+		MediaEffects
+		[
+			&<particles/mine_shrapnel_trail.txt>
+		]
+	}
+}

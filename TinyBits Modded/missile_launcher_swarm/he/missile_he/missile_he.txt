@@ -1,0 +1,212 @@
+ID = "Battleman103333.missile_he_tiny"
+OtherIDs = ["missile_tiny", "cosmoteer.missile_tiny"]
+Range = 350
+IdealRange = 450
+Speed = 45
+
+Components
+{
+	Physics
+	{
+		Type = BoxPhysics
+		Size = [1.5, .5]
+		Density = 0.1
+	}
+
+	Homing
+	{
+		Type = TargetHoming
+		TurnVelocity = 360d
+		Delay = .45
+		AvoidanceRaycastDistance = 100
+		VelocityCompensation = 60%
+	}
+
+	Retarget
+	{
+		Type = SameShipRetarget
+	}
+
+	Acceleration
+	{
+		Type = Acceleration
+		Acceleration = 25
+	}
+
+	NegativeAcceleration
+	{
+		Type = Acceleration
+		Acceleration = [-90, 0]
+		AccelerationOverTime = [0, .75]
+		Direction = FrameOfReferenceVelocity
+	}
+
+	DeathByLifetime
+	{
+		Type = DeathByLifetime
+		Lifetime = 9
+		HasTarget = true
+	}
+
+	DeathByDistanceTraveled
+	{
+		Type = DeathByDistanceTraveled
+		// Distance auto-computed from range.
+		HasTarget = false
+	}
+
+	Sprite
+	{
+		Type = AnimatedSprite
+		Animation
+		{
+			AtlasSprite
+			{
+				Texture
+				{
+					File = "missile_he.png"
+					MipLevels = max
+				}
+				Size = [.8, 1]
+			}
+			FrameCount = 8
+			FrameSize = [256, 128]
+			FramesPerRow = 2
+			FramesPerSecond = 30
+		}
+	}
+
+	MediaEffects
+	{
+		Type = MediaEffects
+		MediaEffects
+		[
+			&<particles/missile_he_thruster_glow.txt>
+			&<particles/missile_he_thruster_trail.txt>
+		]
+	}
+
+	Targetable
+	{
+		Type = Targetable
+		Health = 500
+		TargetCategory = "missile"
+
+		// No AOE damage when shot down.
+		OnDeath = &../Hit/HitFriendly
+	}
+
+	Hit
+	{
+		Type = PenetratingHit
+		SourceShipCollisionDelay = 1.5/30
+		Penetration = 55
+		PenetrationSpeed = 45
+
+		HitShield = &HitOperational
+		HitOperational
+		{
+			HitEffects
+			[
+				{
+					Type = ExplosiveDamage
+					TotalDamage = { BaseValue=6800; BuffType=AmmoDamage; BuffMode=Add; }
+					Radius = 2
+					Filter
+					{
+						Friendlies = true
+					}
+				}
+				{
+					Type = Impulse;
+					Impulse = 50;
+				}
+			]
+
+			MediaEffects
+			[
+				&<particles/missile_he_hit.txt>
+				&<particles/missile_he_flash.txt>
+				&<particles/missile_he_shockwave.txt>
+				&<particles/missile_he_smoke.txt>
+
+				: /BASE_SOUNDS/AudioExterior
+				{
+					Sound = "missile_he_hit.wav"
+					Volume = .75
+					SpeedVariation = .4
+				}
+
+				: /BASE_SHAKE
+				{
+					ShakeAmount = .15
+					Duration = .75
+				}
+			]
+		}
+		HitStructural = &HitOperational
+
+		HitFriendly
+		{
+			MediaEffects
+			[
+				&<particles/missile_he_hit.txt>
+				&<particles/missile_he_smoke.txt>
+
+				: /BASE_SOUNDS/AudioExterior
+				{
+					Sound = "missile_he_hit.wav"
+					Volume = .75
+					SpeedVariation = .4
+				}
+			]
+		}
+
+		PenetratingOperational
+		{
+			HitEffects
+			[
+				{
+					Type = ExplosiveDamage
+					TotalDamage = { BaseValue=550; BuffType=AmmoDamage; BuffMode=Add; }
+					Radius = .5
+				}
+				{
+					Type = Impulse;
+					Impulse = 6.5;
+					Filter
+					[
+						Friendlies = false
+					]
+				}
+			]
+		}
+		PenetratingStructural
+		{
+			// No effect.
+		}
+		FinishedPenetratingOperational
+		{
+			HitEffects
+			[
+				{
+					Type = ExplosiveDamage
+					TotalDamage = { BaseValue=5000; BuffType=AmmoDamage; BuffMode=Add; }
+					Radius = 2
+				}
+				{
+					Type = Impulse;
+					Impulse = 60.5;
+					Filter
+					[
+						Friendlies = false
+					]
+				}
+			]
+		}
+		FinishedPenetratingStructural
+		{
+			// No effect.
+		}
+	}
+}

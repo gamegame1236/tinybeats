@@ -1,0 +1,386 @@
+Part : /BASE_PART
+{
+	NameKey = "Parts/ReactorFleetLarge"
+	IconNameKey = "Parts/ReactorFleetLargeIcon"
+	ID = Gray.fleet_reactor_large // Part IDs must always be in the form of "author_name.part_name". If making your own mod, do *not* use "cosmoteer" as your author name, because it may conflict with future vanilla parts.
+	EditorGroup = "Parts"
+	DescriptionKey = "Parts/ReactorFleetLargeDesc"
+	Cost = 250000
+	AIValueFactor = 5
+	Size = [4, 4]
+	SelectionPriority = 0
+	SelectionTypeID = "reactors"
+	MaxHealth = 7500
+	AutoDoorMaxPathLength = 5
+	TypeCategories = [provides_power, bounty_objective]
+	CreatePartPerTileWhenDestroyed = ""
+	IgnoreRotationForMirroredSelection = true
+	BlockedTravelCells
+	[
+		[1, 1]
+		[1, 2]
+		[2, 1]
+		[2, 2]
+	]
+	ForceManhattenPathInPart = true
+	EditorIcon
+	{
+		Texture
+		{
+			File = "icon.png"
+			SampleMode = Linear
+		}
+		Size = [72, 72]
+	}
+	Components : ^/0/Components
+	{
+		BatteryStorage
+		{
+			Type = AmmoStorage
+			AmmoType = battery
+			MaxAmmo = 15000
+			StartingAmmo = &MaxAmmo
+			SuppliesAmmo = true
+			MaxAmmoPickUp = 3000
+			InitPickUp = 3000
+			PickUpRate = 3000 / 1.0
+			ExpectedAmmoGenerationRate = (&../BatteryProducer/ToQuantity) / (&../BatteryProducer/Interval)
+			ToggleOnAmmo = 6001
+			ToggleOffAmmo = 6000
+		}
+		BatteryProducer
+		{
+			Type = AmmoConverter
+			ToStorage = BatteryStorage
+			ToQuantity = 3000
+			Interval = .8
+		}
+
+		AreaPowerProvider
+		{	
+			Type = TriggeredEffects
+			Location = [2, 2]
+			Trigger = MainTimer
+			HitEffects
+			[
+				{
+					Type = ExplosiveAmmoDrain
+					AmmoType = battery
+					TotalDrain = -5500
+					Radius = 15
+					Filter
+					{
+						Ships = true
+						Shields = false				
+						Friendlies = true
+						Enemies = false
+					}
+				}
+			]
+		}
+
+		MainTimer
+		{
+			Type = Timer
+			Duration = 1
+			AutoStart = true
+			Repeats = true
+		}
+
+		Graphics
+		{
+			Type = Graphics
+			Location = [2, 2]
+			Floor
+			{
+				Layer = "floors"
+				DamageLevels
+				[
+					{
+						File = "floor.png"
+						Size = [4, 4]
+					}
+					{
+						File = "floor_33.png"
+						Size = [4, 4]
+					}
+					{
+						File = "floor_66.png"
+						Size = [4, 4]
+					}
+				]
+			}
+			OperationalLighting
+			{
+				Layer = "lights_add"
+				DamageLevels
+				[
+					{
+						AnimationFiles
+						[
+							"lights1.png"
+							"lights2.png"
+							"lights3.png"
+							"lights4.png"
+							"lights5.png"
+							"lights6.png"
+							"lights7.png"
+							"lights8.png"
+						]
+						Size = [4, 4]
+						AnimationInterval = 0.05
+					}
+				]
+			}
+			Walls
+			{
+				Layer = "walls"
+				DamageLevels
+				[
+					{
+						File = "walls.png"
+						Size = [4, 4]
+					}
+					{
+						File = "walls_33.png"
+						Size = [4, 4]
+					}
+					{
+						File = "walls_66.png"
+						Size = [4, 4]
+					}
+				]
+			}
+			Roof
+			{
+				Layer = "roofs"
+				DamageLevels
+				[
+					{
+						File = "roof.png"
+						Size = [4, 4]
+					}
+					{
+						File = "roof_33.png"
+						Size = [4, 4]
+					}
+					{
+						File = "roof_66.png"
+						Size = [4, 4]
+					}
+				]
+			}
+			OperationalRoofDoodad
+			{
+				Layer = "roof_doodads"
+				DamageLevels
+				[
+					{
+						AnimationFiles
+						[
+							"roof_doodads1.png"
+							"roof_doodads2.png"
+							"roof_doodads3.png"
+							"roof_doodads4.png"
+							"roof_doodads5.png"
+							"roof_doodads6.png"
+							"roof_doodads7.png"
+							"roof_doodads8.png"
+						]
+						Size = [4, 4]
+						AnimationInterval = 0.05
+					}
+				]
+			}
+			OperationalRoofWindows
+			{
+				Layer = "roof_windows"
+				DamageLevels
+				[
+					{
+						File = "roof_windows.png"
+						Size = [4, 4]
+					}
+					{
+						File = "roof_windows_33.png"
+						Size = [4, 4]
+					}
+					{
+						File = "roof_windows_66.png"
+						Size = [4, 4]
+					}
+				]
+			}
+		}
+
+		ReactorHum
+		{
+			Type = ContinuousEffects
+			Location = [2, 2]
+			MediaEffects
+			[
+				: /BASE_SOUNDS/AudioInterior
+				{
+					Sound = "../reactor_small/operating.wav"
+					Volume = .5
+					Speed = .5
+					MaxConcurrent = 1
+					DynamicVolume : ^/0/DynamicVolume
+					{
+						ExteriorVolume = .5
+					}
+				}
+			]
+		}
+
+		BatterySprites
+		{
+			Type = AmmoSprites
+			Location = [2, 2]
+			AmmoStorage = BatteryStorage
+			Layer = "doodads_high"
+			HasZeroAmmoSprite = true
+			AmmoLevels
+			[
+				{
+					File = "reactor0.png"
+					Size = [4, 4]
+				}
+				{
+					File = "reactor1.png"
+					Size = [4, 4]
+				}
+				{
+					File = "reactor2.png"
+					Size = [4, 4]
+				}
+				{
+					File = "reactor3.png"
+					Size = [4, 4]
+				}
+				{
+					File = "reactor4.png"
+					Size = [4, 4]
+				}
+				{
+					File = "reactor5.png"
+					Size = [4, 4]
+				}
+				{
+					File = "reactor6.png"
+					Size = [4, 4]
+				}
+				{
+					File = "reactor7.png"
+					Size = [4, 4]
+				}
+				{
+					File = "reactor8.png"
+					Size = [4, 4]
+				}
+			]
+		}
+
+		DestroyedEffects
+		{
+			Type = DeathEffects
+			Location = [2, 2]
+
+			MediaEffects
+			[
+				&<particles/reactor_explode_large.txt>
+				&<particles/reactor_explode_flash_large.txt>
+				&<particles/reactor_shockwave_large.txt>
+				&<./Data/common_effects/particles/explosions/huge_part_explode_debris.txt>
+				&<./Data/common_effects/particles/explosions/huge_part_explode_smoke.txt>
+
+				: /BASE_SOUNDS/AudioExterior
+				{
+					Sound = "../reactor_small/destroyed.wav"
+					Volume = 2
+					Speed = .5
+					SpeedVariation = .25 * (&Speed)
+				}
+
+				: /BASE_SHAKE
+				{
+					ShakeAmount = .75
+					Duration = 4
+				}
+			]
+			
+			HitEffects
+			[
+				{
+					Type = ExplosiveDamage
+					TotalDamage = 81000
+					Radius = 12
+					Delay = .05
+					ExpandDuration = .8
+					ExpandStartRadius = 4
+					ExpandLoss = 100%
+					FireChancePerNDamage = 75%
+					ImpulsePerNDamage = 10
+					NDamage = 1000
+					Filter
+					{
+						OperationalHealth = true
+						StructuralHealth = false
+						Friendlies = true
+					}
+				}
+				{
+					Type = ExplosiveDamage
+					TotalDamage = 45000
+					Radius = 6
+					Delay = .05
+					ExpandDuration = .7
+					ExpandStartRadius = 4
+					ExpandLoss = 100%
+					ImpulsePerNDamage = 5
+					NDamage = 1000
+					Filter
+					{
+						OperationalHealth = false
+						StructuralHealth = true
+						Friendlies = true
+					}
+				}
+			]
+		}
+
+		Indicators
+		{
+			Type = IndicatorSprites
+			Location = [2, 2]
+			Layer = "indicators"
+			Indicators
+			[
+				// Out of power.
+				{
+					Toggle = BatteryStorage
+					AtlasSprite
+					{
+						File = &/INDICATORS/NoPower
+						Size = [1.5, 1.5]
+					}
+				}
+			]
+		}
+
+		Blueprints
+		{
+			Type = BlueprintSprite
+			File = "blueprints.png"
+			Size = [4, 4]
+		}
+	}
+
+	Stats
+	{
+		PowerGeneration = (&~/Part/Components/BatteryProducer/ToQuantity) / (&~/Part/Components/BatteryProducer/Interval) / 1000
+		BatterySize = (&~/Part/Components/BatteryStorage/MaxAmmoPickUp) / 1000
+		BatteryFillTime = 1000 / (&~/Part/Components/BatteryStorage/PickUpRate)
+		PowerCapacity = (&~/Part/Components/BatteryStorage/MaxAmmo) / 1000
+	}
+}

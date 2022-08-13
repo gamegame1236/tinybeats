@@ -1,0 +1,202 @@
+ID = "Battleman103333.drone_laser"
+Range = 200
+IdealRange = [60, 200]
+IdealRadius = [5, 50]
+Speed = 55
+
+Components
+{
+	Physics
+	{
+		Type = CirclePhysics
+		Radius = 0.01
+		Density = 0.0001
+	}
+
+	Death
+	{
+		Type = DeathByLifetime
+
+		OnDeath
+		{
+			HitEffects
+			[
+				{
+					Type = SpawnBullets
+					Bullet = &<laser_bolt_small2.txt>
+					Count = 36
+					Distance = .005
+					Spread = [0d, 0d]
+					InheritVelocity = false
+					Rotation = 90d
+				}
+			]
+		}
+	}
+
+	Targetable
+	{
+		Type = Targetable
+		Health = 250
+		TargetCategory = "laser"
+	}
+
+	Homing
+	{
+		Type = TargetHoming
+		TurnVelocity = 60d
+		Delay = .01
+		AvoidanceRaycastDistance = 150
+		VelocityCompensation = 80%
+	}
+
+	Acceleration
+	{
+		Type = Acceleration
+		Acceleration = 50
+	}
+
+	Hit
+	{
+		Type = PenetratingHit
+		Penetration = 9.0
+		PenetrationSpeed = 60
+		SourceShipCollisionDelay = 2
+
+		HitShield = &HitOperational
+		HitOperational
+		{
+			ReduceEffectsByPenetration = true
+
+			HitEffects
+			[
+				{
+					Type = ExplosiveDamage
+					TotalDamage = 5500
+					Radius = 2
+				}
+				{
+					Type = Impulse;
+					Impulse = 10;
+				}
+			]
+
+			MediaEffects
+			[
+				&<particles/laser_bolt_small_hit.txt>
+				&<particles/laser_bolt_small_flash.txt>
+				&<particles/laser_bolt_small_sparks.txt>
+
+				: /BASE_SOUNDS/AudioExterior
+				{
+					Sound = "laser_bolt_small_hit.wav"
+					Volume = .4
+					SpeedVariation = .4
+				}
+
+				: /BASE_SHAKE
+				{
+					ShakeAmount = .03
+					Duration = .3
+				}
+			]
+		}
+		HitStructural
+		{
+			HitEffects
+			[
+				{
+					Type = ExplosiveDamage
+					TotalDamage = 5250
+					Radius = 2
+				}
+				{
+					Type = Impulse;
+					Impulse = 6.5;
+					Filter
+					[
+						Friendlies = false
+					]
+				}
+			]
+
+			MediaEffects
+			[
+				&<particles/laser_bolt_small_hit_struct.txt>
+
+				: /BASE_SOUNDS/AudioExterior
+				{
+					Sound = "laser_bolt_small_hit.wav"
+					Volume = .3
+					SpeedVariation = .4
+				}
+			]
+		}
+		PenetratingOperational
+		{
+			HitEffects
+			[
+				{
+					Type = ExplosiveDamage
+					TotalDamage = 550
+					Radius = .5
+				}
+				{
+					Type = Impulse;
+					Impulse = 6.5;
+					Filter
+					[
+						Friendlies = false
+					]
+				}
+			]
+		}
+		PenetratingStructural
+		{
+			// No effect.
+		}
+		FinishedPenetratingOperational
+		{
+			// No effect.
+		}
+		FinishedPenetratingStructural
+		{
+			// No effect.
+		}
+	}
+
+	Sprite
+	{
+		Type = AnimatedSprite
+		ReduceScaleWith = Hit
+		ReduceScaleExponent = 0.5
+		Animation
+		{
+			AtlasSprite
+			{
+				Texture
+				{
+					File = "laser_bolt_small.png"
+					SampleMode = Linear
+					MipLevels = max
+				}
+				Size = [1, 1]
+			}
+			FrameCount = 8
+			FrameSize = [128, 128]
+			FramesPerRow = 2
+			FramesPerSecond = 60
+		}
+	}
+
+	MediaEffects
+	{
+		Type = MediaEffects
+		FactorEffectsWith = Hit
+		FactorEffectsExponent = 0.5
+		MediaEffects
+		[
+			&<particles/laser_bolt_small_glow.txt>
+		]
+	}
+}

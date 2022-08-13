@@ -1,0 +1,298 @@
+ID = "Battleman103333.missile_nuke_cluster"
+Range = 150
+IdealRange = 140
+Speed = 25.5
+
+Components
+{
+	Physics
+	{
+		Type = CirclePhysics
+		Radius = .3
+		Density = 0.01
+	}
+
+	Homing
+	{
+		Type = TargetHoming
+		TurnVelocity = 250d
+		Delay = .1
+		AvoidanceRaycastDistance = 100
+		VelocityCompensation = 70%
+	}
+
+	Acceleration
+	{
+		Type = Acceleration
+		Acceleration = 25
+		Delay = .45
+	}
+
+	NegativeAcceleration
+	{
+		Type = Acceleration
+		Acceleration = [-135, 0]
+		AccelerationOverTime = [0, .75]
+		Direction = FrameOfReferenceVelocity
+	}
+
+	DeathByLifetime
+	{
+		Type = DeathByLifetime
+		HasTarget = true
+
+		HitEffects
+		[
+			{
+				Type = ExplosiveDamage
+				TotalDamage = 50000
+				Radius = 12.5
+				ExpandDuration = .5
+				ExpandStartRadius = .5
+				ExpandLoss = 100%
+				ImpulsePerNDamage = 100
+				NDamage = 1000
+				Filter
+				{
+					OperationalHealth = true
+					StructuralHealth = false
+					Friendlies = true
+				}
+			}
+			{
+				Type = ExplosiveDamage
+				TotalDamage = 65000
+				Radius = 10.5
+				ExpandDuration = .5
+				ExpandStartRadius = .5
+				ExpandLoss = 100%
+				ImpulsePerNDamage = 50
+				NDamage = 1000
+				Filter
+				{
+					OperationalHealth = false
+					StructuralHealth = true
+					Friendlies = true
+				}
+			}
+		]
+
+		MediaEffects
+		[
+			&<particles/missile_nuke_flash.txt>
+			&<particles/missile_nuke_shockwave.txt>
+
+			: /BASE_SOUNDS/AudioExterior
+			{
+				Sound = "missile_nuke_hit.wav"
+				Volume = 1
+			}
+
+			: /BASE_SHAKE
+			{
+				ShakeAmount = .1
+				Duration = .35
+			}
+		]
+	}
+
+	DeathByDistanceTraveled
+	{
+		Type = DeathByDistanceTraveled
+		// Distance auto-computed from range.
+		HasTarget = false
+	}
+
+	Sprite
+	{
+		Type = AnimatedSprite
+		Animation
+		{
+			AtlasSprite
+			{
+				Texture
+				{
+					File = "missile_nuke.png"
+					MipLevels = max
+				}
+				Size = [1, .65]
+			}
+			FrameCount = 8
+			FrameSize = [192, 98]
+			FramesPerRow = 8
+			FramesPerSecond = 24
+		}
+	}
+
+	MediaEffects
+	{
+		Type = MediaEffects
+		MediaEffects
+		[
+			&<particles/missile_nuke_thruster_glow.txt>
+			&<particles/missile_nuke_thruster_trail.txt>
+		]
+	}
+
+	Targetable
+	{
+		Type = Targetable
+		Health = 200
+		TargetCategory = "missile"
+
+		// No AOE damage when shot down.
+		OnDeath = &../Hit/HitFriendly
+	}
+
+	Hit
+	{
+		Type = PenetratingHit
+		Penetration = 80.0
+		PenetrationSpeed = 20
+
+		HitShield = &HitOperational
+		HitOperational
+		{
+			HitEffects
+			[
+				{
+					Type = ExplosiveDamage
+					TotalDamage = 50000
+					Radius = 12
+					ExpandDuration = .5
+					ExpandStartRadius = .5
+					ExpandLoss = 100%
+					ImpulsePerNDamage = 100
+					NDamage = 1000
+					Filter
+					{
+						OperationalHealth = true
+						StructuralHealth = false
+						Friendlies = true
+					}
+				}
+				{
+					Type = ExplosiveDamage
+					TotalDamage = 65000
+					Radius = 10
+					ExpandDuration = .5
+					ExpandStartRadius = .5
+					ExpandLoss = 100%
+					ImpulsePerNDamage = 50
+					NDamage = 1000
+					Filter
+					{
+						OperationalHealth = false
+						StructuralHealth = true
+						Friendlies = true
+					}
+				}
+				{
+					Type = AreaImpulse
+					Impulse = -150
+					Radius = 8
+				}
+			]
+
+			MediaEffects
+			[
+				&<particles/missile_nuke_flash.txt>
+				&<particles/missile_nuke_shockwave.txt>
+
+				: /BASE_SOUNDS/AudioExterior
+				{
+					Sound = "missile_nuke_hit.wav"
+					Volume = 1
+				}
+
+				: /BASE_SHAKE
+				{
+					ShakeAmount = .1
+					Duration = .35
+				}
+			]
+		}
+		HitStructural = &HitOperational
+
+		PenetratingOperational
+		{
+			ReduceEffectsByPenetration = true
+
+			HitEffects
+			[
+				{
+					Type = ExplosiveDamage
+					TotalDamage = 50000
+					Radius = 1.25
+
+					MediaEffects
+					[
+						&<particles/electro_bolt_discharge.txt>
+						&<particles/missile_emp_lightning.txt>
+
+						: /BASE_SOUNDS/AudioExterior
+						{
+							Sound = "discharge.wav"
+							Volume = 1
+							SpeedVariation = .2
+						}
+					]
+				}
+				{
+					Type = Fire
+					FireChance = .3
+				}
+				{
+					Type = Impulse
+					Impulse = 2
+				}
+			]
+		}
+		PenetratingStructural = &PenetratingOperational
+		FinishedPenetratingOperational
+		{
+			HitEffects
+			[
+				{
+					Type = ExplosiveDamage
+					TotalDamage = 50000
+					Radius = 15
+
+					MediaEffects
+					[
+						&<particles/electro_bolt_discharge.txt>
+						&<particles/missile_emp_lightning.txt>
+
+						: /BASE_SOUNDS/AudioExterior
+						{
+							Sound = "discharge.wav"
+							Volume = 1
+							SpeedVariation = .2
+						}
+					]
+				}
+				{
+					Type = Fire
+					FireChance = .8
+				}
+				{
+					Type = Impulse
+					Impulse = 20
+				}
+			]
+		}
+		FinishedPenetratingStructural = &PenetratingStructural
+		HitFriendly
+		{
+			MediaEffects
+			[
+
+				: /BASE_SOUNDS/AudioExterior
+				{
+					Sound = "missile_nuke_hit.wav"
+					Volume = .75
+				}
+			]
+		}
+	}
+}

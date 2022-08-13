@@ -1,0 +1,66 @@
+ID = "Gray.flak_thing_a"
+Range = 20
+IdealRange = 15
+Speed = 150
+ClipRangeToTarget = true
+RandomOffsetRadius = [3, 15] // Increases as range increases.
+
+Components
+{
+
+	HitNothing
+	{
+		HitEffects
+		{
+			Type = ExplosiveDamage
+			TotalDamage = 1800
+			Radius = 4
+           		Slices = 1
+			Filter
+			{
+				Ships = false
+				Shields = false
+				Bullets = true
+				OnlyBulletCategories = [missile, laser, bullet, mine]
+			}
+		}
+		{
+			Type = ExplosiveDamage
+			TotalDamage = 1800
+			Radius = 4
+			Filter
+			{
+				Ships = true
+				Shields = true
+				Bullets = false
+			}
+		}
+		{
+			Type = SpawnBullets
+			Bullet = &<flak_large.txt>
+			Count = 8
+		}
+	]
+
+	MediaEffects
+	[
+		&<particles/flak_large_shrapnel.txt>
+		&<particles/flak_large_flash.txt>
+		&<particles/flak_large_smoke.txt>
+
+		: /BASE_SOUNDS/AudioExterior
+		{
+			Sound = "flak_large_hit.wav"
+			Volume = .5
+			SpeedVariation = .2
+		}
+		: /BASE_SHAKE
+		{
+			ShakeAmount = .05
+			Duration = .25
+		}
+	]
+	HitShield = &HitNothing
+	HitOperational = &HitNothing
+	HitStructural = &HitNothing
+}

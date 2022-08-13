@@ -1,0 +1,162 @@
+ID = "Battleman103333.bullet_boom"
+OtherIDs = ["boom_bullet", "bullet_boom"]
+Range = 15
+IdealRange = [0, 1]
+IdealRadius = [0, 0]
+Speed = 180
+
+Components
+{
+	Physics
+	{
+		Type = CirclePhysics
+		Radius = 0.3
+		Density = 0.01
+	}
+
+	Death
+	{
+		Type = DeathByLifetime
+		
+		OnDeath
+		{
+			HitEffects
+			[
+				{
+					Type = ExplosiveDamage
+					TotalDamage = 18000
+					Radius = 10
+					Filter
+					{
+						OperationalHealth = true
+						StructuralHealth = true
+						Friendlies = false
+					}
+				}
+			]
+
+			MediaEffects
+			[
+				&<particles/bullet_hit_large.txt>
+				&<particles/bullet_smoke_large.txt>
+				&<particles/bullet_flash_large.txt>
+
+				: /BASE_SOUNDS/AudioExterior
+				{
+					Sound = "bullet_large_hit.wav"
+					Volume = .75
+					SpeedVariation = .4
+				}
+
+				: /BASE_SHAKE
+				{
+					ShakeAmount = .1
+					Duration = .75
+				}
+			]
+		}
+	}
+
+	Targetable
+	{
+		Type = Targetable
+		Health = 1
+		TargetCategory = "bullet"
+
+		OnDeath
+		{
+			HitEffects
+			[
+				{
+					Type = ExplosiveDamage
+					TotalDamage = 18000
+					Radius = 10
+					Filter
+					{
+						OperationalHealth = true
+						StructuralHealth = true
+						Friendlies = false
+					}
+				}
+			]
+		}
+	}
+
+	AntiBullet
+	{
+		Type = AntiBullet
+		HitsBulletCategories = [missile, mine, bullet, laser]
+
+		HitBullet
+		{
+			HitEffects
+			[
+				{
+					Type = ExplosiveDamage
+					TotalDamage = 19000
+					Radius = 10
+					Filter
+					{
+						Ships = true
+						Friendlies = false
+						OperationalHealth = true
+						StructuralHealth = true
+					}
+				}
+			]
+
+			MediaEffects
+			[
+				&<particles/bullet_hit_large.txt>
+				&<particles/bullet_smoke_large.txt>
+				&<particles/bullet_flash_large.txt>
+
+				: /BASE_SOUNDS/AudioExterior
+				{
+					Sound = "bullet_large_hit.wav"
+					Volume = .75
+					SpeedVariation = .4
+				}
+
+				: /BASE_SHAKE
+				{
+					ShakeAmount = .1
+					Duration = .75
+				}
+			]
+		}
+	}
+
+	Sprite
+	{
+		Type = AnimatedSprite
+		ReduceScaleWith = Hit
+		ReduceScaleExponent = 0.5
+		Animation
+		{
+			AtlasSprite
+			{
+				Texture
+				{
+					File = "bullet_med.png" // Just re-use the medium cannon's bullet.
+					SampleMode = Linear
+					MipLevels = max
+				}
+				Size = [.1, .1]
+			}
+			FrameCount = 16
+			FrameSize = [128, 128]
+			FramesPerRow = 4
+			FramesPerSecond = 60
+		}
+	}
+
+	MediaEffects
+	{
+		Type = MediaEffects
+		MediaEffects
+		[
+			&<particles/bullet_trail_large.txt>
+		]
+	}
+}

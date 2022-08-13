@@ -1,0 +1,273 @@
+Components
+{
+	MissileStorage
+	{
+		Type = AmmoStorage
+		AmmoType = missile_part_he
+		MaxAmmo = 12
+		InitToMaxAmmoPVP = 0
+		ToggleOnAmmo = 6
+		ToggleOffAmmo = 0
+		DelayBeforeReadyToUse = .15
+	}
+	MissileConsumer
+	{
+		Type = AmmoConsumer
+		AmmoType = missile_part_he
+		Storage = MissileStorage
+		DefaultPriority = &/PRIORITIES/Weapon_Supply
+		OperationalToggle = PowerToggle
+		ReceiveAmmoMediaEffects = &/COMMON_EFFECTS/MissileLoad
+	}
+
+	MissilesPrereq
+	{
+		Type = MultiToggle
+		Toggles = [MissileStorage]
+		Mode = Any
+	}
+
+	Weapon
+	{
+		Type = TurretWeapon
+		Location = [.5, .5]
+		Rotation = -90d
+		Emitter = Emitter
+		OperationalToggle = IsOperational
+		AutoFireToggle = AutoFireToggle
+		FireInterval = .45
+		FiringArc = 0d
+		TargetingArc = 360d
+		ValidArc = 360d
+		FireThresholdAngle = (&TargetingArc) / 2
+		RotateSpeed = 0d
+		AllowFireWithBlockedLOS = true
+		AIFirepowerRating = 8000
+		FirePermissionToggle = FirePermissionToggle
+
+		AutoTargets
+		[
+			{
+				TargetType = ShipParts
+				Toggle = AutoTargetToggle
+				EnableInDirectControlMode = true
+			}
+		]
+
+		CoverageSectorArc
+		{
+			Texture = &/INDICATORS/VerticalGradient
+			VertexColor = [255, 255, 255, 51]
+			QuadCount = 64
+		}
+	}
+	FirePermissionToggle
+	{
+		Type = MultiToggle
+		Toggles = [CommonReloadTimerLong, FireModeToggle]
+		Mode = All
+	}
+
+	ReloadProgressBar
+	{
+		Type = ProgressBar
+		OperationalToggle = IsOperational
+		ShowProgressFor = CommonReloadTimerLong
+		Invert = true
+	}
+
+	CommonReloadResetTrigger
+	{
+		Type = MultiTrigger
+		Triggers = [Weapon]
+	}
+
+	Emitter
+	{
+		Type = BulletEmitter
+		ChainedTo = Weapon
+		OperationalToggle = IsOperational
+		FireTrigger = Weapon
+		GetTargetFrom = Weapon
+		AmmoStorage = MissileStorage
+		AmmoUsed = 1
+		Spread = [-22.5d, 22.5d]
+		Bullet = &<missile_he/missile_he.txt>
+		TargetLeadPrediction = false
+		Recoil = 15
+		Burst = 2
+		BurstDelay = .05
+	}
+
+	LaunchEffect
+	{
+		Type = TriggeredEffects
+		ChainedTo = Weapon
+		Trigger = Weapon
+
+		MediaEffects
+		[
+			&<../particles/missile_launcher_shoot_large.txt>
+
+			: /BASE_SOUNDS/AudioExterior
+			{
+				Sound = "../shoot.wav"
+				Speed = 0.25
+				SpeedVariation = .1
+			}
+		]
+	}
+
+	MissileSprites
+	{
+		Type = AmmoSprites
+		Location = [.5, .7]
+		AmmoStorage = MissileStorage
+		Layer = "doodads_low"
+		HasZeroAmmoSprite = true
+		AmmoLevels
+		[
+			{
+				File = "m0.png"
+				Size = [1, 1]
+			}
+			{
+				File = "m1.png"
+				Size = [1, 1]
+			}
+			{
+				File = "m2.png"
+				Size = [1, 1]
+			}
+			{
+				File = "m3.png"
+				Size = [1, 1]
+			}
+			{
+				File = "m4.png"
+				Size = [1, 1]
+			}
+			{
+				File = "m5.png"
+				Size = [1, 1]
+			}
+			{
+				File = "m6.png"
+				Size = [1, 1]
+			}
+			{
+				File = "m7.png"
+				Size = [1, 1]
+			}
+			{
+				File = "m8.png"
+				Size = [1, 1]
+			}
+			{
+				File = "m9.png"
+				Size = [1, 1]
+			}
+			{
+				File = "m10.png"
+				Size = [1, 1]
+			}
+			{
+				File = "m11.png"
+				Size = [1, 1]
+			}
+			{
+				File = "m12.png"
+				Size = [1, 1]
+			}
+		]
+	}
+
+	DestroyedEffects
+	{
+		Type = DeathEffects
+		MediaEffects = &/COMMON_EFFECTS/BigPartDestroyed
+		Location = [1, 2]
+
+		FactorHitEffectsWith = MissileStorage
+		HitEffects
+		[
+			{
+				Type = ExplosiveDamage
+				TotalDamage = 30000
+				Radius = 5
+				Delay = .05
+				FireChancePerNDamage = 50%
+				NDamage = 1000
+				Filter
+				{
+					OperationalHealth = true
+					StructuralHealth = false
+					Friendlies = true
+				}
+			}
+			{
+				Type = ExplosiveDamage
+				TotalDamage = 10000
+				Radius = 4
+				Delay = .05
+				Filter
+				{
+					OperationalHealth = false
+					StructuralHealth = true
+					Friendlies = true
+				}
+			}
+		]
+	}
+
+	Indicators
+	{
+		Type = IndicatorSprites
+		Location = [.5, 1]
+		Layer = "indicators"
+		Indicators
+		[
+			// Turned off.
+			{
+				Toggle = PowerToggle
+				AtlasSprite
+				{
+					File = &/INDICATORS/PowerOff
+					Size = [1, 1]
+				}
+			}
+
+			// No crew.
+			{
+				Toggle = PartCrew
+				AtlasSprite
+				{
+					File = &/INDICATORS/NoCrew
+					Size = [1, 1]
+				}
+			}
+		]
+	}
+}
+
+MissileStats
+{
+	NameKey = "StatCategories/MissileNuke"
+	Stats
+	{
+		Salvo = 6
+		DamagePerShot = &~/Components/Emitter/Bullet/Components/Hit/HitOperational/HitEffects/0/TotalDamage/BaseValue
+		DamagePerSecond = (&DamagePerShot) * (&ROF)
+		Damage = [&../DamagePerShot, &../DamagePerSecond]
+		DamageArea = &~/Components/Emitter/Bullet/Components/Hit/HitOperational/HitEffects/0/Radius
+		ROF = 1 / (&<../missile_launcher.txt>/Part/Components/CommonReloadTimerLong/Duration)
+		Range = &~/Components/Emitter/Bullet/Range
+		Arc = deg(&~/Components/Weapon/ValidArc)
+		ShotLaunchSpeed = &~/Components/Emitter/Bullet/Speed
+		Acceleration = &~/Components/Emitter/Bullet/Components/Acceleration/Acceleration
+		ShotGuidance = deg(&~/Components/Emitter/Bullet/Components/Homing/TurnVelocity)
+		ShotHP = &~/Components/Emitter/Bullet/Components/Targetable/Health
+		MissileParts = &~/Components/Emitter/AmmoUsed
+	}
+}
+

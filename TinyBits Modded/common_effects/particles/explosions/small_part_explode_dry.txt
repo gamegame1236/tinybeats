@@ -1,0 +1,33 @@
+Type = Particles
+Def = &<med_part_explode_dry_def.txt>
+EmitterDef
+{
+	EmitPerSecond = 0
+	EmitPerOneShot = 1
+	PreInitializers
+	[
+		{
+			Type = SetValue
+			DataOut = scale
+			ValueType = Float
+			Value = 4
+			Name = Scale
+			Enabled = true
+			UpdateAfterInit = false
+		}
+	]
+	PostInitializers[]
+	UpdatedEmittedParticles = false
+}
+Bucket = Upper3
+PenetratingBucket = Middle2
+Delay = 0
+IgnoreIntensity = false
+Sharing = Global
+MinIntensity = 0
+IsFancy = false
+DontEmitWhenOffScreen = true
+DontEmitWhenOffScreenSizeInflate = 3
+UseCustomShapeForOffScreenCheck = false
+MaxEmissionZoom = 3.40282347E+38
+ScaleEmissionWithIntensity = false

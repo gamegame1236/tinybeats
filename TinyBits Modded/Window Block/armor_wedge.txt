@@ -1,0 +1,165 @@
+Part : /BASE_PART
+{
+	NameKey = "Parts/WindowBlock"
+	IconNameKey = "Parts/WindowBlockIcon"
+	ID = Gray.window_block // Part IDs must always be in the form of "author_name.part_name". If making your own mod, do *not* use "cosmoteer" as your author name, because it may conflict with future vanilla parts.
+	EditorGroup = "Parts"
+	DescriptionKey = "Parts/WindowBlockDesc"
+	Cost = 300
+	Size = [1, 1]
+	SelectionTypeID = "armor"
+	MaxHealth = 25000
+	ExplosiveDamageAbsorption = 95%
+	TypeCategories = [armor, is_crewed]
+	Flammable = false
+	CreatePartPerTileWhenDestroyed = ""
+	CreatePartWhenDestroyed = structure_wedge
+	CreatePartPerTileWhenGrabbed = "corridor"
+	InitialPenetrationResistance = 25
+	ContinuingPenetrationResistance = 5
+	CrewSpeedFactor = 1
+	Density = 1
+	CrewCapacity = 1
+	IsRotateable = true
+	IsWalled = false
+	AllowedDoorLocations
+	[
+		[0, -1]
+		[1, 0]
+		[-1, 0]
+		[0, 1]
+	]
+	GeneratorRequiresDoor = false
+	EditorIcon
+	{
+		Texture
+		{
+			File = "icon.png"
+			SampleMode = Linear
+		}
+		Size = [32, 32]
+	}
+	Components : ^/0/Components
+	{
+		EmpAbsorber
+		{
+			Type = ExplosiveAmmoDrainSink
+			AmmoType = battery
+			AbsorbsAmmoDrain = 1000
+			RecoveryRate = (&AbsorbsAmmoDrain) * 0.1
+		}
+
+		Graphics
+		{
+			Type = Graphics
+			Location = [0.5, 0.5]
+			Floor // This is needed so that armor shows up in ship ghosts.
+			{
+				Layer = "floors"
+				DamageLevels
+				[
+					{
+						File = "floor.png"
+						Size = [1, 1]
+						UVRotation = 0
+					}
+					{
+						File = "floor_33.png"
+						Size = [1, 1]
+						UVRotation = 0
+					}
+					{
+						File = "floor_66.png"
+						Size = [1, 1]
+						UVRotation = 0
+					}
+				]
+			}
+			Roof
+			{
+				Layer = "roofs"
+				DamageLevels
+				[
+					{
+						File = "roof.png"
+						Size = [1, 1]
+						UVRotation = 0
+					}
+					{
+						File = "roof_33.png"
+						Size = [1, 1]
+						UVRotation = 0
+					}
+					{
+						File = "roof_66.png"
+						Size = [1, 1]
+						UVRotation = 0
+					}
+				]
+			}
+			OperationalLighting
+			{
+				Layer = "lights_add"
+				DamageLevels
+				[
+					{
+						File = "lights.png"
+						Size = [1, 1]
+					}
+				]
+			}
+		}
+
+		CrewLocation
+		{
+			Type = CrewLocation
+			Location = [.5, .2]
+			Rotation = 180d
+		}
+		PartCrew
+		{
+			Type = PartCrew
+			Crew = 1
+			DefaultPriority = &/PRIORITIES/ControlRoom_Crew
+			Priorities = &/PRIORITIES/ControlRoom_Crew
+			PrerequisitesBeforeCrewing = []
+			HighPriorityPrerequisites = []
+			CrewDestinations
+			[
+				[.5, .2]
+			]
+			CrewLocations
+			[
+				CrewLocation
+			]
+		}
+
+		DestroyedEffects
+		{
+			Type = DeathEffects
+			MediaEffects = &/COMMON_EFFECTS/SmallPartDestroyedDry
+			Location = [.5, .5]
+
+			HitEffects
+			[
+				{
+					Type = ExplosiveDamage
+					TotalDamage = 2500
+					Radius = 2.5
+				}
+			]
+		}
+
+		Blueprints
+		{
+			Type = BlueprintSprite
+			File = "blueprints.png"
+			Size = [1, 1]
+		}
+	}
+
+	Stats
+	{
+		EMPResist = (&~/Part/Components/EmpAbsorber/AbsorbsAmmoDrain) / 1000
+	}
+}

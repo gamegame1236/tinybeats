@@ -1,0 +1,542 @@
+EditorGroups
+{
+	BatteryWeapons = "Battery Weapons"
+	AmmoWeapons = "Ammo Weapons"
+	Parts = "Misc Parts"
+	TitanDefensives = "Titan Defenses"
+}
+Inputs
+{
+	PartToggles
+	{
+		sublight_on = "Activate Sublight"
+		sublight_off = "Deactivate Sublight"
+	}
+}
+PartToggles
+{
+	Deactivate_Sublight = "Deactivate Sublight"
+	Activate_Sublight = "Activate Sublight"
+}
+Ammo
+{
+	LemonJuice = "LemonJuice"
+	LemonJuicePlural = "LemonJuices"
+
+	Diesel = "Diesel"
+	DieselPlural = "Diesel"
+}
+
+Parts
+{
+	CannonTiny = "Tiny Cannon"
+	CannonTinyIcon = "Tiny Cannon"
+	CannonTinyDesc = "A tiny cannon, perfect for those tiny fighters!"
+
+	FlakCannonTiny = "Tiny Flak"
+	FlakCannonTinyIcon = "Tiny Flak"
+	FlakCannonTinyDesc = "A miniature flak gun, also perfect for those tiny fighters!"
+
+	BoomFlakTiny = "Boom Flak"
+	BoomFlakTinyIcon = "Boom Flak"
+	BoomFlakTinyDesc = "Careful with this one! The destructive power contained within this bad boy is enough to take out your hotdog stand! Manufactured by the Titan Corp."
+
+	PointDefenseLargo = "Largo PD"
+	PointDefenseLargoIcon = "Largo PD"
+	PointDefenseLargoDesc = "Woah, a Largo! It big, it fat, and most importantly it attac!"
+
+	PointDefenseHugo = "Largo PD"
+	PointDefenseHugoIcon = "Largo PD"
+	PointDefenseHugoDesc = "Woah, a Largo! It big, it fat, and most importantly it attac!"
+
+	KnockbackGun = "Knockback Gun"
+	KnockbackGunIcon = "Knockback Gun"
+	KnockbackGunDesc = "Woah, there.. b'fore ya go foolin' 'round with this, I gotta tell ya the dangers. DON'T LOOK INTO THE OPERATIONAL END OF THE DEVICE. It WILL steal your face!. Seriously."
+
+	LemonJuicer = "Lemon Juicer Small"
+	LemonJuicerIcon = "Lemon Juicer Small"
+	LemonJuicerDesc = "The way Walt intended it."
+
+	LemonBlasterSmall = "Lemon Blaster Small"
+	LemonBlasterSmallIcon = "Lemon Blaster Small"
+	LemonBlasterSmallDesc = "Careful: Don't get juiced!"
+	
+	MissileLauncherTiny = "Missile Launcher Tiny"
+	MissileLauncherTinyIcon = "Missle Launcher Tiny"
+	MissileLauncherTinyDesc = "*POW!*"
+
+	MissileFactoryHETiny = "Missile Factory Tiny"
+	MissileFactoryHETinyIcon = "Missile Factory Tiny"
+	MissileFactoryHETinyDesc = "A tiny missile factory, for all your Missile-anious needs!"
+
+	MissileLauncherSwarm = "S.W.A.R.M Launcher"
+	MissileLauncherSwarmIcon = "S.W.A.R.M Launcher"
+	MissileLauncherSwarmDesc = "Watch out for the Swarm... Manufactured by the Titan Corp. "
+
+	MegaMiner = "Mega Miner"
+	MegaMinerIcon = "Mega Miner"
+	MegaMinerDesc = "He gonna Miner your Mega. Homing mines, with an added boom! Manufactured by the Titan Corp."
+
+	ControlRoomTiny = "Tiny Control Room"
+	ControlRoomTinyIcon = "Tiny Control Room"
+	ControlRoomTinyDesc = "A tiny control room, perfect for those tiny fighters!"
+
+	AmmoFactoryTiny = "Tiny Ammo Factory"
+	AmmoFactoryTinyIcon = "Tiny Ammo Factory"
+	AmmoFactoryTinyDesc = "A tiny ammo factory, for when you need more dakka!"
+	
+	ReactorTinyS = "Tiny Reactor"
+	ReactorTinySIcon = "Tiny Reactor"
+	ReactorTinySDesc = "Mmm.. Rads"
+	
+	FlakMinigunTiny = "Mini-FUN Flak"
+	FlakMinigunTinyIcon = "Mini-FUN Flak"
+	FlakMinigunTinyDesc = "Haha Flak go brrr"
+	
+	MissileFactoryNukeTiny = "Nuke Factory Tiny"
+	MissileFactoryNukeTinyIcon = "Nuke Factory Tiny"
+	MissileFactoryNukeTinyDesc = "A tiny nuke factory, for all your destructive intents!"
+	
+	LaserMinigunLarge = "Minigun Laser"
+	LaserMinigunLargeIcon = "Minigun Laser"
+	LaserMinigunLargeDesc = "Haha laser go pewrrr! Manufactured by the Titan Corp."
+	
+	LaserShotgun = "Laser Shotgun Med"
+	LaserShotgunIcon = "Laser Shotgun Med"
+	LaserShotgunDesc = "Introducing the ArseBlaster 9000!"
+	
+	OverchargedIonBeamPrism = "Overcharged Ion Prism"
+	OverchargedIonBeamPrismIcon = "Overcharged Ion Prism"
+	OverchargedIonBeamPrismDesc = "This baby uses a cosmic power called science, to deliver you more powerful Ion Beams!"
+
+	SensorArrayTiny = "Tiny Radar"
+	SensorArrayTinyIcon = "Tiny Radar"
+	SensorArrayTinyDesc = "Tiny Radar"
+
+	PowerStorageLarge = "Large Power Storage"
+	PowerStorageLargeIcon = "Large Power Storage"
+	PowerStorageLargeDesc = "Large Power Storage"
+
+	LaserMinigunLargeS = "Supernova Cannon"
+	LaserMinigunLargeSIcon = "Supernova"
+	LaserMinigunLargeSDesc = "Brrvvvvvv BOOM! Harnesses the power of a supernova to create and shoot miniature stars! Manufactured by the Titan Corp."
+
+	EngineRoomTiny = "Tiny ER"
+	EngineRoomTinyIcon = "Tiny ER"
+	EngineRoomTinyDesc = "Tiny ER, for when you need SPEED!"
+
+	AmmoFactoryFleet = "Quantum Ammo Factory"
+	AmmoFactoryFleetIcon = "Chungy QAF"
+	AmmoFactoryFleetDesc = "Looks like a normal ammo factory? BUT IT`S NOT! This factory infuses quantum energy into the ammunition, allowing it to be De-Atomized and Re-Atomized at a different location! Now you can finally supply ammo to ship, right from... y-your ship! Radius = 15"
+
+	ReactorFleetLarge = "Fleet Reactor Large"
+	ReactorFleetLargeIcon = "Fleet LR"
+	ReactorFleetLargeDesc = "MMMMMM TOO MUCH RADS!! Wireless power transmission, with EXTRA radification! Rad suit needed, not required. Manufactured by the Titan Corp.   Radius = 15"
+
+	ReactorFleetTiny = "Fleet Reactor Tiny"
+	ReactorFleetTinyIcon = "Fleet TR"
+	ReactorFleetTinyDesc = "Mmm... a little rads. Wireless power transmission, with a little killability. Radius = 5 Manufactured by the Titan Corp."
+
+	OCEngineRoomTiny = "Overcharged Engine Room"
+	OCEngineRoomTinyIcon = "OCER"
+	OCEngineRoomTinyDesc = "Overcharged engine room, for when the VANILLA ONES, are TOO FAT! AGHHHH"
+
+	SublightDrive = "Sublight Engine"
+	SublightDriveIcon = "Sublight Engine"
+	SublightDriveDesc = "Sublight Engine. Nuff said."
+
+	SublightDriveL = "Sublight Core"
+	SublightDriveLIcon = "Sublight Core"
+	SublightDriveLDesc = "Sublight Core, made for the largest of ships. WARNING: Ships smaller than the specified minimum mass will suffer catastrophic structural and system damage. Consult manual for further detail."
+
+	LaserBlasterSniper = "Laser Sniper"
+	LaserBlasterSniperIcon = "Laser Sniper"
+	LaserBlasterSniperDesc = "Shoots high-temp plasma bolts, capable of high penetration and damage."
+
+	CannonSpread = "Spread Cannon"
+	CannonSpreadIcon = "Spread Cannon"
+	CannonSpreadDesc = "A spread cannon, perfect for DESTROYING those tiny fighters!"
+
+	CannonSpreadL = "OMEGA CANNON"
+	CannonSpreadLIcon = "Why did you want this?"
+	CannonSpreadLDesc = "Dread it. Run from it. The EXCESSIVELY LARGE CANNON, is inevitable"
+
+	UltraDenseArmor = "UltraDense Armor"
+	UltraDenseArmorIcon = "UltraDense Armor"
+	UltraDenseArmorDesc = "Ultra Heavy, Ultra Strong."
+
+	KineticShotgun = "Burst Gun Med"
+	KineticShotgunIcon = "Kinetic Burst Gun Med"
+	KineticShotgunDesc = "Shoots clumps of shots to concentrate damage."
+
+	KineticShotguno = "Kinetic Shotgun Med"
+	KineticShotgunoIcon = "Kinetic Shotgun Med"
+	KineticShotgunoDesc = "Shoots clumps of shots to concentrate damage."
+
+	UDArmor1x2WedgeR = "UltraDense Armor 1x2 Wedge Right"
+	UDArmor1x2WedgeRIcon = "UltraDense Armor 1x2 Wedge R"
+	UDArmor1x2WedgeRDesc = "Ultra Heavy, Ultra Strong."
+
+	UDArmor1x2WedgeL = "UltraDense Armor 1x2 Wedge Left"
+	UDArmor1x2WedgeLIcon = "UltraDense Armor 1x2 Wedge L"
+	UDArmor1x2WedgeLDesc = "Ultra Heavy, Ultra Strong."
+
+	UltraDenseArmorWedge = "UltraDense Armor Wedge"
+	UltraDenseArmorWedgeIcon = "UltraDense Armor Wedge"
+	UltraDenseArmorWedgeDesc = "Ultra Heavy, Ultra Strong."
+
+	OBArmor1x2WedgeR = "Obsidian Armor 1x2 Wedge Right"
+	OBArmor1x2WedgeRIcon = "Obsidian Armor 1x2 Wedge R"
+	OBArmor1x2WedgeRDesc = "Ultra Glassy, Ultra Fragile."
+
+	OBArmor1x2WedgeL = "Obsidian Armor 1x2 Wedge Left"
+	OBArmor1x2WedgeLIcon = "Obsidian Armor 1x2 Wedge L"
+	OBArmor1x2WedgeLDesc = "Ultra Glassy, Ultra Fragile."
+
+	HellStoneArmor = "Hellstone Armor"
+	HellStoneArmorIcon = "Hellstone Armor"
+	HellStoneArmorDesc = "Made from the scorched remains of a forgotten homeworld. Some say the magma flowing within is of the souls of the long dead race, still screaming for revenge."
+
+	HellStone1x2WedgeL = "Hellstone Armor 1x2 Wedge Left"
+	HellStone1x2WedgeLIcon = "Hellstone Armor 1x2 Wedge L"
+	HellStone1x2WedgeLDesc = "Woah it glows."
+
+	HellStone1x2WedgeR = "Hellstone Armor 1x2 Wedge Right"
+	HellStone1x2WedgeRIcon = "Hellstone Armor 1x2 Wedge R"
+	HellStone1x2WedgeRDesc = "Im gonna touch it."
+
+	HellStoneWedge = "Hellstone Armor Wedge"
+	HellStoneWedgeIcon = "Hellstone Armor Wedge"
+	HellStoneWedgeDesc = "WAHHHHA!!"
+
+	Hellstone1x3WedgeL = "Hellstone 1x3 Wedge"
+	Hellstone1x3WedgeLIcon = "Hellstone 1x3 Wedge"
+	Hellstone1x3WedgeLDesc = "AGHH I TOUCHED IT"
+
+	Hellstone1x3WedgeR = "Hellstone 1x3 Wedge"
+	Hellstone1x3WedgeRIcon = "Hellstone 1x3 Wedge"
+	Hellstone1x3WedgeRDesc = "AGHHH IT BURNS"
+
+	ShrapnelCannonTiny = "Ubergewehr"
+	ShrapnelCannonTinyIcon = "Super-Rifle"
+	ShrapnelCannonTinyDesc = "Lobs Balls of Charged laser energy together with Diesel Fuel to fire a sphere of energy, Strong enough to shred through armor in mere seconds. Though it has been found that it draws energy from micro-portals of extra-dimensional origin as a third source of energy, Exercise caution."
+
+	MissileStorageTiny = "Missile Storage Tiny"
+	MissileStorageTinyIcon = "Missile Storage Tiny"
+	MissileStorageTinyDesc = "Tiny storage for missiles!"
+
+	QT = "Warp Gen"
+	QTIcon = "Warp Gen"
+	QTDesc = "Craps out ammo and batteries pulled from other dimensions. Don't fall in."
+
+	DieselPlant = "Diesel Plant"
+	DieselPlantIcon = "Diesel Plant"
+	DieselPlantDesc = "If you need diesel, this is where you go to. 19.35C per can."
+
+	DieselPlant2 = "Diesel Plant 2x2"
+	DieselPlant2Icon = "Diesel Plant 2x2"
+	DieselPlant2Desc = "Diesel Plant 2x2"
+
+	IMax = "Omnidirectional Mach Effect Drive"
+	IMaxIcon = "O.M.E.D"
+	IMaxDesc = "The Mach Effect Drive. Omni-directional, at that. Just be careful where you stand. Can also be used to hide the evidence."
+
+	SublightMed = "Small Sublight Engine"
+	SublightMedIcon = "Small Sublight Engine"
+	SublightMedDesc = "Capable of propelling a ship at slower-than-light speeds."
+
+	OIP = "Drone"
+	OIPIcon = "Drone"
+	OIPDesc = "Equipped with a shield and pew pew laser"
+
+	HellStoneArmorTri = "Hellstone Armor"
+	HellStoneArmorTriIcon = "Hellstone Armor"
+	HellStoneArmorTriDesc = "MEDIC!!"
+
+	HellstoneArmorWedge = "Hellstone Armor"
+	HellstoneArmorWedgeIcon = "Hellstone Armor"
+	HellstoneArmorWedgeDesc = "also known as a magma block"
+
+	Mk1Laser = "Mk1 Laser"
+	Mk1LaserIcon = "Mk1 Laser"
+	Mk1LaserDesc = "A nice little laser you can find some way to use."
+	
+	ShieldGenTiny = "Tiny Shield Generator"
+	ShieldGenTinyIcon = "Tiny Shield Gen"
+	ShieldGenTinyDesc = "Beoooowwwwoooowoooowooow"
+
+	ShieldGenI = "ShieldBox 360"
+	ShieldGenIIcon = "ShieldBox 360"
+	ShieldGenIDesc = "Internal shield generator, infused with the power of hellstone."
+
+
+	DC = "Disconnection Charge"
+	DCIcon = "Disconnection Charge"
+	DCDesc = "A charge that detonates itself, rather than you, and everything around you."
+
+	ReactorControlRoomTiny = "Reactor Control Room"
+	ReactorControlRoomTinyIcon = "Reactor Control Room"
+	ReactorControlRoomTinyDesc = "An advanced version of the tiny control room. This time it not only allows you to control your ship, it also turns you into a Feral Ghoul!"
+
+	OIPtiny = "Drone"
+	OIPtinyIcon = "Drone"
+	OIPtinyDesc = "Tiny version of the pew pew shield thing!"
+
+	MissileLauncherT = "Missile Launcher Tiny"
+	MissileLauncherTIcon = "Missile Launcher Tiny"
+	MissileLauncherTDesc = "Missile Launcher Tiny"
+
+	MissileLauncherTiny1 = "Missile Launcher Tiny"
+	MissileLauncherTiny1Icon = "Missle Launcher Tiny"
+	MissileLauncherTiny1Desc = "*POW!*"
+
+	MissileLauncherhTiny = "Missile Launcher Tiny"
+	MissileLauncherTinyhIcon = "Missle Launcher Tiny"
+	MissileLauncherTinyhDesc = "*POW!*"
+
+
+	WindowWedge = "Window Wedge"
+	WindowWedgeIcon = "Window Wedge"
+	WindowWedgeDesc = "Nice view, isnt it?"
+
+	OverchargedIonBeamPrismRoof = "Overcharged Ion Prism"
+	OverchargedIonBeamPrismRoofIcon = "Overcharged Ion Prism"
+	OverchargedIonBeamPrismRoofDesc = "This baby uses a cosmic power called science, to deliver you more powerful Ion Beams!"
+
+	IonBeamEmitterTiny = "IBET"
+	IonBeamEmitterTinyIcon = "IBET"
+	IonBeamEmitterTinyDesc = "IBET"
+
+	RailgunAcceleratorTiny = "Tiny Railgun Accelerator"
+	RailgunAcceleratorTinyIcon = "Tiny Accelerator"
+	RailgunAcceleratorTinyDesc = "FASTER FASTER FASTER"
+
+	RailgunLoaderTiny = "Tiny Railgun Loader"
+	RailgunLoaderTinyIcon = "Freeloader"
+	RailgunLoaderTinyDesc = "LOAD IT UP UP UP"
+
+	RailgunLauncherTiny = "Rail-Flailer"
+	RailgunLauncherTinyIcon = "Tiny Railgun Launcher"
+	RailgunLauncherTinyDesc = "Flail-Railer?"
+
+	RailgunLauncherTrident = "Rail-Flailer Trident Attachment"
+	RailgunLauncherTridentIcon = "Railgun Trident Attachment"
+	RailgunLauncherTridentDesc = "Trident Flavored Railer-Flailer, Splits projectile into three, for the price of one."
+
+	RailgunLauncherAuto = "Rail-Flailer Automatic"
+	RailgunLauncherAutoIcon = "Railgun Auto Attachment"
+	RailgunLauncherAutoDesc = "Auto-Flail-Railer, for the most automatical autos."
+
+	RailgunLauncherShotgun = "Rail-Flailer-Splailer Thing"
+	RailgunLauncherShotgunIcon = "Railgun Splitter Attachment"
+	RailgunLauncherShotgunDesc = "Splitts the projectile into many high-velocity shraptiles."
+
+
+	RailgunLauncherHoming = "Homer Flailer-Rail"
+	RailgunLauncherHomingIcon = "Railgun Targeting Attachment"
+	RailgunLauncherHomingDesc = "RE"
+
+	CrewQuartersMedTiny = "CQMT"
+	CrewQuartersMedTinyIcon = "CQMT"
+	CrewQuartersMedTinyDesc = "CQMT"
+
+	FireExtinguisher4 = "Quad-Extinguisher"
+	FireExtinguisher4Icon = "Quad-Extinguisher"
+	FireExtinguisher4Desc = "Quad-Extinguisher"
+
+	MineFactoryTiny = "Tiny Mine Factory"
+	MineFactoryTinyIcon = "Tiny Mine Factory"
+	MineFactoryTinyDesc = "Tiny Mine Factory"
+
+	LaserBlasterLargeT = "Tiny Large Laser Blaster"
+	LaserBlasterLargeTIcon = "Tiny Large Laser Blaster"
+	LaserBlasterLargeTDesc = "Tiny Large Laser Blaster"
+
+	IonBeamEmitterI = "Internal Ion Emitter"
+	IonBeamEmitterIIcon = "Internal Ion Emitter"
+	IonBeamEmitterIDesc = "Internal Ion Emitter"
+
+	MissileLauncher3 = "IIII"
+	MissileLauncher3Icon = "AHHHH"
+	MissileLauncher3Desc = "AASSSS"
+
+	WindowBlock = "Window Block"
+	WindowBlockIcon = "Window Block"
+	WindowBlockDesc = "Window Block"
+
+	CannonLargeS = "Miniature Large Cannon"
+	CannonLargeSICon = "Miniature Large Cannon"
+	CannonLargeSDesc = "Miniature Large Cannon"
+
+	LaserBlasterTiny = "Tiny Laser Blaster"
+	LaserBlasterTinyIcon = "Tiny Laser Blaster"
+	LaserBlasterTinyDesc = "Hmm... did it need to be smaller?"
+
+	ReactorFleetSmall = "Small Wireless Reactor"
+	ReactorFleetSmallIcon = "Ship Reactor Samll"
+	ReactorFleetSmallDesc = "Here we are.. let's try this again shall we?            Provides wireless power to surrounding parts. Radius = 7.5"
+
+	AmmoDamageBoosterTiny = "Ammo Weapon Damage Booster"
+	AmmoDamageBoosterIcon = "ADB"
+	AmmoDamageBoosterDesc = "ADB"
+
+	AmmoPenBoosterTiny = "Ammo Weapon Penetration Booster"
+	AmmoPenBoosterIcon = "APB"
+	AmmoPenBoosterDesc = "APB"
+
+	AmmoRangeBoosterTiny = "Ammo Weapon Range Booster"
+	AmmoRangeBoosterIcon = "ARB"
+	AmmoRangeBoosterDesc = "ARB"
+
+	AmmoSpeedBoosterTiny = "Ammo Weapon Speed Booster"
+	AmmoSpeedBoosterIcon = "ASB"
+	AmmoSpeedBoosterDesc = "ASB"
+
+	CannonTurret = "Blunder Cannon"
+	CannonTurretIcon = "Blunder Cannon"
+	CannonTurretDesc = "Quite literally projectile vomits all over the enemy."
+
+	CannonTurretM = "Tiny Naval Cannon"
+	CannonTurretMIcon = "Naval Cannon"
+	CannonTurretMDesc = "Very small, likely 3D printed."
+
+	CannonTurretT = "'Triple Threat' Naval Cannon"
+	CannonTurretTIcon = "Triple Threat"
+	CannonTurretTDesc = "Triple threat, three barrels."
+
+	CannonTurretHV = "High Velocity Naval Cannon"
+	CannonTurretHVIcon = "HV Naval Cannon"
+	CannonTurretHVDesc = "Very small, likely 3D printed. Fires high-velocity rounds."
+
+	FtlDriveTiny = "Tiny FTL"
+	FtlDriveTinyIcon = "FTL Drive Tiny"
+	FtlDriveTinyDesc = "Tiny FTL Drive. Duh"
+
+	LCTiny = "LC"
+	LCIcon = "LC"
+	LCDesc = "LC"
+
+	ThrusterSmol = "Thruster Smol"
+	ThrusterSmolIcon = "Thruster Smol"
+	ThrusterSmolDesc = "Small thruster with a lovely 300 thrust"
+
+	ThrusterSmol3Way = "Thruster Smol"
+	ThrusterSmol3WayIcon = "Thruster Smol"
+	ThrusterSmol3WayDesc = "Small thruster with a lovely 300 thrust"
+
+	ThrusterM = "Thuster Medium"
+	ThrusterMIcon = "Medium Thruster"
+	ThrusterMDesc = "Medium thruster with a lovely 800 thrust"
+
+	ThrusterLargeM = "Large Thruster"
+	ThrusterLargeMIcon = "Large Thruster"
+	ThrusterLargeMDesc = "Large thruster with a lovely 2000 thrust"
+
+	ThrusterHugeM = "Huge Thruster"
+	ThrusterHugeMIcon = "Thruster Huge"
+	ThrusterHugeMDesc = "Huge thruster with a lovely 5000 thrust"
+
+	RTurretM = "Railgun Turret"
+	RTurretMIcon = "Railgun Turret"
+	RTurretMDesc = "Railgun Turret, packs a quick punch!"
+
+	RTurretT = "Railgun BiTurret"
+	RTurretTIcon = "Railgun BiTurret"
+	RTurretTDesc = "Railgun BiTurret, 2 times the punch!"
+
+	RTurretTr = "Railgun TriTurret"
+	RTurretTrIcon = "Railgun TriTurret"
+	RTurretTrDesc = "Railgun TriTurret, 3 times the punch!"
+
+	LaserTurret = "Laser Turret"
+	LaserTurretIcon = "Laser Turret"
+	LaserTurretDesc = "LT"
+
+	Mturret = "Minigun Cannon Turret"
+	MturretIcon = "MCT"
+	MturretDesc = "Minigun Cannon Turret"
+
+	Clusterfucker = "Clusterfucker"
+	ClusterfuckerIcon = "Clusterfucker"
+	ClusterfuckerDesc = "fires a fucking clusterfuck of projectiles"
+
+	Wiggler = "Wiggler"
+	WigglerIcon = "Wiggler"
+	WigglerDesc = "Wiggler"
+
+	Plasma = "Plasma"
+	PlasmaIcon = "Plasma"
+	PlasmaDesc = "Plasma gun, fire hot stuff"
+
+	PlasmaGrape = "Plasma Spreader"
+	PlasmaGrapeIcon = "Plasma Spreader"
+	PlasmaGrapeDesc = "Fires a spread of plasma, very hot"
+
+	PlasmaK = "Plasma Kinetic"
+	PlasmaKIcon = "Plasma Kinetic"
+	PlasmaKDesc = "Fire plasma infused kinetic projectiles for more damage than the normal plasma gun."
+
+	PlasmakGrape = "Plasma Kinetic Spreader"
+	PlasmakGrapeIcon = "Plasma Kinetic Speader"
+	PlasmakGrapeDesc = "Fire plasma infused kinetic projectiles for more damage than the normal plasma gun."
+
+	OIC = "Cannon Drone"
+	OICIcon = "Cannon Drone"
+	OICDesc = "Cannon Drone."
+
+	OIM = "Missile Drone"
+	OIMIcon = "Missile Drone"
+	OIMDesc = "Missile Drone."
+
+	SideCannon = "Side Cannon"
+	SideCannonIcon = "Side Cannon"
+	SideCannonDesc = "Side Cannon"
+
+	SCR = "Side Cannon R"
+	SCRIcon = "Side Cannon R"
+	SCRDesc = "Side Cannon R"
+
+	SCL = "Side Cannon L"
+	SCLIcon = "Side Cannon L"
+	SCLDesc = "Side Cannon L"
+
+	IT = "IT"
+	ITIcon = "IT"
+	ITDesc = "IT"
+
+	SideLaser = "Side Laser"
+	SideLaserIcon = "Side Laser"
+	SideLaserDesc = "Side Laser"
+
+	SLR = "Side Laser R"
+	SLRIcon = "Side Laser R"
+	SLRDesc = "Side Laser R"
+
+	SLL = "Side Laser L"
+	SLLIcon = "Side Laser L"
+	SLLDesc = "Side Laser L"
+
+	ShieldGenF = "Fleet Shield"
+	ShieldGenFIcon = "Fleet Shield"
+	ShieldGenFDesc = "Fleet Shield for fleet protection"
+
+	ShieldGenFL = "Fleet Shield"
+	ShieldGenFLIcon = "Fleet Shield"
+	ShieldGenFLDesc = "Large Fleet Shield for fleet protection"
+
+	ShieldGenFT = "Fleet Shield Tiny"
+	ShieldGenFTIcon = "Fleet Shield Tiny"
+	ShieldGenFTDesc = "Tiny Fleet Shield for fleet protection" 
+
+	MissileLaunchernuke = "MLNS"
+	MissileLaunchernukeIcon = "MLNS"
+	MissileLaunchernukeDesc = "MLNS"
+
+	ShieldGenFLr = "Fleet Shield"
+	ShieldGenFLrIcon = "Fleet Shield"
+	ShieldGenFLrDesc = "Large Fleet Shield for fleet protection"
+
+	DCN = "Nuclear Charge"
+	DCNIcon = "Nuclear Charge"
+	DCNDesc = "Nuclear Charge"
+}

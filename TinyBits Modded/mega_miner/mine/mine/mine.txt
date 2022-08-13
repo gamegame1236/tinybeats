@@ -1,0 +1,107 @@
+ID = "Battleman103333.mega_mine"
+Range = 600
+IdealRange = 500
+Speed = 60
+RandomRotation = true
+
+Components
+{
+	Physics
+	{
+		Type = CirclePhysics
+		Radius = .3
+		Density = 2
+		LinearDamping = .5
+		AngularDamping = 1
+		CollidesWithBullets = true
+		FrameOfReferenceDuration = 1
+	}
+
+	NegativeAcceleration
+	{
+		Type = Acceleration
+		Acceleration = [-90, 0]
+		AccelerationOverTime = [0, .75]
+		Direction = FrameOfReferenceVelocity
+	}
+
+	UnarmedSprite
+	{
+		Type = Sprite
+		RenderBucket = Lower
+		Sprite
+		{
+			Texture
+			{
+				File = "mine_unarmed.png"
+				MipLevels = max
+			}
+			Size = [4.5, 4.5]
+		}
+	}
+
+	Targetable
+	{
+		Type = Targetable
+		Health = 800
+		TargetCategory = "mine"
+		OnDeath = &~/Components/Hit/HitOperational
+	}
+
+	DeployDeath
+	{
+		Type = DeathBySpeed
+		MinSpeed = 30
+		FactorEffectsWith = Targetable
+
+		OnDeath
+		{
+			HitEffects
+			[
+				{
+					Type = SpawnBullets
+					Bullet = &<mine_deployed.txt>
+					Count = 1
+					InheritVelocity = true
+					ScaleHealth = true
+				}
+			]
+		}
+	}
+
+	Hit
+	{
+		Type = SimpleHit
+		SourceShipCollisionDelay = 1.5/30
+		ShieldCollisions
+		{
+			HitsEnemyShields = false
+		}
+
+		HitShield {}
+
+		HitOperational
+		{
+			MediaEffects
+			[
+				&<particles/missile_he_hit.txt>
+				&<particles/missile_he_flash.txt>
+
+				: /BASE_SOUNDS/AudioExterior
+				{
+					Sound = "missile_he_hit.wav"
+					Volume = .75
+					SpeedVariation = .4
+				}
+
+				: /BASE_SHAKE
+				{
+					ShakeAmount = .1
+					Duration = .75
+				}
+			]
+		}
+
+		HitStructural = &HitOperational
+	}
+}

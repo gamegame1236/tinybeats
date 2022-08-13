@@ -1,0 +1,218 @@
+ID = "Battleman1.missile_emp_tiny"
+Range = { BaseValue=600; BuffType=AmmoRange; BuffMode=Multiply; }
+IdealRange = { BaseValue=600; BuffType=AmmoRange; BuffMode=Multiply; Min=600; Max=1200; }
+Speed = { BaseValue=60; BuffType=AmmoSpeed; BuffMode=Multiply; }
+ReceivableBuffs = [AmmoDamage, AmmoSpeed, AmmoRange]
+
+Components
+{
+	Physics
+	{
+		Type = CirclePhysics
+		Radius = 0.5
+		Density = 0.1
+	}
+
+	Homing
+	{
+		Type = TargetHoming
+		TurnVelocity = 120d
+		Delay = .1
+		AvoidanceRaycastDistance = 150
+		VelocityCompensation = 80%
+	}
+
+	Retarget
+	{
+		Type = SameShipRetarget
+	}
+
+	Acceleration
+	{
+		Type = Acceleration
+		Acceleration = { BaseValue=75; BuffType=AmmoSpeed; BuffMode=Multiply; Min=75; Max=250; }
+	}
+
+	NegativeAcceleration
+	{
+		Type = Acceleration
+		Acceleration = [-90, 0]
+		AccelerationOverTime = [0, .75]
+		Direction = FrameOfReferenceVelocity
+	}
+
+	DeathByLifetime
+	{
+		Type = DeathByLifetime
+		Lifetime = 12
+		HasTarget = true
+	}
+
+	DeathByDistanceTraveled
+	{
+		Type = DeathByDistanceTraveled
+		// Distance auto-computed from range.
+		HasTarget = false
+	}
+
+	Sprite
+	{
+		Type = AnimatedSprite
+		Animation
+		{
+			AtlasSprite
+			{
+				Texture
+				{
+					File = "missile_emp.png"
+					MipLevels = max
+				}
+				Size = [1.5, .75615]
+			}
+			FrameCount = 8
+			FrameSize = [192, 98]
+			FramesPerRow = 8
+			FramesPerSecond = 30
+		}
+	}
+
+	MediaEffects1
+	{
+		Type = MediaEffects
+		Offset = [-.1, -.15]
+		MediaEffects
+		[
+			&<particles/missile_emp_thruster_glow.txt>
+			&<particles/missile_emp_thruster_trail.txt>
+		]
+	}
+	MediaEffects2
+	{
+		Type = MediaEffects
+		Offset = [-.1, .15]
+		MediaEffects
+		[
+			&<particles/missile_emp_thruster_glow.txt>
+			&<particles/missile_emp_thruster_trail.txt>
+		]
+	}
+	MediaEffects3
+	{
+		Type = MediaEffects
+		MediaEffects
+		[
+			&<particles/missile_emp_electric_trail.txt>
+		]
+	}
+
+	Targetable
+	{
+		Type = Targetable
+		Health = 3200
+		TargetCategory = "missile"
+
+		// No AOE damage when shot down.
+		OnDeath = &../Hit/HitFriendly
+	}
+
+	Hit
+	{
+		Type = SimpleHit
+		SourceShipCollisionDelay = 1.5/30
+
+		HitShield = &HitOperational
+		HitOperational
+		{
+			HitEffects
+			[
+				{
+					Type = ExplosiveAmmoDrain
+					AmmoType = battery
+					TotalDrain = { BaseValue=7500; BuffType=AmmoDamage; BuffMode=Multiply; }
+					Radius = 6
+					Slices = 1
+					Filter
+					{
+						Ships = true
+						Shields = true
+						Friendlies = true
+					}
+
+					MediaEffectsOnDrainFactor = .00025
+					MediaEffectsOnDrain
+					[
+						&<particles/electro_bolt_discharge.txt>
+						&<particles/missile_emp_lightning.txt>
+
+						: /BASE_SOUNDS/AudioExterior
+						{
+							Sound = "discharge.wav"
+							Volume = 1
+							SpeedVariation = .2
+						}
+					]
+				}
+				{
+					Type = Damage
+					Damage = { BaseValue=300; BuffType=AmmoDamage; BuffMode=Multiply; }
+					Filter
+					{
+						Friendlies = true
+					}
+				}
+				{
+					Type = ExplosiveDamage
+					TotalDamage = { BaseValue=5000; BuffType=AmmoDamage; BuffMode=Multiply; }
+					Radius = 3
+					Filter
+					{
+						OperationalHealth = false
+						StructuralHealth = true
+						Friendlies = true
+					}
+				}
+				{
+					Type = Impulse;
+					Impulse = 100;
+				}
+			]
+
+			MediaEffects
+			[
+				&<particles/missile_emp_hit.txt>
+				&<particles/missile_emp_shrapnel.txt>
+				&<particles/missile_emp_shockwave.txt>
+
+				: /BASE_SOUNDS/AudioExterior
+				{
+					Sound = "missile_emp_hit.wav"
+					Volume = 1
+					SpeedVariation = .2
+				}
+
+				: /BASE_SHAKE
+				{
+					ShakeAmount = .05
+					Duration = .75
+				}
+			]
+		}
+		HitStructural = &HitOperational
+
+		HitFriendly
+		{
+			MediaEffects
+			[
+				&<particles/missile_emp_hit.txt>
+				&<particles/missile_emp_shrapnel.txt>
+
+				: /BASE_SOUNDS/AudioExterior
+				{
+					Sound = "missile_emp_hit.wav"
+					Volume = 1
+					SpeedVariation = .2
+				}
+			]
+		}
+	}
+}

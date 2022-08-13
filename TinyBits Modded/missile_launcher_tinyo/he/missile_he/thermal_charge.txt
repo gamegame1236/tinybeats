@@ -1,0 +1,78 @@
+ID = "Battleman103333.thermal_charge"
+Range = 10
+Speed = 99
+
+Components
+{
+	Physics
+	{
+		Type = BoxPhysics
+		Size = [.5, .5]
+		Density = 0.1
+	}
+
+	Hit
+	{
+		Type = PenetratingHit
+		Penetration = 25
+		PenetrationSpeed = 99
+
+		HitShield = &HitOperational
+		HitOperational
+		{
+			HitEffects
+			[
+				{
+					Type = ExplosiveDamage
+					TotalDamage = 10000
+					Radius = 2
+					FireChance = 100
+				}
+			]
+		}
+		HitStructural = &HitOperational
+
+		PenetratingOperational
+		{
+			HitEffects
+			[
+				{
+					Type = ExplosiveDamage
+					TotalDamage = 10000
+					Radius = 2
+					FireChancePerNDamage = 100%
+					ImpulsePerNDamage = 5
+					NDamage = 500
+				}
+			]		
+		}
+		PenetratingStructural
+		{
+			//No Effect
+		}
+		FinishedPenetratingOperational = &HitOperational
+		FinishedPenetratingStructural = &PenetratingStructural
+	}
+
+	Sprite
+	{
+		Type = AnimatedSprite
+		Animation
+		{
+			AtlasSprite
+			{
+				Texture
+				{
+					File = "missile_he.png"
+					MipLevels = max
+				}
+				Size = [.1, .1]
+			}
+			FrameCount = 8
+			FrameSize = [256, 128]
+			FramesPerRow = 2
+			FramesPerSecond = 30
+		}
+	}
+}
+			

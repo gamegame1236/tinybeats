@@ -1,0 +1,177 @@
+Part : /BASE_PART
+{
+	NameKey = "Parts/HellStone1x2WedgeL"
+	IconNameKey = "Parts/HellStone1x2WedgeLIcon"
+	ID = Battleman103333.hellstone_1x2_wedge_L // Part IDs must always be in the form of "author_name.part_name". If making your own mod, do *not* use "cosmoteer" as your author name, because it may conflict with future vanilla parts.
+	OtherIDs = [hellstone2_wedge_L]
+	EditorGroup = "TitanDefensives"
+	DescriptionKey = "Parts/HellStone1x2WedgeLDesc"
+	EditorReplacementPartID = ""
+	Cost = 2500
+	Size = [1, 2]
+	AllowedContiguity = [Right, Bottom]
+	SelectionTypeID = "armor"
+	MaxHealth = 80000
+	ExplosiveDamageAbsorption = 100%
+	ExplosiveDamageResistance = 90%
+	TypeCategories = [armor]
+	Flammable = false
+	CreatePartPerTileWhenDestroyed = ""
+	CreatePartWhenDestroyed = "obsidian_2_wedge_L"
+	CreatePartPerTileWhenGrabbed = "corridor"
+	InitialPenetrationResistance = 200
+	ContinuingPenetrationResistance = 250
+	CrewSpeedFactor = 0
+	Density = 3
+	IsRotateable = true
+	IsWalled = true
+	IsBuildable = true
+	ExternalWallsByCell
+	[
+		{
+			Key = [0, 0]
+			Value = [TopRight, Right]
+		}
+		{
+			Key = [0, 1]
+			Value = [Right, BottomRight, Bottom, BottomLeft]
+		}
+	]
+	InternalWallsByCell
+	[
+	 	{
+	 		Key = [0, 0]
+	 		Value = [BottomLeft, Left, TopLeft, Top]
+	 	}
+	 	{
+	 		Key = [0, 1]
+	 		Value = [Left, TopLeft]
+	 	}
+	]
+	VirtualInternalCells
+	[
+		{ExternalCell=[0, -1]; InternalCell=[1, 0]}
+		{ExternalCell=[-1, 1]; InternalCell=[0, 2]}
+	]
+	AllowedDoorLocations = []
+	GeneratorRequiresDoor = false
+	FlipHRotate = [0, 3, 2, 1]
+	FlipVRotate = [2, 1, 0, 3]
+	UsePartWhenFlipped = hellstone2_wedge_R
+	CustomCollider
+	[
+		[1, 0]
+		[1, 2]
+		[0, 2]
+	]
+	EditorIcon
+	{
+		Texture
+		{
+			File = "icon.png"
+			SampleMode = Linear
+		}
+		Size = [32, 64]
+	}
+	Components : ^/0/Components
+	{
+		EmpAbsorber
+		{
+			Type = ExplosiveAmmoDrainSink
+			AmmoType = battery, ion_energy
+			AbsorbsAmmoDrain = 5000
+			RecoveryRate = (&AbsorbsAmmoDrain) * 0.1
+		}
+
+		Graphics
+		{
+			Type = Graphics
+			Location = [0.5, 1]
+			Floor // This is needed so that armor shows up in ship ghosts.
+			{
+				Layer = "floors"
+				DamageLevels
+				[
+					{
+						File = "floor.png"
+						Size = [1, 2]
+					}
+					{
+						File = "floor_33.png"
+						Size = [1, 2]
+					}
+					{
+						File = "floor_66.png"
+						Size = [1, 2]
+					}
+				]
+			}
+			Walls
+			{
+				Layer = "walls"
+				DamageLevels
+				[
+					{
+						File = "armor.png"
+						Size = [1, 2]
+					}
+					{
+						File = "armor_33.png"
+						Size = [1, 2]
+					}
+					{
+						File = "armor_66.png"
+						Size = [1, 2]
+					}
+				]
+			}
+			Roof
+			{
+				Layer = "roofs"
+				DamageLevels
+				[
+					{
+						File = "roof.png"
+						Size = [1, 2]
+					}
+					{
+						File = "roof_33.png"
+						Size = [1, 2]
+					}
+					{
+						File = "roof_66.png"
+						Size = [1, 2]
+					}
+				]
+			}
+		}
+
+		DestroyedEffects
+		{
+			Type = DeathEffects
+			MediaEffects = &/COMMON_EFFECTS/MedPartDestroyed
+			Location = [.5, 1]
+
+			HitEffects
+			[
+				{
+					Type = ExplosiveDamage
+					TotalDamage = 1000
+					Radius = 1.5
+				}
+			]
+		}
+
+		Blueprints
+		{
+			Type = BlueprintSprite
+			File = "blueprints.png"
+			Size = [1, 2]
+		}
+	}
+
+	Stats
+	{
+		EMPResist = (&~/Part/Components/EmpAbsorber/AbsorbsAmmoDrain) / 1000
+	}
+}

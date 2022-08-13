@@ -1,0 +1,629 @@
+Part : /BASE_PART
+{
+	NameKey = "Parts/ShieldGenTiny"
+	IconNameKey = "Parts/ShieldGenTinyIcon"
+	ID = Gray.shield_gen_tiny // Part IDs must always be in the form of "author_name.part_name". If making your own mod, do *not* use "cosmoteer" as your author name, because it may conflict with future vanilla parts.
+	EditorGroup = "TitanDefensives"
+	DescriptionKey = "Parts/ShieldGenTinyDesc"
+	Cost = 5000
+	AIValueFactor = 5
+	Size = [1, 1]
+	SelectionPriority = 1
+	SelectionTypeByRotation = true
+	MaxHealth = 4000
+	TypeCategories = [defense, uses_power]
+	PenetrationRectType = Normal
+	ProhibitAbove = 1
+	AllowedDoorLocations
+	[
+		[-1, 0]
+		[1, 0]
+		[0, 1]
+	]
+	EditorIcon
+	{
+		Texture
+		{
+			File = "icon.png"
+			SampleMode = Linear
+		}
+		Size = [42.66, 64]
+	}
+	Components : ^/0/Components
+	{
+		IsOperational
+		{
+			Type = MultiToggle
+			Toggles = [PowerToggle, BatteryStorage]
+			Mode = All
+		}
+
+		PowerToggle
+		{
+			Type = UIToggle
+			ToggleID = "on_off"
+			Default = 1
+		}
+
+		BatteryStorage
+		{
+			Type = AmmoStorage
+			AmmoType = battery
+			MaxAmmo = 6000
+			ToggleOnAmmo = 5001
+			DrainOnFtlJump = true
+		}
+		BatteryConsumer
+		{
+			Type = AmmoConsumer
+			AmmoType = battery
+			Storage = BatteryStorage
+			DefaultPriority = &/PRIORITIES/Defense_Supply
+			ResupplyThreshold = 500
+			OperationalToggle = PowerToggle
+			ReceiveAmmoMediaEffects = &/COMMON_EFFECTS/PowerDeliver
+		}
+
+		ProgressBar
+		{
+			Type = ProgressBar
+			OperationalToggle = IsOperational
+			ShowProgressFor = BatteryStorage
+			LowColor = [0, 0, 255]
+			HighColor = [0, 0, 255]
+			FullColor = [0, 0, 255]
+			Height = 10
+		}
+
+		PowerDrain
+		{
+			Type = AmmoConverter
+			OperationalToggle = IsOperational
+			FromStorage = BatteryStorage
+			FromQuantity = 100
+			MinFromQuantityForConversion = 1
+			Interval = 1
+		}
+
+		ArcShield
+		{
+			Type = ArcShield
+			Radius = 6.5
+			Arc = 165d
+			OperationalToggle = IsOperational
+			PenetrationResistance = [25, 0]
+			DrainAmmoFrom = BatteryStorage
+			AmmoDrainPerDamage = .5
+			Rotation = -90d
+			Location = [.5, 1]
+
+			BlueprintArcSprite
+			{
+				Texture
+				{
+					File = "shield_energy.png"
+					SampleMode = Linear
+					MipLevels = max
+				}
+				Size = [0, 1.5]
+				Color = [0, 0, 255, 127]
+			}
+			BlueprintArcSpriteSegments = 64
+
+			CoverageArcSprite
+			{
+				Texture
+				{
+					File = "shield_energy.png"
+					SampleMode = Linear
+					MipLevels = max
+				}
+				Size = [0, 1.5]
+				Color = [255, 255, 255, 127]
+			}
+			CoverageArcSpriteSegments = 64
+
+			HitMediaEffects
+			[
+				{
+					Type = ArcShield
+					FadeInTime = .1
+					FadeOutTime = .5
+					Radius = &~/Part/Components/ArcShield/Radius
+					Arc = 20d
+					ArcSprite
+					{
+						Texture
+						{
+							File = "shield_energy.png"
+							SampleMode = Linear
+							MipLevels = max
+						}
+						Shader = "shield.shader"
+						_waveTex
+						{
+							File = "shield_energy_wave.png"
+							UVMode = Wrap
+							SampleMode = Linear
+							MipLevels = max
+						}
+						_waveSpeed = -2
+						_waveAlpha = .75
+						_waveCurveInterval = 1
+						_waveCurveMagnitude = .25
+						_waveCurveUOffsetPerSecond = 0
+						//TargetBlendMode = Add
+						_fullPowerColor = [350, 0, 100 , 201]
+						_lowPowerColor = [150, 75, 10, .171]
+						_lowPowerThicknessExponent = .6
+						TargetBlendMode = Add
+						Size = [.5, 2]
+					}
+					ArcSpriteSegments = 32
+					Bucket = Upper3
+				}
+
+				: /BASE_SOUNDS/AudioExterior
+				{
+					Sound = "shield_hit.wav"
+					Volume = 1
+					Speed = 1
+					IgnoreIntensity = true
+					SpeedVariation = .25
+					MaxConcurrent = 10
+				}
+			]
+		}
+
+		EmitterCollider
+		{
+			Type = CircleCollider
+			ChainedTo = ArcShield
+			Location = [.2, 0]
+			Radius = 1
+			Density = .1
+		}
+
+		ArcShieldEffect
+		{
+			Type = ContinuousEffects
+			ChainedTo = ArcShield
+			FactorMediaEffectsIntensityWith = BatteryStorage
+			Location = [&~/Part/Components/ArcShield/Radius, 0]
+			OperationalToggle = IsOperational
+			MediaEffects
+			[
+				{
+					Type = ArcShield
+					Radius = &~/Part/Components/ArcShield/Radius
+					Arc = &~/Part/Components/ArcShield/Arc
+					FadeInTime = .25
+					FadeOutTime = .25
+					FadeFromScale = .8
+					ArcSprite
+					{
+						Texture
+						{
+							File = "shield_energy.png"
+							SampleMode = Linear
+							MipLevels = max
+						}
+						Shader = "shield.shader"
+						_waveTex
+						{
+							File = "shield_energy_wave.png"
+							UVMode = Wrap
+							SampleMode = Linear
+							MipLevels = max
+						}
+						_waveSpeed = 1
+						_waveAlpha = 1
+						_waveCurveInterval = .35
+						_waveCurveMagnitude = .55
+						_waveCurveUOffsetPerSecond = .3
+						_fullPowerColor = [350, 0, 150, 7]
+						_lowPowerColor = [50, 50, 150, 7]
+						_lowPowerThicknessExponent = .6
+						TargetBlendMode = Add
+						Size = [1, 3]
+					}
+					ArcSpriteSegments = 64
+					Bucket = Lower1
+				}
+
+				: /BASE_SOUNDS/AudioExteriorDetail
+				{
+					Sound = "shield_loop.wav"
+					Volume = .15
+					Speed = .5
+					MaxConcurrent = 1
+					MaxConcurrentVolume = .3
+					DynamicVolume : ^/0/DynamicVolume
+					{
+						MinDistance = .75
+						MaxDistance = 1.5
+					}
+					IgnoreIntensity = true
+				}
+			]
+		}
+
+		EmitterEffect
+		{
+			Type = ContinuousEffects
+			ChainedTo = ArcShield
+			FactorMediaEffectsIntensityWith = BatteryStorage
+			Location = [2.2, 0]
+			OperationalToggle = IsOperational
+			MediaEffects
+			[
+				{
+					Type = ArcShield
+					Radius = 1
+					Arc = &~/Part/Components/ArcShield/Arc
+					FadeInTime = .25
+					FadeOutTime = .25
+					ArcSprite
+					{
+						Texture
+						{
+							File = "shield_energy.png"
+							SampleMode = Linear
+							MipLevels = max
+						}
+						UVRect = [0, 1, 1, -1]
+						Shader = "shield.shader"
+						_waveTex
+						{
+							File = "shield_energy_wave.png"
+							UVMode = Wrap
+							SampleMode = Linear
+							MipLevels = max
+						}
+						_waveSpeed = -1
+						_waveAlpha = 1
+						_waveCurveInterval = .35
+						_waveCurveMagnitude = .55
+						_waveCurveUOffsetPerSecond = .3
+						_fullPowerColor = [350, 0, 100, 187]
+						_lowPowerColor = [100, 50, 50, 157]
+						_lowPowerThicknessExponent = .6
+						TargetBlendMode = Add
+						Size = [0, 1.0]
+					}
+					ArcSpriteSegments = 12
+					Bucket = Lower1
+				}
+
+				: /BASE_SOUNDS/AudioExteriorDetail
+				{
+					Sound = "shield_emitter_loop.wav"
+					Volume = .2
+					Speed = 1
+					MaxConcurrent = 1
+					MaxConcurrentVolume = .4
+					IgnoreIntensity = true
+				}
+			]
+		}
+
+		ShieldOperationEffects
+		{
+			Type = ToggleEffects
+			ChainedTo = ArcShieldEffect
+			Toggle = IsOperational
+			ToggledOnMediaEffects
+			[
+				: /BASE_SOUNDS/AudioExterior
+				{
+					Sound = "activate.wav"
+					Volume = .5
+					Speed = 1
+					IgnoreIntensity = true
+				}
+			]
+			ToggledOffMediaEffects
+			[
+				: /BASE_SOUNDS/AudioExterior
+				{
+					Sound = "deactivate.wav"
+					Volume = .5
+					Speed = 1
+					IgnoreIntensity = true
+				}
+			]
+		}
+
+		GraphicsFloor // Hack: We want different floor sprites depending on the operational state.
+		{
+			Type = Graphics
+			Location = [.5, .5]
+			OperationalToggle = IsOperational
+			OperationalDoodad
+			{
+				Layer = "floors"
+				DamageLevels
+				[
+					{
+						File = "floor_on.png"
+						Size = [1, 1]
+					}
+					{
+						File = "floor_on_33.png"
+						Size = [1, 1]
+					}
+					{
+						File = "floor_on_66.png"
+						Size = [1, 1]
+					}
+				]
+			}
+			NonOperationalDoodad
+			{
+				Layer = "floors"
+				DamageLevels
+				[
+					{
+						File = "floor_off.png"
+						Size = [1, 1]
+					}
+					{
+						File = "floor_off_33.png"
+						Size = [1, 1]
+					}
+					{
+						File = "floor_off_66.png"
+						Size = [1, 1]
+					}
+				]
+			}
+		}
+
+		GraphicsOther
+		{
+			Type = Graphics
+			Location = [.5, .15]
+			OperationalToggle = IsOperational
+			OperationalDoodad
+			{
+				Layer = "doodads_high"
+				DamageLevels
+				[
+					{
+						AnimationFiles
+						[
+							"doodads_on1.png"
+							"doodads_on2.png"
+							"doodads_on3.png"
+							"doodads_on4.png"
+							"doodads_on5.png"
+							"doodads_on6.png"
+							"doodads_on7.png"
+							"doodads_on8.png"
+						]
+						Size = [1, 1.5]
+						AnimationInterval = 0.075
+					}
+				]
+			}
+			NonOperationalDoodad
+			{
+				Layer = "doodads_high"
+				DamageLevels
+				[
+					{
+						File = "doodads_off.png"
+						Size = [1, 1.5]
+					}
+				]
+			}
+			OperationalLighting
+			{
+				Layer = "lights_add"
+				Offset = [0, .35]
+				DamageLevels
+				[
+					{
+						File = "lights.png"
+						Size = [1, 1]
+					}
+				]
+			}
+			Walls
+			{
+				Layer = "walls"
+				Offset = [0, 0.1]
+				DamageLevels
+				[
+					{
+						File = "walls.png"
+						Size = [1, 1.6]
+					}
+					{
+						File = "walls_33.png"
+						Size = [1, 1.6]
+					}
+					{
+						File = "walls_66.png"
+						Size = [1, 1.6]
+					}
+				]
+			}
+			Roof
+			{
+				Layer = "roofs"
+				Offset = [0, .35]
+				DamageLevels
+				[
+					{
+						File = "roof.png"
+						Size = [1, 1]
+					}
+					{
+						File = "roof_33.png"
+						Size = [1, 1]
+					}
+					{
+						File = "roof_66.png"
+						Size = [1, 1]
+					}
+				]
+			}
+			OperationalRoofDoodad
+			{
+				Layer = "roof_doodads"
+				Offset = [0, .35]
+				DamageLevels
+				[
+					{
+						AnimationFiles
+						[
+							"roof_doodads_on1.png"
+							"roof_doodads_on2.png"
+							"roof_doodads_on3.png"
+							"roof_doodads_on4.png"
+							"roof_doodads_on5.png"
+							"roof_doodads_on6.png"
+							"roof_doodads_on7.png"
+							"roof_doodads_on8.png"
+						]
+						Size = [1, 1]
+						AnimationInterval = 0.075
+					}
+				]
+			}
+			NonOperationalRoofDoodad
+			{
+				Layer = "roof_doodads"
+				Offset = [0, .35]
+				DamageLevels
+				[
+					{
+						File = "roof_doodads_off.png"
+						Size = [1, 1]
+						AnimationInterval = 0.1
+					}
+				]
+			}
+			OperationalRoofWindows
+			{
+				Layer = "roof_windows"
+				Offset = [0, .35]
+				DamageLevels
+				[
+					{
+						File = "roof_windows.png"
+						Size = [1, 1]
+					}
+					{
+						File = "roof_windows_33.png"
+						Size = [1, 1]
+					}
+					{
+						File = "roof_windows_66.png"
+						Size = [1, 1]
+					}
+				]
+			}
+			NonOperationalRoofWindows = &OperationalRoofWindows
+		}
+
+		BatterySprites
+		{
+			Type = AmmoSprites
+			Location = [.5, .1]
+			AmmoStorage = BatteryStorage
+			Layer = "doodads_low"
+			AmmoLevels
+			[
+				{
+					File = "batteries1.png"
+					Size = [1, 1]
+				}
+				{
+					File = "batteries2.png"
+					Size = [1, 1]
+				}
+				{
+					File = "batteries3.png"
+					Size = [1, 1]
+				}
+				{
+					File = "batteries4.png"
+					Size = [1, 1]
+				}
+				{
+					File = "batteries5.png"
+					Size = [1, 1]
+				}
+				{
+					File = "batteries6.png"
+					Size = [1, 1]
+				}
+			]
+		}
+
+		OperationEffects
+		{
+			Type = ToggleEffects
+			Toggle = IsOperational
+			ToggledOnMediaEffects = &/COMMON_EFFECTS/PowerOn
+			ToggledOffMediaEffects = &/COMMON_EFFECTS/PowerOff
+		}
+
+		DestroyedEffects
+		{
+			Type = DeathEffects
+			MediaEffects = &/COMMON_EFFECTS/MedPartDestroyed
+			Location = [.5, 1]
+		}
+
+		Indicators
+		{
+			Type = IndicatorSprites
+			Location = [.5, 1]
+			Layer = "indicators"
+			Indicators
+			[
+				// Turned off.
+				{
+					Toggle = PowerToggle
+					AtlasSprite
+					{
+						File = &/INDICATORS/PowerOff
+						Size = [1, 1]
+					}
+				}
+
+				// Out of power.
+				{
+					Toggle = BatteryStorage
+					AtlasSprite
+					{
+						File = &/INDICATORS/NoPower
+						Size = [1.5, 1.5]
+					}
+				}
+			]
+		}
+
+		Blueprints
+		{
+			Type = BlueprintSprite
+			File = "blueprints.png"
+			Size = [1, 1]
+		}
+	}
+
+	Stats
+	{
+		ShieldHP = (&~/Part/Components/BatteryStorage/MaxAmmo) / (&~/Part/Components/ArcShield/AmmoDrainPerDamage)
+		ShieldArc = deg(&~/Part/Components/ArcShield/Arc)
+		ShieldDist = (&~/Part/Components/ArcShield/Radius) - (&~/Part/Components/ArcShield/Location/1)
+		PowerUsageContinuous = (&~/Part/Components/PowerDrain/FromQuantity) / (&~/Part/Components/PowerDrain/Interval) / 1000
+		PowerCapacity = (&~/Part/Components/BatteryStorage/MaxAmmo) / 1000
+
+		RecPower = (&PowerUsageContinuous) + 0.5
+		RecCrew = (&RecPower) * 4
+	}
+}

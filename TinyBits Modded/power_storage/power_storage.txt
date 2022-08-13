@@ -1,0 +1,545 @@
+Part : /BASE_PART
+{
+	NameKey = "Parts/PowerStorageLarge"
+	IconNameKey = "Parts/PowerStorageLargeIcon"
+	ID = Gray.power_storage_large // Part IDs must always be in the form of "author_name.part_name". If making your own mod, do *not* use "cosmoteer" as your author name, because it may conflict with future vanilla parts.
+	EditorGroup = "Parts"
+	DescriptionKey = "Parts/PowerStorageLargeDesc"
+	Cost = 15000
+	Size = [2, 2]
+	MaxHealth = 4000
+	TypeCategories = [provides_power, storage]
+	IgnoreRotationForMirroredSelection = true
+	EditorIcon
+	{
+		Texture
+		{
+			File = "icon.png"
+			SampleMode = Linear
+		}
+		Size = [56, 56]
+	}
+	Components : ^/0/Components
+	{
+		IsOperational
+		{
+			Type = MultiToggle
+			Toggles = [PowerToggle, BatteryStorage]
+			Mode = All
+		}
+
+		PowerToggle
+		{
+			Type = UIToggle
+			ToggleID = "on_off"
+			Default = 1
+		}
+
+		BatteryStorage
+		{
+			Type = AmmoStorage
+			AmmoType = battery
+			MaxAmmo = 50000
+			StartingAmmo = 5000
+			InitToMaxAmmoPVP = 0
+			SuppliesAmmo = true
+			MaxAmmoPickUp = 2500
+			SuppliesAmmoToggle = PowerToggle
+		}
+		BatteryProducer
+		{
+			Type = AmmoConverter
+			ToStorage = BatteryStorage
+			ToQuantity = 100
+			Interval = .8
+		}
+		BatteryConsumer
+		{
+			Type = AmmoConsumer
+			AmmoType = battery
+			Storage = BatteryStorage
+			DefaultPriority = &/PRIORITIES/Storage_Supply
+			ResupplyThreshold = 500
+			OperationalToggle = PowerToggle
+
+			ReceiveAmmoMediaEffects = &/COMMON_EFFECTS/PowerDeliver
+		}
+
+		Graphics
+		{
+			Type = Graphics
+			Location = [1, 1]
+			OperationalToggle = IsOperational
+			Floor
+			{
+				Layer = "floors"
+				DamageLevels
+				[
+					{
+						File = "floor.png"
+						Size = [2, 2]
+					}
+					{
+						File = "floor_33.png"
+						Size = [2, 2]
+					}
+					{
+						File = "floor_66.png"
+						Size = [2, 2]
+					}
+				]
+			}
+			OperationalDoodad
+			{
+				Layer = "doodads_low"
+				DamageLevels
+				[
+					{
+						AnimationFiles
+						[
+							"blinkies1.png"
+							"blinkies2.png"
+							"blinkies3.png"
+							"blinkies4.png"
+							"blinkies5.png"
+							"blinkies6.png"
+							"blinkies7.png"
+							"blinkies8.png"
+						]
+						Size = [2, 2]
+						AnimationInterval = 0.1
+					}
+				]
+			}
+			Walls
+			{
+				Layer = "walls"
+				DamageLevels
+				[
+					{
+						File = "walls.png"
+						Size = [2, 2]
+					}
+					{
+						File = "walls_33.png"
+						Size = [2, 2]
+					}
+					{
+						File = "walls_66.png"
+						Size = [2, 2]
+					}
+				]
+			}
+			Roof
+			{
+				Layer = "roofs"
+				DamageLevels
+				[
+					{
+						File = "roof.png"
+						Size = [2, 2]
+					}
+					{
+						File = "roof_33.png"
+						Size = [2, 2]
+					}
+					{
+						File = "roof_66.png"
+						Size = [2, 2]
+					}
+				]
+			}
+			OperationalRoofWindows
+			{
+				Layer = "roof_windows"
+				DamageLevels
+				[
+					{
+						File = "roof_windows.png"
+						Size = [2, 2]
+					}
+					{
+						File = "roof_windows_33.png"
+						Size = [2, 2]
+					}
+					{
+						File = "roof_windows_66.png"
+						Size = [2, 2]
+					}
+				]
+			}
+			NonOperationalRoofWindows = &OperationalRoofWindows
+		}
+
+		BatterySprites
+		{
+			Type = AmmoSprites
+			Location = [1, 1]
+			AmmoStorage = BatteryStorage
+			Layer = "doodads_low"
+			AmmoLevels
+			[
+				{
+					File = "batteries1.png"
+					Size = [2, 2]
+				}
+				{
+					File = "batteries2.png"
+					Size = [2, 2]
+				}
+				{
+					File = "batteries3.png"
+					Size = [2, 2]
+				}
+				{
+					File = "batteries4.png"
+					Size = [2, 2]
+				}
+				{
+					File = "batteries5.png"
+					Size = [2, 2]
+				}
+				{
+					File = "batteries6.png"
+					Size = [2, 2]
+				}
+				{
+					File = "batteries7.png"
+					Size = [2, 2]
+				}
+				{
+					File = "batteries8.png"
+					Size = [2, 2]
+				}
+				{
+					File = "batteries9.png"
+					Size = [2, 2]
+				}
+				{
+					File = "batteries10.png"
+					Size = [2, 2]
+				}
+				{
+					File = "batteries11.png"
+					Size = [2, 2]
+				}
+				{
+					File = "batteries12.png"
+					Size = [2, 2]
+				}
+				{
+					File = "batteries13.png"
+					Size = [2, 2]
+				}
+				{
+					File = "batteries14.png"
+					Size = [2, 2]
+				}
+				{
+					File = "batteries15.png"
+					Size = [2, 2]
+				}
+				{
+					File = "batteries16.png"
+					Size = [2, 2]
+				}
+				{
+					File = "batteries17.png"
+					Size = [2, 2]
+				}
+				{
+					File = "batteries18.png"
+					Size = [2, 2]
+				}
+				{
+					File = "batteries19.png"
+					Size = [2, 2]
+				}
+				{
+					File = "batteries20.png"
+					Size = [2, 2]
+				}
+				{
+					File = "batteries21.png"
+					Size = [2, 2]
+				}
+				{
+					File = "batteries22.png"
+					Size = [2, 2]
+				}
+				{
+					File = "batteries23.png"
+					Size = [2, 2]
+				}
+				{
+					File = "batteries24.png"
+					Size = [2, 2]
+				}
+				{
+					File = "batteries25.png"
+					Size = [2, 2]
+				}
+				{
+					File = "batteries26.png"
+					Size = [2, 2]
+				}
+				{
+					File = "batteries27.png"
+					Size = [2, 2]
+				}
+				{
+					File = "batteries28.png"
+					Size = [2, 2]
+				}				
+				{
+					File = "batteries29.png"
+					Size = [2, 2]
+				}
+				{
+					File = "batteries30.png"
+					Size = [2, 2]
+				}
+				{
+					File = "batteries31.png"
+					Size = [2, 2]
+				}
+				{
+					File = "batteries32.png"
+					Size = [2, 2]
+				}
+				{
+					File = "batteries33.png"
+					Size = [2, 2]
+				}
+				{
+					File = "batteries34.png"
+					Size = [2, 2]
+				}
+				{
+					File = "batteries35.png"
+					Size = [2, 2]
+				}
+				{
+					File = "batteries36.png"
+					Size = [2, 2]
+				}
+				{
+					File = "batteries37.png"
+					Size = [2, 2]
+				}
+				{
+					File = "batteries38.png"
+					Size = [2, 2]
+				}
+				{
+					File = "batteries39.png"
+					Size = [2, 2]
+				}
+				{
+					File = "batteries40.png"
+					Size = [2, 2]
+				}
+				{
+					File = "batteries41.png"
+					Size = [2, 2]
+				}
+				{
+					File = "batteries42.png"
+					Size = [2, 2]
+				}
+				{
+					File = "batteries43.png"
+					Size = [2, 2]
+				}
+				{
+					File = "batteries44.png"
+					Size = [2, 2]
+				}
+				{
+					File = "batteries45.png"
+					Size = [2, 2]
+				}
+				{
+					File = "batteries46.png"
+					Size = [2, 2]
+				}
+				{
+					File = "batteries47.png"
+					Size = [2, 2]
+				}
+				{
+					File = "batteries48.png"
+					Size = [2, 2]
+				}
+				{
+					File = "batteries49.png"
+					Size = [2, 2]
+				}
+				{
+					File = "batteries50.png"
+					Size = [2, 2]
+				}
+				{
+					File = "batteries51.png"
+					Size = [2, 2]
+				}
+				{
+					File = "batteries52.png"
+					Size = [2, 2]
+				}
+				{
+					File = "batteries53.png"
+					Size = [2, 2]
+				}
+				{
+					File = "batteries54.png"
+					Size = [2, 2]
+				}
+				{
+					File = "batteries55.png"
+					Size = [2, 2]
+				}
+				{
+					File = "batteries56.png"
+					Size = [2, 2]
+				}
+				{
+					File = "batteries57.png"
+					Size = [2, 2]
+				}
+				{
+					File = "batteries58.png"
+					Size = [2, 2]
+				}
+				{
+					File = "batteries59.png"
+					Size = [2, 2]
+				}
+				{
+					File = "batteries60.png"
+					Size = [2, 2]
+				}
+			]
+		}
+
+		BatterySpritesLighting
+		{
+			Type = AmmoSprites
+			Location = [1, 1]
+			AmmoStorage = BatteryStorage
+			Layer = "doodads_high"
+			AmmoLevels
+			[
+				{
+					File = "lights1.png"
+					Size = [2, 2]
+				}
+				{
+					File = "lights2.png"
+					Size = [2, 2]
+				}
+				{
+					File = "lights3.png"
+					Size = [2, 2]
+				}
+				{
+					File = "lights4.png"
+					Size = [2, 2]
+				}
+				{
+					File = "lights5.png"
+					Size = [2, 2]
+				}
+				{
+					File = "lights6.png"
+					Size = [2, 2]
+				}
+				{
+					File = "lights7.png"
+					Size = [2, 2]
+				}
+				{
+					File = "lights8.png"
+					Size = [2, 2]
+				}
+				{
+					File = "lights9.png"
+					Size = [2, 2]
+				}
+				{
+					File = "lights10.png"
+					Size = [2, 2]
+				}
+				{
+					File = "lights11.png"
+					Size = [2, 2]
+				}
+				{
+					File = "lights12.png"
+					Size = [2, 2]
+				}
+				{
+					File = "lights13.png"
+					Size = [2, 2]
+				}
+				{
+					File = "lights14.png"
+					Size = [2, 2]
+				}
+				{
+					File = "lights15.png"
+					Size = [2, 2]
+				}
+			]
+		}
+
+		DestroyedEffects
+		{
+			Type = DeathEffects
+			MediaEffects = &/COMMON_EFFECTS/MedPartDestroyed
+			Location = [1, 1]
+		}
+
+		Indicators
+		{
+			Type = IndicatorSprites
+			Location = [1, 1]
+			Layer = "indicators"
+			Indicators
+			[
+				// Turned off.
+				{
+					Toggle = PowerToggle
+					AtlasSprite
+					{
+						File = &/INDICATORS/PowerOff
+						Size = [1, 1]
+					}
+				}
+
+				// Out of power.
+				{
+					Toggle = BatteryStorage
+					AtlasSprite
+					{
+						File = &/INDICATORS/NoPower
+						Size = [1.5, 1.5]
+					}
+				}
+			]
+		}
+
+		Blueprints
+		{
+			Type = BlueprintSprite
+			File = "blueprints.png"
+			Size = [2, 2]
+		}
+	}
+
+	Stats
+	{
+		BatterySize = (&~/Part/Components/BatteryStorage/MaxAmmoPickUp) / 1000
+		PowerCapacity = (&~/Part/Components/BatteryStorage/MaxAmmo) / 1000
+	}
+}

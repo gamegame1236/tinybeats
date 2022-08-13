@@ -1,0 +1,263 @@
+Type = Particles
+Def
+{
+	EmitPerSecond = 0
+	EmitPerOneShot = 0
+	Initializers
+	[
+		{
+			Type = LocationToWorldSpace
+			LocationIn = location
+			LocationOut = location
+			Name = "Convert location to world space."
+			Enabled = true
+			UpdateAfterInit = false
+		}
+		{
+			Type = VelocityToWorldSpace
+			VelocityIn = base_velocity
+			VelocityOut = base_velocity
+			Name = "Convert velocity to world space"
+			Enabled = true
+			UpdateAfterInit = false
+		}
+		{
+			Type = AddFrameOfReference
+			VelocityInOut = inherited_velocity
+			Name = "Add frame of reference"
+			Enabled = true
+			UpdateAfterInit = false
+		}
+	]
+	Updaters
+	[
+		{
+			Type = Lifetime
+			LifeInOut = life
+			Lifetime = 0.85
+			Name = Lifetime
+			Enabled = true
+			UpdateAfterInit = false
+		}
+		{
+			Type = OperatorConst
+			AIn = life
+			ResultOut = vel_lerp_t
+			Operator = Multiply
+			ValueType = Float
+			Value = 1.3
+			Name = "Velocity lerp T"
+			Enabled = false
+			UpdateAfterInit = false
+		}
+		{
+			Type = OperatorConst
+			AIn = vel_lerp_t
+			ResultOut = vel_lerp_t
+			Operator = Min
+			ValueType = Float
+			Value = 1
+			Name = "Velocity lerp T limit"
+			Enabled = false
+			UpdateAfterInit = false
+		}
+		{
+			Type = Lerp
+			LerpIn = life
+			DataOut = velocity
+			Invert = false
+			ValueType = Vector2
+			FromValue
+			{
+				X = 1
+				Y = 1
+			}
+			ToValue
+			{
+				X = 0
+				Y = 0
+			}
+			Name = "Velocity lerp"
+			Enabled = true
+			UpdateAfterInit = true
+		}
+		{
+			Type = Operator
+			DataType = Vector2
+			AIn = velocity
+			BIn = base_velocity
+			ResultOut = velocity
+			Operator = Multiply
+			Name = "Apply base velocity"
+			Enabled = true
+			UpdateAfterInit = false
+		}
+		{
+			Type = Operator
+			DataType = Vector2
+			AIn = location
+			BIn = velocity
+			ResultOut = location
+			Operator = AddDt
+			Name = "Apply velocity."
+			Enabled = true
+			UpdateAfterInit = false
+		}
+		{
+			Type = Operator
+			DataType = Vector2
+			AIn = location
+			BIn = inherited_velocity
+			ResultOut = location
+			Operator = AddDt
+			Name = "Apply inherited velocity"
+			Enabled = true
+			UpdateAfterInit = false
+		}
+		{
+			Type = Lerp
+			LerpIn = life
+			DataOut = scale
+			Invert = true
+			ValueType = Float
+			FromValue = 0.55
+			ToValue = -0.2
+			Name = "Scale lerp"
+			Enabled = true
+			UpdateAfterInit = true
+		}
+	]
+	Renderer
+	{
+		Type = StandardQuadRenderer
+		LocationIn = location
+		ScaleIn = scale
+		RotationIn
+		ColorIn = color
+		UvRectIn
+		BaseSize
+		{
+			X = 0.65
+			Y = 0.65
+		}
+		Name = ""
+	}
+	Material
+	{
+		Texture
+		{
+			File = "../../../../../../../../../../../Program Files/Cosmoteer/Data/common_effects/particles/spark.png"
+			MipLevels = max
+			SampleMode = Linear
+		}
+		TargetBlendMode
+		{
+			SourceRgbFactor = SourceAlpha
+			DestRgbFactor = One
+			RgbOperator = Add
+			SourceAlphaFactor = InverseDestAlpha
+			DestAlphaFactor = One
+			AlphaOperator = Add
+		}
+	}
+	DeleteMode = KeepOrder
+	EnableMultithreading = false
+	InitCapacity = 2500
+}
+EmitterDef
+{
+	EmitPerSecond = 200
+	EmitPerOneShot = 0
+	PreInitializers
+	[
+		{
+			Type = SetValue
+			DataOut = color
+			ValueType = Color
+			Value
+			{
+				Rf = 0.22
+				Gf = 1
+				Bf = 0.984
+				Af = 0.741
+			}
+			Name = Color
+			Enabled = true
+			UpdateAfterInit = false
+		}
+		{
+			Type = SetRandomCircle
+			LocationOut = location
+			Circle
+			{
+				Center
+				{
+					X = 0
+					Y = 0
+				}
+				Radius = 0.001
+			}
+			Perimeter = true
+			Name = "Init location"
+			Enabled = true
+			UpdateAfterInit = false
+		}
+		{
+			Type = SetRandomVelocityFromPoint
+			LocationIn = location
+			VelocityOut = base_velocity
+			Speed
+			{
+				Min = 0
+				Max = 4
+			}
+			AwayFromPoint
+			{
+				X = 0
+				Y = 0
+			}
+			Name = "Initial velocity"
+			Enabled = true
+			UpdateAfterInit = false
+		}
+	]
+	PostInitializers[]
+}
+Bucket = Middle3
+UseRealTime = false
+PenetratingBucket
+MinIntensity = 0
+IsFancy = true
+IsSimple = false
+Sharing = Global
+UnsharedRenderInWorldSpace = false
+DontEmitWhenOffScreen = true
+DontEmitWhenOffScreenSizeInflate = 3
+UseCustomShapeForOffScreenCheck = false
+MaxEmissionZoom = 15
+ScaleEmissionWithIntensity = true
+ScaleEmissionWithBeamLength = false
+CaptureBackBuffer = false
+Filter
+{
+	Ships = true
+	OperationalHealth = true
+	StructuralHealth = true
+	OnlyPartCategories
+	ExcludePartCategories
+	Shields = true
+	Bullets = true
+	OnlyBulletCategories
+	ExcludeBulletCategories
+	IgnoreInvulnerability = true
+	Self
+	TargetedSelf
+	Friendlies = true
+	TargetedFriendlies
+	Enemies = true
+	TargetedEnemies
+	Junk = true
+	TargetedJunk
+}
+Delay = 0
+IgnoreIntensity = false

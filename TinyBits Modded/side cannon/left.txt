@@ -1,0 +1,42 @@
+Part : &<center.txt>/Part
+{
+	NameKey = "Parts/SCL"
+	IconNameKey = "Parts/SCLIcon"
+	ID = Gray.scl
+	DescriptionKey = "Parts/SCLDesc"
+	UsePartWhenFlipped = Gray.scr
+	CustomCollider
+	[
+		[0, -0.37]
+		[0.40, -0.33]
+		[1, 0]
+		[1, 1]
+		[0, 1]
+	]
+
+	EditorIcon
+	{
+		Texture
+		{
+			File = "icon_left.png"
+			SampleMode = Linear
+		}
+		Size = [30,60]
+	}
+
+	Components : &<center.txt>/Part/Components
+	{
+		Turret : &<center.txt>/Part/Components/Turret
+		{
+			Rotation = -180d
+		}
+
+		Blueprints
+		{
+			Type = BlueprintSprite
+			File = "blueprints_Left.png"
+			Size = [1, 1]
+			Offset = [-1, -0.5]
+		}
+	}
+}

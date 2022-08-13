@@ -1,0 +1,166 @@
+ID = "Battleman103333.minigun_bolt_large"
+OtherIDs = ["laser_bolt_mini"]
+Range = { BaseValue=350; BuffType=AmmoRange; BuffMode=Multiply; MaxValue = 600}
+IdealRange
+[
+	{ BaseValue=50; BuffType=RailgunShot; BuffMode=Multiply; MaxValue=250; }
+	{ BaseValue=350; BuffType=RailgunShot; BuffMode=Multiply; MaxValue=600; }
+]
+IdealRadius = [5, 50]
+Speed = { BaseValue=160; BuffType=AmmoSpeed; BuffMode=Multiply; }
+ReceiveableBuffs = [AmmoDamage, AmmoSpeed, AmmoRange, AmmoPen]
+
+Components
+{
+	Physics
+	{
+		Type = CirclePhysics
+		Radius = 0.01
+		Density = 0.0001
+	}
+
+	Death
+	{
+		Type = DeathByLifetime
+		// Lifetime will be auto-calculated based on range and speed.
+	}
+
+	Targetable
+	{
+		Type = Targetable
+		Health = 300
+		TargetCategory = "laser"
+	}
+
+	Hit
+	{
+		Type = PenetratingHit
+		FactorEffectsWith = Targetable
+		SourceShipCollisionDelay = 3
+
+		HitShield = &HitOperational
+		HitOperational
+		{
+			HitEffects
+			[
+				{
+					Type = ExplosiveDamage
+					TotalDamage = { BaseValue=800; BuffType=AmmoDamage; BuffMode=Multiply; }
+					Radius = 3
+					Filter
+					{
+						Friendlies = false
+					}
+				}
+				{
+					Type = Impulse;
+					Impulse = 4;
+				}
+			]
+
+			MediaEffects
+			[
+				&<particles/laser_bolt_large_hit.txt>
+				&<particles/laser_bolt_large_flash.txt>
+				&<particles/laser_bolt_large_sparks.txt>
+
+				: /BASE_SOUNDS/AudioExterior
+				{
+					Sound = "laser_bolt_large_hit.wav"
+					Volume = .4
+					SpeedVariation = .4
+				}
+
+				: /BASE_SHAKE
+				{
+					ShakeAmount = .06
+					Duration = .3
+				}
+			]
+		}
+		HitStructural
+		{
+			HitEffects
+			[
+				{
+					Type = ExplosiveDamage
+					TotalDamage = 600
+					Radius = 4
+					Filter
+					{
+						Friendlies = true
+					}
+				}
+				{
+					Type = Impulse;
+					Impulse = 2;
+				}
+			]
+
+			MediaEffects
+			[
+				&<particles/laser_bolt_large_hit_struct.txt>
+
+				: /BASE_SOUNDS/AudioExterior
+				{
+					Sound = "laser_bolt_large_hit.wav"
+					Volume = .3
+					SpeedVariation = .4
+				}
+			]
+		}
+		PenetratingOperational
+		{
+			// No effect.
+		}
+		PenetratingStructural
+		{
+			// No effect.
+		}
+		FinishedPenetratingOperational
+		{
+			// No effect.
+		}
+		FinishedPenetratingStructural
+		{
+			// No effect.
+		}
+	}
+
+	Sprite
+	{
+		Type = AnimatedSprite
+		Offset = [-1, 0]
+		ReduceScaleWith = Hit
+		ReduceScaleExponent = 0.5
+		Animation
+		{
+			AtlasSprite
+			{
+				Texture
+				{
+					File = "laser_bolt_large.png"
+					SampleMode = Linear
+					MipLevels = max
+				}
+				Size = [1.75, 1.15]
+			}
+			FrameCount = 8
+			FrameSize = [192, 128]
+			FramesPerRow = 2
+			FramesPerSecond = 30
+		}
+	}
+
+	MediaEffects
+	{
+		Type = MediaEffects
+		FactorEffectsWith = Hit
+		FactorEffectsExponent = 0.5
+		MediaEffects
+		[
+			&<particles/laser_bolt_large_trail.txt>
+			&<particles/laser_bolt_large_glow.txt>
+		]
+	}
+}

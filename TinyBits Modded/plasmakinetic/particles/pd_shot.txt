@@ -1,0 +1,89 @@
+ID = "cosmoteer.pd_shot_knockback"
+OtherIDs = ["point_defense_shot_knockback", "pd_shot_knockback"]
+Range = 250
+IdealRange = 65
+Speed = 750
+
+Components
+{
+	Physics
+	{
+		Type = CirclePhysics
+		Radius = 0.1
+		Density = .0001
+	}
+
+	Death
+	{
+		Type = DeathByLifetime
+		// Lifetime will be auto-calculated based on range and speed.
+	}
+
+	Sprite
+	{
+		Type = Sprite
+		RenderBucket = Lower
+		Sprite
+		{
+			Texture
+			{
+				File = "pd_shot.png"
+				SampleMode = Linear
+				MipLevels = max
+			}
+			Size = [8, .5]
+		}
+		Offset = [-3.5, 0]
+		LerpScaleFrom = [.25, 1]
+		LerpTime = .05
+	}
+
+	AntiBullet
+	{
+		Type = AntiBullet
+		HitsBulletCategories = [missile, mine, bullet]
+
+		HitBullet
+		{
+			HitEffects
+			[
+				{
+					Type = Damage
+					Damage = 1
+				}
+				{
+					Type = Impulse
+					Impulse = 1000000
+				}
+			]
+
+			MediaEffects
+			[
+				&<particles/pd_shot_clink.txt>
+			]
+		}
+	}
+
+	Hit
+	{
+		Type = SimpleHit
+
+		HitShield = &HitOperational
+		HitOperational
+		{
+			HitEffects
+			[
+				{
+					Type = Damage
+					Damage = 1
+				}
+				{
+					Type = Impulse
+					Impulse = 1000000
+				}
+			]
+			MediaEffects = &~/Components/AntiBullet/HitBullet/MediaEffects
+		}
+		HitStructural = &HitOperational
+	}
+}
